@@ -1,0 +1,167 @@
+.contenedor-main-content {
+  flex: 1 1 0%;
+  overflow-y: auto;
+  background-color: var(--bg-main);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Encabezado del Área de Trabajo */
+.main-content-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .main-content-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.main-content-title {
+  height: 25px;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  letter-spacing: -0.02em;
+}
+
+.main-content-subtitle {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  margin-top: 0.25rem;
+}
+
+.main-content-subtitle strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Acciones del encabezado */
+.main-content-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.main-content-btn-sync {
+  padding: 0.5rem 0.875rem;
+  border-radius: var(--radius-badge);
+  background-color: var(--bg-card);
+  color: var(--color-text-primary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-medium);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.15s ease;
+}
+
+.main-content-btn-sync:hover {
+  background-color: var(--bg-card-inner);
+  border-color: #d1d5db;
+}
+
+.main-content-btn-action {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-badge);
+  background-color: var(--color-text-primary);
+  color: #ffffff;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  transition: opacity 0.15s ease;
+}
+
+.main-content-btn-action:hover {
+  opacity: 0.88;
+}
+
+/* Grid de Tarjetas KPI */
+.main-content-kpis-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .main-content-kpis-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Sección Lienzo Central */
+.main-content-canvas-section {
+  padding: 1.5rem;
+  border-radius: var(--radius-card);
+  background-color: var(--bg-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.main-content-canvas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.875rem;
+}
+
+.main-content-canvas-title {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.main-content-canvas-tag {
+  font-size: var(--text-2xs);
+  font-family: var(--font-family-mono);
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-badge);
+  background-color: var(--bg-card-inner);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.main-content-canvas-placeholder {
+  padding: 3.5rem 1.5rem;
+  text-align: center;
+  border-radius: var(--radius-card);
+  background-color: var(--bg-card-inner);
+  border: 1px dashed var(--color-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.main-content-canvas-placeholder-heading {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.main-content-canvas-placeholder-text {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
