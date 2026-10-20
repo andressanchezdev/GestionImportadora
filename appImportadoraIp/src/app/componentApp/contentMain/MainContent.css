@@ -16,7 +16,7 @@
   flex-direction: column;
   gap: 1rem;
   border-bottom: 1px solid var(--color-border);
-  padding-bottom: 1.25rem;
+  padding: 0.9rem;
 }
 
 @media (min-width: 768px) {

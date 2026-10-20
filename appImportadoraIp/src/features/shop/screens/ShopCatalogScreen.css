@@ -4,7 +4,7 @@
 .shop-catalog-screen {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.9rem;
   width: 100%;
 }
 
