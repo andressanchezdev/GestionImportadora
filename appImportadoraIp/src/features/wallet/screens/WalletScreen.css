@@ -1,0 +1,17 @@
+/* WalletScreen.css · estilos de la pantalla de cartera · solo usa tokens de styles/tokens.css */
+/* src/features/wallet/screens/WalletScreen.css */
+
+.wallet-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+}
+
+.wallet-section-kpis {
+  width: 100%;
+}
+
+.wallet-section-table {
+  width: 100%;
+}

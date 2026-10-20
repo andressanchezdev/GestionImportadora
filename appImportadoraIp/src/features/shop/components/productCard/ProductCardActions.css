@@ -1,0 +1,101 @@
+/* ProductCardActions.css · estilos de la cantidad y el botón de ordenar de la tarjeta · solo usa tokens de styles/tokens.css */
+/* ojo: antes estas reglas estaban en ProductCard.css (se separó para que cada archivo haga una sola cosa) */
+/* Fila de Acción (Stepper y Botón Ordenar) */
+.product-card-action-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.product-card-quantity-stepper {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--c-slate-300);
+    border-radius: var(--radius-md);
+    background: var(--c-white);
+    overflow: hidden;
+    height: 36px;
+}
+
+.product-card-stepper-btn {
+    border: none;
+    background: transparent;
+    width: 30px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: var(--text-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--c-slate-600);
+    transition: background-color var(--motion-fast);
+}
+
+.product-card-stepper-btn:hover:not(:disabled) {
+    background-color: var(--c-slate-100);
+    color: var(--c-slate-900);
+}
+
+.product-card-stepper-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.product-card-stepper-input {
+    width: 32px;
+    border: none;
+    text-align: center;
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--c-slate-900);
+    background: transparent;
+    outline: none;
+}
+
+.product-card-btn-add-to-cart {
+    flex: 1;
+    height: 36px;
+    border-radius: var(--radius-md);
+    border: none;
+    background: var(--c-blue-600);
+    color: var(--c-white);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all var(--motion-fast);
+    box-shadow: var(--shadow-rest);
+}
+
+.product-card-btn-add-to-cart:hover:not(:disabled) {
+    background: var(--c-blue-700);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-rest);
+}
+
+.product-card-btn-add-to-cart:disabled {
+    background: var(--c-slate-200);
+    color: var(--c-slate-400);
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.product-card-btn-add-to-cart.product-card-already-ordered {
+    background: var(--c-emerald-700);
+    box-shadow: var(--shadow-rest);
+}
+
+.product-card-btn-add-to-cart.product-card-already-ordered:hover:not(:disabled) {
+    background: var(--c-emerald-700);
+}
+
+/* ojo: este estilo antes estaba en línea dentro de ProductCard.tsx */
+.product-card-added-qty {
+    opacity: 0.8;
+    font-size: var(--text-xs);
+}

@@ -1,3 +1,5 @@
+// shop.types · contratos de producto, precios, filtros y carrito
+// conecta con: shop.constants, shop.slice y los componentes de shop
 export type PriceLevelKey = 'P0' | 'P1' | 'P2' | 'P3'
 
 export interface ProductPrices {
@@ -55,4 +57,11 @@ export interface ShopState {
     cart: CartItem[]
     selectedProductId: string | null
     isCartDrawerOpen: boolean
+}
+
+// cambio de stock que llega en tiempo real: valor ABSOLUTO del producto en una bodega (así un evento repetido no descuenta dos veces)
+export interface StockUpdate {
+    productId: string
+    warehouseId: string
+    stock: number
 }

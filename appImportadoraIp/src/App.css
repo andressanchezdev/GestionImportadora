@@ -1,53 +1,5 @@
-/* ============================================================================
-   VARIABLES GLOBALES DEL ERP (Design Tokens alineados con clienteIP)
-   ============================================================================ */
-:root {
-  /* 1. BACKGROUNDS (Superficies y Fondos) */
-  --bg-app: #f7f7f7;                    /* Fondo base general de la app */
-  --bg-header: #ffffff;                 /* Superficie blanca de la cabecera */
-  --bg-sidebar: #ffffff;                /* Superficie blanca del menú lateral */
-  --bg-main: #f7f7f7;                   /* Fondo del lienzo central de trabajo */
-  --bg-card: #ffffff;                   /* Fondo de tarjetas, paneles y métricas */
-  --bg-card-inner: #f7f7f7;             /* Fondo de contenedores internos / placeholders */
-  --bg-drawer: #ffffff;                 /* Superficie blanca del drawer lateral derecho */
-
-  /* 2. TEXTOS Y BORDES (Escala de Grises de clienteIP) */
-  --color-text-primary: #1a1a1a;        /* Texto principal carbón de alto contraste */
-  --color-text-secondary: #757575;      /* Subtítulos, etiquetas e iconos inactivos */
-  --color-text-muted: #757575;          /* Textos tenues */
-  --color-border: #e5e5e5;              /* Bordes finos y divisores sutiles */
-
-  /* 3. SOMBRAS Y BORDES REDONDEADOS */
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --shadow-card-hover: 0 6px 20px rgba(0, 0, 0, 0.1);
-  --radius-badge: 6px;
-  --radius-card: 12px;
-  --radius-input: 24px;
-
-  /* 4. FUENTES (Familias y Pesos Tipográficos) */
-  --font-family-base: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-
-  --font-weight-normal: 400;            /* Texto estándar */
-  --font-weight-medium: 500;            /* Subtítulos y etiquetas */
-  --font-weight-semibold: 600;          /* Botones e ítems de menú */
-  --font-weight-bold: 700;              /* Títulos y valores numéricos */
-  --font-weight-black: 900;             /* Título principal del módulo */
-
-  /* 5. MEDIDAS (Tamaños de Texto y Dimensiones del Layout) */
-  --text-2xs: 10px;                     /* Badges pequeños, tags */
-  --text-xs: 12px;                      /* 12px: botones pequeños, subtítulos, migas */
-  --text-sm: 14px;                      /* 14px: texto de menú, placeholders */
-  --text-base: 16px;                    /* 16px: títulos de sección */
-  --text-xl: 20px;                      /* 20px: iconos y encabezados medianos */
-  --text-2xl: 24px;                     /* 24px: títulos principales del ERP y KPIs */
-
-  /* --- Dimensiones estructurales de Layout --- */
-  --header-height: 64px;                /* 64px: altura fija de cabecera de clienteIP */
-  --sidebar-width: 340px;               /* 340px: ancho fijo del menú lateral ERP */
-  --drawer-width-open: 360px;           /* 360px: ancho del panel derecho abierto */
-  --drawer-width-collapsed: 56px;       /* 56px: ancho del panel derecho contraído */
-}
+/* App.css · reset y estilos base de la app; importa los tokens · solo usa tokens de styles/tokens.css */
+@import './styles/tokens.css';
 
 /* ============================================================================
    RESET Y ESTILOS BASE
@@ -69,4 +21,32 @@ body,
   font-family: var(--font-family-base);
   background-color: var(--bg-app);
   color: var(--color-text-primary);
+}
+
+/* ojo: botones y campos heredaban la fuente del navegador (13.33px); ahora usan la fuente y el tamaño base de la app */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: var(--text-sm);
+}
+
+/* foco visible al navegar con teclado (antes no había estilo de foco) */
+:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+}
+
+/* animación compartida de "latido" (punto de estado de la API y esqueletos de carga); antes estaba en AppHeader.css */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
 }

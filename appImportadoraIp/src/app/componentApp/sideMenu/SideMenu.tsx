@@ -1,80 +1,40 @@
+// SideMenu · menú lateral: lista de módulos con sus subgestiones y, abajo, el estado de la API y el usuario
+// conecta con: navigation (MENU_ITEMS y acciones del estado ui); partes: SideMenuItem, ApiStatus y SideMenuUser
 import React from 'react'
 import './SideMenu.css'
-import { useAppDispatch, useAppSelector } from '@/app/store/store'
-import {
-    MENU_ITEMS,
-    setActiveModule,
-    setActiveSubitem,
-} from '@/features/navigation'
+import { useAppDispatch, useAppSelector } from '@/global/hooks/useRedux'
+import { MENU_ITEMS, setActiveModule, setActiveSubitem } from '@/features/navigation'
+import { SideMenuItem } from './item/SideMenuItem'
+import { ApiStatus } from './footer/ApiStatus'
+import { SideMenuUser } from './footer/SideMenuUser'
 
-export const SideMenuLateral: React.FC = () => {
+export const SideMenu: React.FC = () => {
     const dispatch = useAppDispatch()
-    const { activeModule, activeSubitem, currentUser } = useAppSelector(
-        (state) => state.ui
-    )
+    const { activeModule, activeSubitem } = useAppSelector((state) => state.ui)
+
     return (
-        <aside className="side-menu-lateral">
-            {/* Lista de Navegación de los 7 Módulos */}
-            <nav className="side-menu-nav">
-                {MENU_ITEMS.map((item) => {
-                    const isActive = activeModule === item.id
-                    return (
-                        <div key={item.id} className="side-menu-item-group">
-                            <button
-                                onClick={() => dispatch(setActiveModule(item.id))}
-                                className={`side-menu-item-btn ${isActive
-                                    ? 'side-menu-item-btn-active'
-                                    : 'side-menu-item-btn-inactive'
-                                    }`}
-                            >
-                                <div className="side-menu-item-label-wrapper">
-                                    <img src={item.icon} alt={item.label} className="side-menu-item-icon" />
-                                    <span>{item.label}</span>
-                                </div>
-                                {Boolean(item.badgeCount && item.badgeCount > 0) &&
-                                    (<span className={`side-menu-item-badge ${isActive ? 'side-menu-item-badge-active' : 'side-menu-item-badge-inactive'}`}>
-                                        {item.badgeCount}
-                                    </span>)}
-
-                            </button>
-
-                            {/* Submenú del módulo activo */}
-                            {isActive && (
-                                <div className="side-menu-subitems">
-                                    {item.subitems.map((sub, idx) => {
-                                        const isSubActive = activeSubitem === sub
-                                        return (
-                                            <button
-                                                key={idx}
-                                                onClick={() => dispatch(setActiveSubitem(sub))}
-                                                className={`side-menu-subitem-btn ${isSubActive ? 'side-menu-subitem-btn-active' : ''
-                                                    }`}
-                                            >
-                                                • {sub}
-                                            </button>
-                                        )
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                    )
-                })}
+        <aside className="side-menu">
+            {/* Lista de Navegación de los Módulos */}
+            <nav className="side-menu-nav" aria-label="Módulos">
+                {MENU_ITEMS.map((item) => (
+                    <SideMenuItem
+                        key={item.id}
+                        item={item}
+                        isActive={activeModule === item.id}
+                        activeSubitem={activeSubitem}
+                        onSelectModule={(id) => dispatch(setActiveModule(id))}
+                        onSelectSubitem={(id) => dispatch(setActiveSubitem(id))}
+                    />
+                ))}
             </nav>
 
-            {/* Pie de estado */}
+            {/* Pie: estado de la API y usuario */}
             <div className="side-menu-footer">
-                {/* Perfil del Usuario */}
-                <div className="app-header-user">
-                    <div className="app-header-user-avatar">
-                        TU
-                    </div>
-                    <div className="app-header-user-info">
-                        <p className="app-header-user-name">{currentUser?.name}</p>
-                        <p className="app-header-user-role">{currentUser?.role}</p>
-                    </div>
-                </div>
-
+                <ApiStatus />
+                <SideMenuUser />
             </div>
         </aside>
     )
 }
+
+export default SideMenu

@@ -1,3 +1,5 @@
+// warehouses.constants · lista fija de bodegas
+// conecta con: AppHeader (selector de bodega)
 import type { Warehouse } from '../types/warehouse.types'
 
 export const WAREHOUSES: Warehouse[] = [

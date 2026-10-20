@@ -1,3 +1,5 @@
+// navigation.slice · estado de navegación (clave 'ui'): módulo, subitem, bodega y usuario activos
+// conecta con: SideMenu, MainContent, DrawerRight, AppHeader (leen/disparan estas acciones)
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { type ERPModule } from '../types/navigation.types'
 import { MENU_ITEMS } from '../constants/menuItems.constants'
@@ -11,7 +13,7 @@ export const navigationSlice = createSlice({
       state.activeModule = action.payload
       const menuItem = MENU_ITEMS.find((item) => item.id === action.payload)
       if (menuItem && menuItem.subitems.length > 0) {
-        state.activeSubitem = menuItem.subitems[0]
+        state.activeSubitem = menuItem.subitems[0].id
       }
     },
     setActiveSubitem: (state, action: PayloadAction<string>) => {

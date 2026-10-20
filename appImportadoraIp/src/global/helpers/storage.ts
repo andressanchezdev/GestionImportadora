@@ -1,3 +1,5 @@
+// storage · almacenamiento seguro (localStorage) para redux-persist
+// conecta con: app/store/store
 /**
  * Motor de almacenamiento seguro para Redux Persist y navegador.
  * Compatible con Vite (ESM), SSR y modo incógnito.

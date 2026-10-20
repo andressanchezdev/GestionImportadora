@@ -1,3 +1,5 @@
+// config · URL base, timeout y endpoints del backend
+// conecta con: api/client, api/health
 // src/api/config.ts
 
 /**
@@ -8,6 +10,8 @@ export const API_CONFIG = {
     (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) ||
     'https://importadora-back-production.up.railway.app',
   TIMEOUT: 15000, // 15 segundos
+  // URL del websocket de tiempo real; vacía = tiempo real desactivado (no se conecta a ningún servidor por defecto)
+  WS_URL: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_WS_URL) || '',
   ENDPOINTS: {
     // Autenticación
     AUTH: {
@@ -54,6 +58,11 @@ export const API_CONFIG = {
       LIST: '/employees/list',
       ROLES: '/employees/roles',
       PERMISSIONS: '/employees/permissions',
+    },
+    // Salud del backend (GET, sin sesión y muy liviano: unos 220 bytes)
+    HEALTH: {
+      CHECK: '/health',
+      READINESS: '/readiness',
     },
     // Verificación / Documentación Swagger
     DOCS: {

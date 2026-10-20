@@ -1,5 +1,7 @@
+// shop.slice · estado de tienda: filtros, carrito y selección de producto
+// conecta con: ShopCatalogScreen, ProductCard, ShopCartDrawer
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { Product, PriceLevelKey } from '../types/shop.types'
+import type { Product, PriceLevelKey, StockUpdate } from '../types/shop.types'
 import { INITIAL_SHOP_STATE } from '../constants/shop.constants'
 
 export const shopSlice = createSlice({
@@ -89,6 +91,12 @@ export const shopSlice = createSlice({
         setSelectedProductId: (state, action: PayloadAction<string | null>) => {
             state.selectedProductId = action.payload
         },
+        // tiempo real: fija el stock de un producto en una bodega con el valor que manda el servidor
+        applyStockUpdate: (state, action: PayloadAction<StockUpdate>) => {
+            const { productId, warehouseId, stock } = action.payload
+            const product = state.products.find((p) => p.id === productId)
+            if (product) product.stockByWarehouse[warehouseId] = stock
+        },
     },
 })
 
@@ -106,6 +114,8 @@ export const {
     toggleCartDrawer,
     setCartDrawerOpen,
     setSelectedProductId,
+    applyStockUpdate,
 } = shopSlice.actions
 
+export const shopReducer = shopSlice.reducer
 export default shopSlice.reducer

@@ -1,36 +1,35 @@
+// navigation.types · contratos del menú y del estado de navegación (ui)
+// conecta con: menuItems.constants, navigation.slice, SideMenu, MainContent, DrawerRight
 export type ERPModule =
-  | 'tienda'
-  | 'cartera'
-  | 'caja'
-  | 'inventario'
-  | 'traslados'
-  | 'empleados'
-  | 'reportes'
+  | 'shop'
+  | 'wallet'
+  | 'cashRegister'
+  | 'inventory'
+  | 'transfers'
+  | 'thirdParties'
+  | 'reports'
+
+// ojo: antes subitems era string[] y la lógica comparaba el texto visible; ahora id (código) + label (cliente)
+export interface NavSubitem {
+  id: string
+  label: string
+}
 
 export interface NavItem {
   id: ERPModule
   label: string
   icon: string
-  subitems: string[]
+  subitems: NavSubitem[]
   badgeCount?: number
 }
 
-export interface UserProfile {
-  id: string
-  name: string
-  role: string
-  branch: string
-}
-
+// ojo: el usuario y la empresa ya no se guardan aquí; salen de la sesión (features/auth)
 export interface UIState {
   activeModule: ERPModule
   activeSubitem: string
   sidebarOpen: boolean
   activeWarehouseId: string
   activeWarehouseName: string
-  companyId: string
-  companyName: string
-  currentUser: UserProfile
   cashRegisterStatus: 'open' | 'closed'
 }
 

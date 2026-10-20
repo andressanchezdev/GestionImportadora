@@ -1,3 +1,5 @@
+// health · prueba de conexión con el backend y latencia en ms
+// conecta con: api/client y api/config (HEALTH.CHECK); lo usa global/hooks/useApiHealth para mostrar la latencia en el footer del menú
 // src/api/health.ts
 import { apiClient } from './client'
 import { API_CONFIG } from './config'
@@ -11,8 +13,8 @@ export async function checkApiHealth(): Promise<HealthCheckResult> {
   const startTime = Date.now()
 
   try {
-    // Consultamos el endpoint del documento Swagger para verificar que el servidor Railway esté activo
-    const response = await apiClient.get(API_CONFIG.ENDPOINTS.DOCS.SWAGGER_DOC, {
+    // ojo: antes se consultaba /swagger/doc.json (descargaba 781 KB cada vez); ahora GET /health (220 bytes)
+    const response = await apiClient.get(API_CONFIG.ENDPOINTS.HEALTH.CHECK, {
       timeout: 8000,
     })
 

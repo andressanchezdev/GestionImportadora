@@ -1,0 +1,46 @@
+/* CreditAccountMetrics.css · estilos del saldo adeudado y el cupo disponible · solo usa tokens de styles/tokens.css */
+/* ojo: antes estas reglas estaban en CreditAccountDrawer.css (se separó para que cada archivo haga una sola cosa) */
+/* Metrics Card */
+.credit-drawer-metrics-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  background: var(--c-slate-50);
+  border: 1px solid var(--color-border, var(--c-slate-200));
+  border-radius: var(--radius-md);
+  padding: 0.875rem;
+}
+
+.credit-drawer-metric-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.credit-drawer-metric-label {
+  font-size: var(--text-xs);
+  color: var(--c-slate-600);
+  font-weight: var(--font-weight-semibold);
+}
+
+.credit-drawer-metric-value-debt {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-extrabold);
+  font-family: var(--font-family-mono);
+  margin-top: 2px;
+}
+
+.credit-drawer-metric-value-avail {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-extrabold);
+  font-family: var(--font-family-mono);
+  margin-top: 2px;
+}
+
+/* ojo: estas dos clases antes se usaban desde CreditClientsTable.css; ahora cada componente tiene la suya */
+.credit-drawer-text-rose {
+  color: var(--c-rose-700);
+}
+
+.credit-drawer-text-emerald {
+  color: var(--c-emerald-700);
+}

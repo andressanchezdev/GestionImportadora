@@ -1,3 +1,5 @@
+// api.types · contratos de respuesta, paginación y error de la API
+// conecta con: api/client, api/health
 // src/api/types/api.types.ts
 
 /**

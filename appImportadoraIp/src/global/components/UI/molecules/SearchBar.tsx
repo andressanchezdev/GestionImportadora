@@ -1,3 +1,5 @@
+// SearchBar · barra de búsqueda reutilizable con botón de limpiar
+// conecta con: ShopCatalogScreen, CreditClientsTable
 import React from 'react'
 import './SearchBar.css'
 

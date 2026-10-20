@@ -1,3 +1,5 @@
+// StatCard · tarjeta de métrica (título, valor, subtítulo)
+// conecta con: WalletKpiHeader
 import React from 'react'
 import './StatCard.css'
 
