@@ -11,8 +11,8 @@ export const AppHeader: React.FC = () => {
             <div className="app-header-brand">
                 <div className="app-header-logo">IP</div>
                 <div>
-                    <h1 className="app-header-title">IP Online</h1>
-                    <span className="app-header-badge">ERP Premium</span>
+                    <h1 className="app-header-title">Importadora Premium</h1>
+                    <span className="app-header-badge">ERP Online</span>
                 </div>
             </div>
 
