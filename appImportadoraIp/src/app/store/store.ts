@@ -22,7 +22,7 @@ import { rootReducer } from './rootReducer'
 // 1. CONFIGURACIÓN DEL STORE & PERSISTENCIA
 // ============================================================================
 const persistConfig = {
-  key: 'ip_online_root_v2', // v2: cambiaron los ids a inglés (módulos y estados), se sube la clave para no cargar datos viejos
+  key: 'ip_online_pruebas_v2', // v2: cambiaron los ids a inglés (módulos y estados), se sube la clave para no cargar datos viejos
   storage,
   whitelist: ['ui', 'shop', 'wallet'], //afuturo aqui las demas 
 }
