@@ -11,7 +11,8 @@ import { fetchCartThunk } from '../thunks/shop.cart.thunks'
 
 export const useCartSync = (): void => {
     const dispatch = useAppDispatch()
-    const companyId = useAppSelector(selectCurrentUser)?.companyId
+    const user = useAppSelector(selectCurrentUser)
+    const companyId = user?.companyId
     const activeWarehouseId = useAppSelector((state) => state.ui.activeWarehouseId)
     const warehousesStatus = useAppSelector(selectWarehousesStatus)
     const cartUuid = useAppSelector((state) => state.shop.cartUuid)
@@ -24,5 +25,9 @@ export const useCartSync = (): void => {
     }, [dispatch, companyId, activeWarehouseId, cartUuid, ready])
 
     // al salir (cerrar sesión) se olvida el carrito de este usuario
-    useEffect(() => () => void dispatch(resetCart()), [dispatch])
+    useEffect(() => {
+        return () => {
+            dispatch(resetCart())
+        }
+    }, [dispatch])
 }

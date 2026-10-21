@@ -18,7 +18,8 @@ export const setUnauthorizedHandler = (handler: () => void): void => {
 }
 
 /**
- * 1. Instancia Base de Axios configurada para Importadora Premium (Railway)
+ * 1. Instancia Base de Axios configurada para Importadora Premium (punto de entrada de la url de el swager de la api)
+ * "VITE_API_BASE_URL esta en el .env"
  */
 export const apiClient: AxiosInstance = axios.create({
   baseURL: API_CONFIG.BASE_URL,

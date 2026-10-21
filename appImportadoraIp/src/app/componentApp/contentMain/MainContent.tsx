@@ -21,7 +21,7 @@ export const MainContent: React.FC = () => {
         <h2 className="main-content-title">
           <img src={getModuleIcon(activeModule)} alt="" className="main-content-title-icon" />
           <span>
-            {getModuleTitle(activeModule)} · {subitemLabel || 'Inicio'}
+            {subitemLabel || 'Inicio'}
           </span>
         </h2>
       </div>

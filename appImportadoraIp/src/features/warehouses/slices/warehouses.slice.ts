@@ -25,6 +25,7 @@ export const warehousesSlice = createSlice({
             })
     },
 })
+//AJUSTES SOBRE ESTA CAPA VALIDANDO CORRECTAMENTE EL Id obtenido en el auth
 
 export const warehousesReducer = warehousesSlice.reducer
 export default warehousesSlice.reducer

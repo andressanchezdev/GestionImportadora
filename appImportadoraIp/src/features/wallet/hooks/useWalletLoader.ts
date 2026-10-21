@@ -10,7 +10,8 @@ import { loadWalletSummaryThunk, loadWalletThunk } from '../thunks/wallet.thunks
 
 export const useWalletLoader = (): void => {
   const dispatch = useAppDispatch()
-  const companyId = useAppSelector(selectCurrentUser)?.companyId
+  const user = useAppSelector(selectCurrentUser)
+  const companyId = user?.companyId
   const activeWarehouseId = useAppSelector((state) => state.ui.activeWarehouseId)
   const warehousesStatus = useAppSelector(selectWarehousesStatus)
   const page = useAppSelector(selectWalletPage)

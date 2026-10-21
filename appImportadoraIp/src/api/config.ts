@@ -42,7 +42,7 @@ export const API_CONFIG = {
       DELETE_ALL: '/carts/deleteall',
       REASSIGN_USER: '/carts/reassignuser',
     },
-    // Catálogos Base
+    // Catálogos grupo base de el endpoint
     CATALOGS: {
       CATEGORIES: '/categories',
       CATEGORIES_REGISTER: '/categories/register',
@@ -57,7 +57,7 @@ export const API_CONFIG = {
       WAREHOUSES_REGISTER: '/warehouses/register',
       WAREHOUSES_UPDATE: '/warehouses/update',
     },
-    // Terceros: usuarios (clientes y vendedores), su crédito, direcciones y descuentos
+    // Terceros: usuarios (clientes y vendedores, proveedores, TODOS los Agentes activos son ), centralizada de la imfo de cada actor
     USERS: {
       LIST: '/users',
       BY_ID: (id: number | string) => `/users/${id}`,

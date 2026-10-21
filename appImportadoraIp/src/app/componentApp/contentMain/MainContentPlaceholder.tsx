@@ -14,7 +14,7 @@ export const MainContentPlaceholder: React.FC<MainContentPlaceholderProps> = ({ 
     <div className="main-content-canvas-section">
       <div className="main-content-canvas-header">
         <h3 className="main-content-canvas-title">
-          {getModuleTitle(moduleId)} · {subitemLabel || 'General'}
+          {subitemLabel || 'General'}
         </h3>
         <span className="main-content-canvas-tag">Próxima Fase</span>
       </div>

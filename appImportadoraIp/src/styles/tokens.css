@@ -272,7 +272,7 @@
   /* 6. TARJETA DE PRODUCTO (diseño tomado de las cards de Yamaha; ver docs/yamaha-product-card-spec.md) */
   --product-card-min-width: 330px;
   --product-card-media-height: 180px;
-  --radius-product-card: 25px;
+  --radius-product-card: 12px;
   --c-product-card-border: #e9e7e7;
   --c-product-card-name: #374f5b;
   --c-product-card-title: #333333;

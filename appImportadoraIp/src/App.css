@@ -108,3 +108,46 @@ th {
 .shop-catalog-filter-pills-scroll::-webkit-scrollbar {
   display: none;
 }
+
+/* ============================================================================
+   ESTILOS GLOBALES DE SCROLLBAR
+   Barras verticales transparentes/invisibles · Barras horizontales visibles y estilizadas
+   ============================================================================ 
+/* Dimensiones base: ancho 0 para vertical (oculto), alto para horizontal */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 6px;
+}
+
+/* Scrollbar vertical: completamente invisible y transparente en toda la app */
+::-webkit-scrollbar:vertical {
+  display: none;
+  width: 0px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-track:vertical {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  background: transparent;
+}
+
+/* Scrollbar horizontal: visible, estilizada con tokens */
+::-webkit-scrollbar:horizontal {
+  height: 6px;
+}
+
+::-webkit-scrollbar-track:horizontal {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:horizontal:hover {
+  background: var(--color-text-tertiary);
+}

@@ -10,6 +10,10 @@ export const SESSION_TIMING = {
   TICK_MS: 5000, // cada cuánto se revisa el estado de la sesión
 } as const
 
+
+//ajustarlas medidas de carga aumentar el valor para mejor control de el tocken
+
+
 // qué cuenta como "actividad del usuario"
 export const ACTIVITY_EVENTS = ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart', 'click'] as const
 

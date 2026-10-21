@@ -1,6 +1,6 @@
 // store · configura redux + persistencia y exporta los tipos RootState y AppDispatch
 // conecta con: rootReducer, global/helpers/storage; ojo: antes se llamaba store.tsx (no tenía JSX)
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore, type UnknownAction } from '@reduxjs/toolkit'
 import {
   persistStore,
   persistReducer,
@@ -41,9 +41,10 @@ export const store = configureStore({
 export const persistor = persistStore(store)
 
 // ojo: si el backend responde 401 (token vencido) se cierra la sesión; la alerta "Tu sesión expiró" la muestra logoutThunk (antes se mostraba aquí)
-// ojo: login, refresh y logout no cuentan (los filtra api/client); si ya no hay sesión no se repite el cierre (varias llamadas pueden dar 401 a la vez)
 setUnauthorizedHandler(() => {
-  if (selectIsAuthenticated(store.getState())) store.dispatch(logoutThunk('expired'))
+  if (selectIsAuthenticated(store.getState())) {
+    store.dispatch(logoutThunk('expired') as unknown as UnknownAction)
+  }
 })
 
 // ============================================================================

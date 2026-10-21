@@ -61,17 +61,21 @@
   color: var(--color-text-primary);
 }
 
-.side-menu-subitem-btn-active,
-.side-menu-subitem-btn-active:hover {
-  background-color: var(--c-blue-50);
-  color: var(--c-blue-700);
+.side-menu-subitem-btn-active {
+  background-color: transparent;
+  color: var(--color-text-primary);
   font-weight: var(--font-weight-semibold);
   /* misma implosión del módulo, más suave */
   animation: side-menu-subitem-implode var(--duration-implode) var(--ease-out);
 }
 
+.side-menu-subitem-btn-active:hover {
+  background-color: var(--bg-card-inner);
+  color: var(--color-text-primary);
+}
+
 .side-menu-subitem-btn-active::before {
-  background-color: var(--c-blue-600);
+  background-color: var(--color-text-primary);
   transform: scale(1.25);
 }
 

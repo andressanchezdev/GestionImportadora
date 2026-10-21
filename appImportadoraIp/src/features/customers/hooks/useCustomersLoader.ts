@@ -9,7 +9,8 @@ import { loadCustomersThunk } from '../thunks/customers.thunks'
 
 export const useCustomersLoader = (): void => {
   const dispatch = useAppDispatch()
-  const companyId = useAppSelector(selectCurrentUser)?.companyId
+  const user = useAppSelector(selectCurrentUser)
+  const companyId = user?.companyId
   const page = useAppSelector(selectCustomersPage)
 
   useEffect(() => {

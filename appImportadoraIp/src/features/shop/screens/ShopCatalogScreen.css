@@ -44,6 +44,7 @@
   outline: none;
   cursor: pointer;
   transition: border-color var(--motion-fast);
+  width: 125px;
 }
 
 .shop-catalog-select:focus {
@@ -64,6 +65,7 @@
   grid-template-columns: repeat(auto-fill, minmax(var(--product-card-min-width), 1fr));
   gap: 1.25rem;
 }
+
 /* mientras se pide otra página o se cambia un filtro, la lista anterior se atenúa y no se puede tocar (evita agregar productos que están por cambiar) */
 .shop-catalog-products-grid-loading {
   opacity: 0.55;
