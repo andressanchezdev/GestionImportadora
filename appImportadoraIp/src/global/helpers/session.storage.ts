@@ -33,6 +33,17 @@ export const saveSession = (session: StoredSession, remember: boolean): void => 
   }, undefined)
 }
 
+// cambia solo los tokens de la sesión, en el MISMO almacén donde ya está (así "recordarme" se respeta y la sesión nunca cambia de lugar)
+// ojo: si el servidor rota el refresh token hay que guardar el nuevo; si no viene, se deja el que había
+export const updateTokens = (accessToken: string, refreshToken: string | null): void => {
+  safe(() => {
+    const store = [localStorage, sessionStorage].find((s) => s.getItem(KEYS.accessToken))
+    if (!store) return
+    store.setItem(KEYS.accessToken, accessToken)
+    if (refreshToken) store.setItem(KEYS.refreshToken, refreshToken)
+  }, undefined)
+}
+
 // lee la sesión guardada (primero localStorage, luego sessionStorage); null si no hay o está dañada
 export const readSession = (): StoredSession | null => {
   return safe(() => {

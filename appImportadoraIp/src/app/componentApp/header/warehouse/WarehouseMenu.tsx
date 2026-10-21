@@ -1,20 +1,22 @@
 // WarehouseMenu · lista desplegable de bodegas disponibles con la activa marcada
-// conecta con: WarehouseSelector (le pasa la bodega activa y recibe la elegida); lista de features/warehouses
+// conecta con: WarehouseSelector (le pasa la lista de bodegas del backend y la activa, y recibe la elegida); tipo Warehouse de features/warehouses
 import React from 'react'
-import { WAREHOUSES, type Warehouse } from '@/features/warehouses'
+import type { Warehouse } from '@/features/warehouses'
 import './WarehouseMenu.css'
 
 interface WarehouseMenuProps {
+    warehouses: Warehouse[]
     activeWarehouseId: string
     onSelect: (warehouse: Warehouse) => void
 }
 
-export const WarehouseMenu: React.FC<WarehouseMenuProps> = ({ activeWarehouseId, onSelect }) => {
+export const WarehouseMenu: React.FC<WarehouseMenuProps> = ({ warehouses, activeWarehouseId, onSelect }) => {
     return (
         <div className="app-header-warehouse-menu" role="listbox">
             <div className="app-header-warehouse-menu-header">Bodegas Disponibles</div>
             <div className="app-header-warehouse-menu-list">
-                {WAREHOUSES.map((wh) => {
+                {warehouses.length === 0 && <div className="app-header-warehouse-menu-empty">No hay bodegas disponibles</div>}
+                {warehouses.map((wh) => {
                     const isSelected = wh.id === activeWarehouseId
                     return (
                         <button
@@ -32,7 +34,7 @@ export const WarehouseMenu: React.FC<WarehouseMenuProps> = ({ activeWarehouseId,
                                 <span className="app-header-warehouse-menu-item-name">{wh.name}</span>
                             </div>
                             <div className="app-header-warehouse-menu-item-right">
-                                <span className="app-header-warehouse-menu-item-id">{wh.id}</span>
+                                <span className="app-header-warehouse-menu-item-id">#{wh.id}</span>
                                 {isSelected && (
                                     <svg
                                         className="app-header-warehouse-menu-check"

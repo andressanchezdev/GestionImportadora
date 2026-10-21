@@ -4,14 +4,5 @@
 .wallet-screen {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  width: 100%;
-}
-
-.wallet-section-kpis {
-  width: 100%;
-}
-
-.wallet-section-table {
   width: 100%;
 }

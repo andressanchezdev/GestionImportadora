@@ -1,5 +1,5 @@
-// WalletKpiHeader · tarjetas de totales de cartera (cupo, por cobrar, mora, clientes)
-// conecta con: wallet.slice (clientes), global StatCard
+// WalletKpiHeader · tarjetas de totales de cartera (por cobrar, clientes en mora, cupo y clientes con crédito)
+// conecta con: wallet.selectors (selectWalletKpis, que sale de POST /wallet/summary), global StatCard
 // src/features/wallet/components/kpis/WalletKpiHeader.tsx
 import React from 'react'
 import './WalletKpiHeader.css'
@@ -11,8 +11,6 @@ import { useAppSelector } from '@/global/hooks/useRedux'
 import { selectWalletKpis } from '../../selectors/wallet.selectors'
 
 export const WalletKpiHeader: React.FC = () => {
-  const { customers } = useAppSelector((state) => state.wallet)
-
   const kpis = useAppSelector(selectWalletKpis)
 
   return (
@@ -20,15 +18,15 @@ export const WalletKpiHeader: React.FC = () => {
       <StatCard
         title="Total Cartera por Cobrar"
         value={formatCOP(kpis.totalReceivable)}
-        subtitle="Saldo corriente y vencido"
+        subtitle="Saldo adeudado por los clientes"
         badge={{ text: 'Activo', variant: 'indigo' }}
       />
       <StatCard
-        title="Cartera en Mora"
-        value={formatCOP(kpis.totalOverdue)}
-        subtitle="Vencimiento mayor a 30 días"
+        title="Clientes en Mora"
+        value={String(kpis.customersOverdue)}
+        subtitle="Con facturas vencidas"
         badge={{ text: 'Alerta', variant: 'rose' }}
-        trend={{ value: 'Riesgo alto', positive: false }}
+        trend={kpis.customersOverdue > 0 ? { value: 'Requieren gestión', positive: false } : undefined}
       />
       <StatCard
         title="Cupo Total Aprobado"
@@ -37,9 +35,9 @@ export const WalletKpiHeader: React.FC = () => {
         badge={{ text: 'Cupos', variant: 'emerald' }}
       />
       <StatCard
-        title="Clientes con Saldo Activo"
-        value={`${kpis.activeClients} de ${customers.length}`}
-        subtitle="Clientes con créditos vigentes"
+        title="Clientes con Crédito"
+        value={String(kpis.customersWithCredit)}
+        subtitle={`Plazo promedio: ${Math.round(kpis.averageCreditDays)} días`}
         badge={{ text: 'Clientes', variant: 'slate' }}
       />
     </div>

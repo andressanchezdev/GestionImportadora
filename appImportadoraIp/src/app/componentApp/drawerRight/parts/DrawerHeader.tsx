@@ -14,15 +14,17 @@ interface DrawerHeaderProps {
 export const DrawerHeader: React.FC<DrawerHeaderProps> = ({ icon, meta, onClose }) => {
   return (
     <header className="drawer-header">
-      <span className="drawer-header-icon-box">
-        <img src={icon} alt="" className="drawer-header-icon" />
-      </span>
+      <div className="drawer-header-icon-col">
+        <span className="drawer-header-icon-box">
+          <img src={icon} alt="" className="drawer-header-icon" />
+        </span>
+        {meta.badge && <span className="drawer-header-badge">{meta.badge}</span>}
+      </div>
       <div className="drawer-header-text">
         {meta.tag && <span className="drawer-header-tag">{meta.tag}</span>}
         <h3 className="drawer-header-title">{meta.title}</h3>
         {meta.subtitle && <span className="drawer-header-subtitle">{meta.subtitle}</span>}
       </div>
-      {meta.badge && <span className="drawer-header-badge">{meta.badge}</span>}
       <button type="button" onClick={onClose} className="drawer-header-close" aria-label="Cerrar panel" title="Cerrar panel (Esc)">
         ✕
       </button>

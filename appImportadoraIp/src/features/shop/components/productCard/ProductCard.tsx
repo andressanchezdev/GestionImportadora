@@ -1,10 +1,13 @@
-// ProductCard · tarjeta de producto: marca, ubicación, datos del repuesto y sus tres partes (stock, precios, acciones)
-// conecta con: ShopCatalogScreen (le pasa los datos y recibe el agregar al carrito); usa shop.helpers y las partes ProductCard*
+// ProductCard · tarjeta de producto con el diseño de Yamaha: imagen con iconos, nombre, referencia, precio con tarifas y cantidad
+// conecta con: ShopCatalogScreen (le pasa los datos y recibe el agregar al carrito); usa shop.helpers y las partes ProductCard* (parts/ Media, Info, TierMenu)
+// ojo: ProductCardStock ya no se usa en la tarjeta (el stock salió del diseño); el archivo se conserva como referencia
 import React, { useState } from 'react'
 import type { PriceLevelKey } from '../../types/shop.types'
 import type { ProductCardProps } from '../../types/shop.card.types'
-import { getCategoryEmoji, getStockStatus, getWarehouseStock } from '../../helpers/shop.helpers'
-import { ProductCardStock } from './ProductCardStock'
+import { getStockStatus, getWarehouseStock } from '../../helpers/shop.helpers'
+import { useQuantityInput } from '../../hooks/useQuantityInput'
+import { ProductCardMedia } from './parts/ProductCardMedia'
+import { ProductCardInfo } from './parts/ProductCardInfo'
 import { ProductCardPricing } from './ProductCardPricing'
 import { ProductCardActions } from './ProductCardActions'
 import './ProductCard.css'
@@ -19,91 +22,53 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     // Nivel de precio local editable por tarjeta (por defecto el seleccionado globalmente)
     // ojo: antes se sincronizaba con un useEffect; ahora el cambio local solo vale mientras el nivel global no cambie
     const [priceOverride, setPriceOverride] = useState<{ level: PriceLevelKey; from: PriceLevelKey } | null>(null)
-    const [quantity, setQuantity] = useState<number>(1)
     const cardPriceLevel: PriceLevelKey =
         priceOverride && priceOverride.from === selectedPriceLevel ? priceOverride.level : selectedPriceLevel
 
     // Stock de la bodega activa
     const warehouseStock = getWarehouseStock(product, activeWarehouseId)
-    const stockStatus = getStockStatus(warehouseStock, product.minStockAlert)
-    const isOutOfStock = stockStatus === 'out_of_stock'
+    const isOutOfStock = getStockStatus(warehouseStock, product.minStockAlert) === 'out_of_stock'
 
-    const handleIncrement = () => {
-        if (quantity < warehouseStock) {
-            setQuantity((prev) => prev + 1)
-        }
-    }
-
-    const handleDecrement = () => {
-        if (quantity > 1) {
-            setQuantity((prev) => prev - 1)
-        }
-    }
+    // ojo: la cantidad (botones, número escrito y flechas del teclado) ahora vive en useQuantityInput; antes eran useState + handleIncrement/Decrement aquí
+    const quantityInput = useQuantityInput(warehouseStock)
 
     const handleAdd = () => {
         if (isOutOfStock) return
-        onAddToCart(product, quantity, cardPriceLevel)
+        // si el usuario estaba escribiendo, se confirma ese número antes de agregar
+        onAddToCart(product, quantityInput.commitDraft(), cardPriceLevel)
     }
 
     return (
         <article className={`product-card ${isOutOfStock ? 'product-card-out-of-stock' : ''}`}>
-            {/* Barra Superior: Marca, Ubicación en Bodega */}
-            <div className="product-card-top-bar">
-                <span className="product-card-brand-badge">{product.brand}</span>
-                {product.location && (
-                    <span className="product-card-location-tag" title="Ubicación física en estantería">
-                        📍 {product.location}
-                    </span>
-                )}
-            </div>
-
-            {/* Thumbnail visual */}
-            <div className="product-card-visual">
-                <span className="product-card-visual-icon">
-                    {getCategoryEmoji(product.category)}
-                </span>
-                <span className="product-card-category-pill">{product.category}</span>
-            </div>
-
-            {/* Información del Producto */}
-            <div className="product-card-info">
-                <div className="product-card-sku-row">
-                    <span className="product-card-code">{product.code}</span>
-                    {product.barcode && (
-                        <span className="product-card-barcode">BAR: {product.barcode}</span>
-                    )}
-                </div>
-
-                <h4 className="product-card-name" title={product.name}>
-                    {product.name}
-                </h4>
-
-                {product.modelCompatible && (
-                    <div className="product-card-compat">
-                        <span>🏍️</span>
-                        <span>{product.modelCompatible}</span>
-                    </div>
-                )}
-
-                {/* Disponibilidad de Stock */}
-                <ProductCardStock status={stockStatus} stock={warehouseStock} />
-            </div>
-
-            {/* Sección de Precios Multinivel */}
-            <ProductCardPricing
+            <ProductCardMedia
+                name={product.name}
+                category={product.category}
+                imageUrl={product.imageUrl}
                 product={product}
                 level={cardPriceLevel}
                 onLevelChange={(level) => setPriceOverride({ level, from: selectedPriceLevel })}
             />
 
-            {/* Fila de Acción: Stepper de Cantidad + Botón Ordenar */}
+            <ProductCardInfo name={product.name} code={product.code} location={product.location} />
+
+            {/* Precio del nivel activo alineado a la derecha */}
+            <ProductCardPricing
+                product={product}
+                level={cardPriceLevel}
+            />
+
+            {/* Contador de cantidad + botón Ordenar */}
             <ProductCardActions
-                quantity={quantity}
+                quantity={quantityInput.quantity}
+                quantityText={quantityInput.text}
                 maxQuantity={warehouseStock}
                 isOutOfStock={isOutOfStock}
                 cartQuantity={cartQuantity}
-                onIncrement={handleIncrement}
-                onDecrement={handleDecrement}
+                onIncrement={quantityInput.increment}
+                onDecrement={quantityInput.decrement}
+                onQuantityChange={quantityInput.handleChange}
+                onQuantityKeyDown={quantityInput.handleKeyDown}
+                onQuantityBlur={quantityInput.handleBlur}
                 onAdd={handleAdd}
             />
         </article>

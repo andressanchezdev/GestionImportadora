@@ -73,18 +73,20 @@
 
 .credit-drawer-invoice-pay-btn {
   background: var(--c-white);
-  border: 1px solid var(--c-emerald-500);
-  color: var(--c-emerald-700);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
   font-size: var(--text-xs);
   font-weight: var(--font-weight-bold);
-  padding: 0.375rem;
+  padding: 0.375rem 0.625rem;
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--motion-fast);
 }
 
 .credit-drawer-invoice-pay-btn:hover {
-  background: var(--c-emerald-50);
+  background: var(--c-brand-yellow);
+  border-color: var(--c-brand-yellow);
+  color: var(--c-brand-charcoal);
 }
 
 /* ojo: misma regla que el saldo rojo de las métricas, con su propio nombre para no depender del CSS de otro componente */

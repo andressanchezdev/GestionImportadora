@@ -26,6 +26,27 @@ export interface PaginatorMetadata {
 }
 
 /**
+ * Estado de carga de cualquier recurso pedido a la API (lo usan los slices de las features)
+ */
+export type LoadStatus = 'idle' | 'loading' | 'succeeded' | 'failed'
+
+/**
+ * Datos de paginación que viajan en el cuerpo de todo listado (POST con { companyId, page, pageSize, ...filtros })
+ */
+export interface PageRequest {
+  page: number
+  pageSize: number
+}
+
+/**
+ * Una página de resultados ya lista para la UI: los registros y los metadatos de paginación
+ */
+export interface Paginated<T> {
+  items: T[]
+  meta: PaginatorMetadata
+}
+
+/**
  * Error estandarizado de la aplicación para captura en UI y servicios
  */
 export interface AppApiError {

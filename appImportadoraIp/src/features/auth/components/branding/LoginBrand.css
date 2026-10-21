@@ -15,6 +15,6 @@
 .login-brand-name {
   font-size: var(--text-heading);
   font-weight: var(--font-weight-bold);
-  line-height: 1.2;
+  line-height: var(--leading-snug);
   color: var(--c-brand-charcoal);
 }

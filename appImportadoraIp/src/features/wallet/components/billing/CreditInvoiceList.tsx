@@ -5,18 +5,29 @@ import { CreditInvoiceCard } from './CreditInvoiceCard'
 import type { CreditInvoiceListProps } from '../../types/wallet.account.types'
 import './CreditInvoiceList.css'
 
-export const CreditInvoiceList: React.FC<CreditInvoiceListProps> = ({ invoices, onPayInvoice }) => {
+export const CreditInvoiceList: React.FC<CreditInvoiceListProps> = ({ invoices, status, error, disabled, onPayInvoice }) => {
+  // ojo: el backend devuelve también las facturas ya pagadas; esta sección solo muestra las que tienen saldo
+  const pending = invoices.filter((invoice) => invoice.pendingBalance > 0)
+
   return (
     /* Facturas Pendientes */
     <div className="credit-drawer-invoices-section">
       <h4 className="credit-drawer-invoices-section-title">
-        Facturas Pendientes ({invoices.filter((i) => i.pendingBalance > 0).length})
+        Facturas Pendientes ({pending.length})
       </h4>
 
-      {invoices.length > 0 ? (
+      {status === 'failed' ? (
+        <div className="credit-drawer-invoices-empty">
+          <span>{error}</span>
+        </div>
+      ) : invoices.length === 0 && status !== 'succeeded' ? (
+        <div className="credit-drawer-invoices-empty">
+          <span>Cargando facturas…</span>
+        </div>
+      ) : pending.length > 0 ? (
         <div className="credit-drawer-invoices-list">
-          {invoices.map((inv) => (
-            <CreditInvoiceCard key={inv.id} invoice={inv} onPay={onPayInvoice} />
+          {pending.map((inv) => (
+            <CreditInvoiceCard key={inv.id} invoice={inv} disabled={disabled} onPay={onPayInvoice} />
           ))}
         </div>
       ) : (

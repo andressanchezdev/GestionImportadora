@@ -1,77 +1,23 @@
-/* ProductCardPricing.css · estilos del precio y los niveles P0-P3 de la tarjeta · solo usa tokens de styles/tokens.css */
-/* ojo: antes estas reglas estaban en ProductCard.css (se separó para que cada archivo haga una sola cosa) */
-/* Precios */
+/* ProductCardPricing.css · estilos de la fila del precio de la tarjeta · solo usa tokens de styles/tokens.css */
+/* ojo: los estilos de la cuadrícula P0-P3 se quitaron; el menú de tarifas tiene su propio css (parts/ProductCardTierMenu.css) */
+
+/* precio a la izquierda e icono de tarifas a la derecha (antes iban juntos pegados a la derecha) */
 .product-card-pricing {
-    background: var(--c-slate-50);
-    border: 1px solid var(--c-slate-200);
-    border-radius: var(--radius-md);
-    padding: 10px;
-    margin-bottom: var(--space-3);
-}
-
-.product-card-price-header {
+    margin-top: auto;
+    padding-top: var(--space-2);
+    min-height: 35px;
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 6px;
-}
-
-.product-card-price-main {
-    font-size: var(--text-lg);
-    font-weight: var(--font-weight-extrabold);
-    color: var(--c-slate-900);
-    letter-spacing: -0.3px;
-}
-
-.product-card-price-tier-tag {
-    font-size: var(--text-xs);
-    font-weight: var(--font-weight-bold);
-    color: var(--c-blue-700);
-    background: var(--c-blue-100);
-    padding: 1px 6px;
-    border-radius: var(--radius-sm);
-}
-
-.product-card-price-breakdown {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-1);
-    font-size: var(--text-xs);
-}
-
-.product-card-price-tier-mini {
-    display: flex;
-    flex-direction: column;
     align-items: center;
-    padding: 2px 0;
-    border-radius: var(--radius-sm);
-    background: var(--c-white);
-    border: 1px solid var(--c-slate-200);
-    cursor: pointer;
-    transition: all var(--motion-fast);
+    justify-content: flex-end;
+    gap: 6px;
+    width: 100%;
 }
 
-.product-card-price-tier-mini:hover {
-    border-color: var(--c-blue-300);
-    background: var(--c-blue-25);
-}
-
-.product-card-price-tier-mini.product-card-active-tier {
-    background: var(--c-blue-600);
-    border-color: var(--c-blue-600);
-    color: var(--c-white);
-}
-
-.product-card-price-tier-mini.product-card-active-tier span {
-    color: var(--c-white);
-}
-
-.product-card-tier-code {
+/* ojo: 20px (--text-xl) en vez de 19.6px (+40% sobre el 14px de Yamaha) para quedar dentro de la escala de texto */
+.product-card-price-main {
+    padding: 3px 0 5px;
+    color: var(--c-product-card-name);
+    font-size: var(--text-xl);
     font-weight: var(--font-weight-bold);
-    color: var(--c-slate-600);
-}
-
-.product-card-tier-val {
-    font-weight: var(--font-weight-semibold);
-    color: var(--c-slate-800);
+    line-height: var(--leading-tight);
 }

@@ -60,7 +60,7 @@
   max-width: 28rem;
   margin-left: auto;
   margin-right: auto;
-  line-height: 1.5;
+  line-height: var(--leading-relaxed);
 }
 
 .main-content-placeholder-icon {

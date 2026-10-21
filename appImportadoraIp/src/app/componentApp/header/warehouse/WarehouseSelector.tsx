@@ -1,8 +1,10 @@
 // WarehouseSelector · botón que muestra la bodega activa y abre el menú para cambiarla
-// conecta con: navigation (bodega activa), features/warehouses (lista), global useClickOutside (cierra con clic fuera o Escape)
-import React, { useRef, useState } from 'react'
-import { WAREHOUSES } from '@/features/warehouses'
+// conecta con: navigation (bodega activa), features/warehouses (lista del backend y elección de la activa), auth (bodega del usuario), global useClickOutside (cierra con clic fuera o Escape)
+// ojo: antes la lista era fija (WH-01); ahora llega de POST /warehouses y, al llegar, se deja activa la que ya estaba, la del usuario, la principal o la primera
+import React, { useEffect, useRef, useState } from 'react'
+import { pickActiveWarehouse, useWarehouses } from '@/features/warehouses'
 import { setActiveWarehouse } from '@/features/navigation'
+import { selectCurrentUser } from '@/features/auth'
 import { useAppDispatch, useAppSelector } from '@/global/hooks/useRedux'
 import { useClickOutside } from '@/global/hooks/useClickOutside'
 import buildingIcon from '@/assets/icons/building.svg'
@@ -12,12 +14,22 @@ import './WarehouseSelector.css'
 export const WarehouseSelector: React.FC = () => {
     const dispatch = useAppDispatch()
     const activeWarehouseId = useAppSelector((state) => state.ui.activeWarehouseId)
+    const activeWarehouseName = useAppSelector((state) => state.ui.activeWarehouseName)
+    const user = useAppSelector(selectCurrentUser)
+    const { warehouses, status } = useWarehouses()
     const [isOpen, setIsOpen] = useState(false)
     const wrapperRef = useRef<HTMLDivElement>(null)
     // ojo: antes el clic fuera y Escape estaban escritos aquí a mano; ahora es el hook compartido
     useClickOutside(wrapperRef, () => setIsOpen(false), isOpen)
 
-    const activeWarehouse = WAREHOUSES.find((w) => w.id === activeWarehouseId) || WAREHOUSES[0]
+    // cuando llegan las bodegas se corrige la activa si la guardada ya no existe (por ejemplo 'WH-01' de versiones anteriores) o cambió de nombre
+    useEffect(() => {
+        if (status !== 'succeeded') return
+        const pick = pickActiveWarehouse(warehouses, activeWarehouseId, user?.warehouseId)
+        if (pick && (pick.id !== activeWarehouseId || pick.name !== activeWarehouseName)) {
+            dispatch(setActiveWarehouse({ id: pick.id, name: pick.name }))
+        }
+    }, [status, warehouses, activeWarehouseId, activeWarehouseName, user?.warehouseId, dispatch])
 
     return (
         <div className="app-header-warehouse-wrapper" ref={wrapperRef}>
@@ -31,8 +43,8 @@ export const WarehouseSelector: React.FC = () => {
                     aria-haspopup="listbox"
                 >
                     <img src={buildingIcon} alt="" className="app-header-warehouse-icon" aria-hidden="true" />
-                    <span className="app-header-warehouse-name">{activeWarehouse.name}</span>
-                    <span className="app-header-warehouse-badge">{activeWarehouse.id}</span>
+                    <span className="app-header-warehouse-name">{activeWarehouseName}</span>
+                    {activeWarehouseId && <span className="app-header-warehouse-badge">#{activeWarehouseId}</span>}
                     <svg
                         className={`app-header-warehouse-chevron ${isOpen ? 'app-header-warehouse-chevron-open' : ''}`}
                         width="14"
@@ -52,6 +64,7 @@ export const WarehouseSelector: React.FC = () => {
                 {/* Menú Desplegable Flotante */}
                 {isOpen && (
                     <WarehouseMenu
+                        warehouses={warehouses}
                         activeWarehouseId={activeWarehouseId}
                         onSelect={(wh) => {
                             dispatch(setActiveWarehouse(wh))

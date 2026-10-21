@@ -61,19 +61,33 @@
 .credit-table-btn-detail {
   background: var(--c-white);
   border: 1px solid var(--color-border, var(--c-slate-300));
-  padding: 0.375rem var(--space-3);
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--radius-sm);
-  font-size: var(--text-xs);
-  font-weight: var(--font-weight-semibold);
   color: var(--c-blue-600);
   cursor: pointer;
   transition: all var(--motion-fast);
-  white-space: nowrap;
+  padding: 0;
 }
 
 .credit-table-btn-detail:hover {
   background: var(--c-blue-50);
   border-color: var(--c-blue-300);
+  transform: translateY(-1px);
+}
+
+.credit-table-btn-detail-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  opacity: 0.85;
+}
+
+.credit-table-btn-detail:hover .credit-table-btn-detail-icon {
+  opacity: 1;
 }
 
 /* ojo: misma regla que la columna Acciones de la tabla, con su propio nombre para no depender del CSS de otro componente */

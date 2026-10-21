@@ -62,3 +62,9 @@ export function normalizeError(error: AxiosError<unknown>): AppApiError {
     timestamp: new Date().toISOString(),
   }
 }
+
+// mensaje legible para el cliente a partir de cualquier error que llegue a un thunk (ya normalizado por el cliente HTTP o desconocido)
+export const getErrorMessage = (error: unknown, fallback = 'No fue posible completar la operación. Intenta de nuevo.'): string => {
+  const apiError = error as Partial<AppApiError> | null
+  return apiError?.userFriendlyMessage ?? fallback
+}

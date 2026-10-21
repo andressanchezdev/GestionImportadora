@@ -11,47 +11,7 @@
   border-top: 1px solid var(--color-border, var(--c-slate-100));
 }
 
-.shop-catalog-pills-group {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  flex: 1;
-  min-width: 280px;
-}
-
-.shop-catalog-filter-pills-scroll {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  overflow-x: auto;
-  padding-bottom: 2px;
-}
-
-.shop-catalog-filter-pill {
-  padding: 0.3125rem var(--space-3);
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-medium);
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--color-border, var(--c-slate-200));
-  background: var(--c-white);
-  color: var(--color-text-secondary, var(--c-slate-600));
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.15s ease-in-out;
-}
-
-.shop-catalog-filter-pill:hover {
-  background: var(--bg-hover, var(--c-slate-100));
-  color: var(--color-text-primary, var(--c-slate-900));
-}
-
-/* ojo: antes usaba; ahora gana por especificidad (también sobre el hover) */
-.shop-catalog-filter-pill.shop-catalog-filter-pill-active,
-.shop-catalog-filter-pill.shop-catalog-filter-pill-active:hover {
-  background: var(--c-slate-900);
-  border-color: var(--c-slate-900);
-  color: var(--c-white);
-}
+/* ojo: el selector de categoría (wrapper, etiqueta y select) comparte reglas con el de marca; viven en screens/ShopCatalogScreen.css */
 
 /* Resumen de Resultados */
 .shop-catalog-results-summary {
@@ -60,12 +20,4 @@
   justify-content: space-between;
   font-size: var(--text-md);
   color: var(--color-text-secondary, var(--c-slate-500));
-}
-
-/* ojo: misma regla que la etiqueta Marca de la barra, con su propio nombre para no depender del CSS de otro componente */
-.shop-catalog-filters-label {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-secondary, var(--c-slate-500));
-  white-space: nowrap;
 }

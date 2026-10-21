@@ -32,14 +32,14 @@
   font-weight: var(--font-weight-black);
   color: var(--c-white);
   font-size: var(--text-md);
-  letter-spacing: -0.5px;
+  letter-spacing: var(--tracking-tight);
 }
 
 .app-header-title {
   font-size: var(--text-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
-  line-height: 1.2;
+  line-height: var(--leading-snug);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -50,7 +50,7 @@
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: var(--tracking-wide);
 }
 
 /* Controles y Acciones */

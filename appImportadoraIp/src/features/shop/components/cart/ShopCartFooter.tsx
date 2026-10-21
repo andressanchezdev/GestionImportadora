@@ -1,16 +1,17 @@
 // ShopCartFooter · pie del carrito: total a facturar, vaciar y finalizar pedido
-// conecta con: shop.slice (vaciar), shop.selectors (total), global toast (aviso de pedido listo)
+// conecta con: shop.cart.thunks (vaciar en el backend), shop.selectors (total), global toast (aviso de pedido listo)
 import React from 'react'
 import { formatCOP } from '@/global/helpers/format'
 import { toast } from '@/global/helpers/toast'
 import { useAppDispatch, useAppSelector } from '@/global/hooks/useRedux'
-import { clearCart } from '../../slices/shop.slice'
-import { selectCartTotals } from '../../selectors/shop.selectors'
+import { clearCartThunk } from '../../thunks/shop.cart.update.thunks'
+import { selectCartMutating, selectCartTotals } from '../../selectors/shop.selectors'
 import './ShopCartFooter.css'
 
 export const ShopCartFooter: React.FC = () => {
   const dispatch = useAppDispatch()
   const { totalAmount } = useAppSelector(selectCartTotals)
+  const isBusy = useAppSelector(selectCartMutating)
 
   return (
     <div className="shop-cart-footer">
@@ -20,7 +21,7 @@ export const ShopCartFooter: React.FC = () => {
       </div>
 
       <div className="shop-cart-actions">
-        <button type="button" onClick={() => dispatch(clearCart())} className="shop-cart-btn-clear">
+        <button type="button" onClick={() => dispatch(clearCartThunk())} disabled={isBusy} className="shop-cart-btn-clear">
           Vaciar
         </button>
         <button

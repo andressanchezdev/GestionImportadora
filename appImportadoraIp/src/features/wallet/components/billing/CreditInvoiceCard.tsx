@@ -5,7 +5,7 @@ import { formatCOP } from '@/global/helpers/format'
 import type { CreditInvoiceCardProps } from '../../types/wallet.account.types'
 import './CreditInvoiceCard.css'
 
-export const CreditInvoiceCard: React.FC<CreditInvoiceCardProps> = ({ invoice: inv, onPay }) => {
+export const CreditInvoiceCard: React.FC<CreditInvoiceCardProps> = ({ invoice: inv, disabled, onPay }) => {
   return (
     <div className="credit-drawer-invoice-item-card">
       <div className="credit-drawer-invoice-item-header">
@@ -41,7 +41,8 @@ export const CreditInvoiceCard: React.FC<CreditInvoiceCardProps> = ({ invoice: i
       {inv.pendingBalance > 0 && (
         <button
           type="button"
-          onClick={() => onPay(inv.id, inv.pendingBalance)}
+          onClick={() => onPay(inv.saleId, inv.pendingBalance)}
+          disabled={disabled}
           className="credit-drawer-invoice-pay-btn"
         >
           Pagar Total Factura ({formatCOP(inv.pendingBalance)})

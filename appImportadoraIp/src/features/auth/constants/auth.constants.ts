@@ -23,4 +23,10 @@ export const LOGIN_MESSAGES = {
   successTitle: 'Sesión iniciada',
   expiredTitle: 'Tu sesión expiró',
   expiredDescription: 'Ingresa de nuevo para continuar.',
+  inactiveTitle: 'Sesión cerrada por inactividad',
+  inactiveDescription: 'Pasó 1 hora sin actividad. Ingresa de nuevo para continuar.',
+  logoutTitle: 'Sesión cerrada',
+  remoteLogoutTitle: 'Sesión cerrada en otra pestaña',
+  warningTitle: 'Tu sesión está por cerrarse',
+  warningDescription: 'Mueve el mouse o toca una tecla para seguir conectado.',
 } as const

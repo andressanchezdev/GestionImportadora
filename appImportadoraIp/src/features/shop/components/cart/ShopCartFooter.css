@@ -25,8 +25,8 @@
 .shop-cart-total-value {
   font-size: var(--text-xl);
   font-weight: var(--font-weight-extrabold);
-  color: var(--c-emerald-700);
-  letter-spacing: -0.01em;
+  color: var(--color-text-primary, var(--c-slate-900));
+  letter-spacing: var(--tracking-tight);
 }
 
 .shop-cart-actions {
@@ -57,8 +57,8 @@
   padding: 0.625rem var(--space-4);
   font-size: var(--text-sm);
   font-weight: var(--font-weight-bold);
-  background: var(--c-emerald-700);
-  color: var(--c-white);
+  background: var(--c-product-card-action, var(--c-brand-yellow));
+  color: var(--c-product-card-action-text, var(--c-brand-charcoal));
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -67,5 +67,5 @@
 }
 
 .shop-cart-btn-checkout:hover {
-  background: var(--c-emerald-800);
+  background: var(--c-product-card-action-hover, #e09f14);
 }

@@ -1,8 +1,7 @@
 /* WalletKpiHeader.css · estilos de la fila de tarjetas de cartera · solo usa tokens de styles/tokens.css */
-/* ojo: antes este estilo estaba en línea dentro de WalletKpiHeader.tsx */
 .wallet-kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 5px;
-  margin-bottom: var(--space-4);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+  width: 100%;
 }

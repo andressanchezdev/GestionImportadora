@@ -80,8 +80,11 @@ apiClient.interceptors.response.use(
   (error: AxiosError<APIResponse<unknown>>) => {
     const normalized = normalizeError(error)
 
-    // 401 en cualquier llamada menos el propio login: la sesión venció o el token no sirve
-    if (normalized.status === 401 && error.config?.url !== API_CONFIG.ENDPOINTS.AUTH.LOGIN) {
+    // 401 en cualquier llamada menos las de la propia sesión: la sesión venció o el token no sirve
+    // ojo: login, refresh y logout quedan fuera a propósito; si no, un fallo al renovar o al cerrar volvería a cerrar la sesión en bucle (ellos manejan su error)
+    const { LOGIN, REFRESH, LOGOUT } = API_CONFIG.ENDPOINTS.AUTH
+    const isSessionCall = [LOGIN, REFRESH, LOGOUT].some((url) => url === error.config?.url)
+    if (normalized.status === 401 && !isSessionCall) {
       unauthorizedHandler?.()
     }
 

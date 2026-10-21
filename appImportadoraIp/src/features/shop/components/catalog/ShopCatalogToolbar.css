@@ -10,38 +10,11 @@
   flex: 1;
 }
 
-.shop-catalog-filter-group-label {
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-secondary, var(--c-slate-500));
-  white-space: nowrap;
-}
-
+/* ojo: el selector (wrapper, etiqueta y select) lo usan este archivo y ShopCatalogFilters; sus reglas viven en screens/ShopCatalogScreen.css */
 .shop-catalog-controls-group {
   display: flex;
   align-items: center;
   gap: var(--space-4);
-}
-
-.shop-catalog-filter-select-wrapper {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
-
-.shop-catalog-select {
-  padding: 0.35rem var(--space-3);
-  font-size: var(--text-sm);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border, var(--c-slate-200));
-  background: var(--c-white);
-  color: var(--color-text-primary, var(--c-slate-900));
-  outline: none;
-  cursor: pointer;
-}
-
-.shop-catalog-select:focus {
-  border-color: var(--c-blue-600);
 }
 
 .shop-catalog-filter-checkbox-label {

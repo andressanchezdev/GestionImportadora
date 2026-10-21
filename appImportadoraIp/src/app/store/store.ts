@@ -12,9 +12,8 @@ import {
   REGISTER,
 } from 'redux-persist'
 import storage from '@/global/helpers/storage'
-import { toast } from '@/global/helpers/toast'
 import { setUnauthorizedHandler } from '@/api'
-import { LOGIN_MESSAGES, logoutThunk } from '@/features/auth'
+import { logoutThunk, selectIsAuthenticated } from '@/features/auth'
 
 import { rootReducer } from './rootReducer'
 
@@ -22,9 +21,9 @@ import { rootReducer } from './rootReducer'
 // 1. CONFIGURACIÓN DEL STORE & PERSISTENCIA
 // ============================================================================
 const persistConfig = {
-  key: 'ip_online_pruebas_v2', // v2: cambiaron los ids a inglés (módulos y estados), se sube la clave para no cargar datos viejos
+  key: 'ip_online_pruebas_v6', // v6: cartera salió del estado guardado (viene del backend); v5: el carrito salió del estado guardado (ahora viene del backend; solo se guardan su uuid y los niveles de precio); v4: los filtros del catálogo pasaron a ids y la lista de productos salió del estado guardado (ahora viene del backend); v3: las bodegas ya vienen del backend (ids numéricos) y el stock de los productos de ejemplo cambió; v2: cambiaron los ids a inglés (módulos y estados). Se sube la clave para no cargar datos viejos
   storage,
-  whitelist: ['ui', 'shop', 'wallet'], //afuturo aqui las demas 
+  whitelist: ['ui', 'shop'], // ojo: wallet ya no se guarda (su estado viene del backend) //afuturo aqui las demas 
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -41,10 +40,10 @@ export const store = configureStore({
 
 export const persistor = persistStore(store)
 
-// ojo: si el backend responde 401 (token vencido) se cierra la sesión y se avisa; el login mismo no cuenta (lo filtra api/client)
+// ojo: si el backend responde 401 (token vencido) se cierra la sesión; la alerta "Tu sesión expiró" la muestra logoutThunk (antes se mostraba aquí)
+// ojo: login, refresh y logout no cuentan (los filtra api/client); si ya no hay sesión no se repite el cierre (varias llamadas pueden dar 401 a la vez)
 setUnauthorizedHandler(() => {
-  store.dispatch(logoutThunk())
-  toast.error(LOGIN_MESSAGES.expiredTitle, { description: LOGIN_MESSAGES.expiredDescription })
+  if (selectIsAuthenticated(store.getState())) store.dispatch(logoutThunk('expired'))
 })
 
 // ============================================================================

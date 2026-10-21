@@ -1,30 +1,15 @@
-// shop.constants · categorías, marcas, niveles de precio, filtros y estado inicial
+// shop.constants · niveles de precio, filtros y estado inicial
 // conecta con: shop.slice (initialState), ShopCatalogScreen
 import type { CatalogFilter, PriceLevelOption, ShopState } from '../types/shop.types'
-import { SAMPLE_PRODUCTS } from '../mocks/shop.mocks'
 
-// opción que significa 'sin filtro' en categoría y marca (la usan los selectors y la pantalla)
+// texto de la opción 'sin filtro' en los selectores de categoría y marca (el valor interno es null)
 export const ALL_FILTER_OPTION = 'Todas'
 
-export const CATALOG_CATEGORIES: string[] = [
-    'Todas',
-    'Motor',
-    'Frenos',
-    'Transmisión',
-    'Eléctrico',
-    'Suspensión',
-    'Accesorios',
-]
+// ojo: antes aquí estaban CATALOG_CATEGORIES y CATALOG_BRANDS (listas fijas); ahora las categorías y marcas salen del backend (features/catalogs)
 
-export const CATALOG_BRANDS: string[] = [
-    'Todas',
-    'Bajaj',
-    'Yamaha',
-    'Honda',
-    'AKT',
-    'Suzuki',
-    'TVS',
-]
+// tamaños de lo que se pide al backend: página del catálogo y máximo de resultados de la búsqueda por texto
+export const PRODUCTS_PAGE_SIZE = 30
+export const SEARCH_LIMIT = 50
 
 export const PRICE_LEVEL_OPTIONS: PriceLevelOption[] = [
     { key: 'P0', label: 'P0 · Mostrador', description: 'Precio al detal / público' },
@@ -35,16 +20,17 @@ export const PRICE_LEVEL_OPTIONS: PriceLevelOption[] = [
 
 export const INITIAL_CATALOG_FILTERS: CatalogFilter = {
     searchQuery: '',
-    selectedCategory: 'Todas',
-    selectedBrand: 'Todas',
+    selectedCategoryId: null,
+    selectedBrandId: null,
     onlyInStock: false,
     priceLevel: 'P0',
 }
 
 export const INITIAL_SHOP_STATE: ShopState = {
-    products: SAMPLE_PRODUCTS,
     filters: INITIAL_CATALOG_FILTERS,
-    cart: [],
+    cartUuid: '',
+    cartLevels: {},
+    cartCustomer: null,
     selectedProductId: null,
     isCartDrawerOpen: false,
 }

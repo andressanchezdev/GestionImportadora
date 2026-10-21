@@ -27,5 +27,5 @@
   font-size: var(--text-xs);
   color: var(--color-text-secondary, var(--c-slate-500));
   max-width: 200px;
-  line-height: 1.4;
+  line-height: var(--leading-normal);
 }

@@ -1,27 +1,17 @@
-// WalletScreen · pantalla de cartera: KPIs arriba y tabla de clientes
-// conecta con: WalletKpiHeader, CreditClientsTable; la monta MainContent
-// src/features/wallet/screens/WalletScreen.tsx
+// WalletScreen · pantalla de cartera: módulo único integrado con KPIs y tabla de clientes
+// conecta con: CreditClientsTable, useWalletLoader (pide la cartera); la monta MainContent
 import React from 'react'
 import './WalletScreen.css'
-import { WalletKpiHeader } from '../components/kpis/WalletKpiHeader'
 import { CreditClientsTable } from '../components/clientsTable/CreditClientsTable'
+import { useWalletLoader } from '../hooks/useWalletLoader'
 
 export const WalletScreen: React.FC = () => {
+  // ojo: la lista y los totales se piden al backend al abrir la pantalla y al cambiar página o bodega
+  useWalletLoader()
+
   return (
     <div className="wallet-screen">
-      {/* 1. Métricas KPI Superiores
-      <section className="wallet-section-kpis">
-        <WalletKpiHeader />
-      </section> */}
-
-      {/* 2. Tabla Principal de Clientes y Cupos */}
-      <section className="wallet-section-table">
-        {/* 1. Métricas KPI Superiores */}
-        <section className="wallet-section-kpis">
-          <WalletKpiHeader />
-        </section>
-        <CreditClientsTable />
-      </section>
+      <CreditClientsTable />
     </div>
   )
 }

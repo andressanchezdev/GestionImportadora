@@ -11,6 +11,13 @@
   flex-direction: column;
 }
 
+/* KPIs integrados en la tarjeta única */
+.credit-table-kpis-wrapper {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border, var(--c-slate-200));
+  background: var(--bg-card, var(--c-white));
+}
+
 /* Table */
 .credit-table-responsive {
   width: 100%;
@@ -45,7 +52,7 @@
   text-align: center;
 }
 
-.credit-table-empty-content p {
+.credit-table-empty-text {
   color: var(--color-text-secondary, var(--c-slate-500));
   font-size: var(--text-md);
   margin-bottom: var(--space-2);
@@ -58,11 +65,6 @@
   font-size: var(--text-sm);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
-}
-
-/* ojo: estos 2 estilos antes estaban en línea dentro de CreditClientsTable.tsx (el ancho de la barra de progreso sigue en línea porque es dinámico) */
-.credit-table .credit-table-th-usage {
-  width: 140px;
 }
 
 .credit-table .credit-table-align-right {

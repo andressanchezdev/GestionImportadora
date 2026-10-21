@@ -15,6 +15,22 @@ export const getStockStatus = (stock: number, minAlert: number = 5): ProductStoc
   return 'in_stock'
 }
 
+// deja la cantidad entre 1 y el stock disponible (redondea hacia abajo; si no es un número válido queda en 1; sin stock es 0)
+export const clampQuantity = (value: number, max: number): number => {
+  if (max <= 0) return 0
+  if (!Number.isFinite(value)) return 1
+  return Math.min(Math.max(1, Math.floor(value)), max)
+}
+
+// identificador nuevo para el carrito de una venta (el backend agrupa las líneas del carrito por este uuid)
+export const createCartUuid = (): string =>
+  typeof crypto !== 'undefined' && 'randomUUID' in crypto
+    ? crypto.randomUUID()
+    : `cart-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
+
+// ojo: toWarehouseNumber se movió a global/helpers/warehouse (también la usa wallet); se re-exporta para no cambiar los imports de shop
+export { toWarehouseNumber } from '@/global/helpers/warehouse'
+
 // precio del producto según el nivel activo (P0 mostrador ... P3 mayorista)
 export const getPriceByLevel = (product: Product, level: PriceLevelKey): number => {
   const key = level.toLowerCase() as keyof Product['prices']

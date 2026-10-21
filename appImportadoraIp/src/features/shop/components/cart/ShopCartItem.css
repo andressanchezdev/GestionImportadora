@@ -26,7 +26,7 @@
   font-size: var(--text-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--color-text-primary, var(--c-slate-900));
-  line-height: 1.3;
+  line-height: var(--leading-normal);
 }
 
 .shop-cart-item-meta {

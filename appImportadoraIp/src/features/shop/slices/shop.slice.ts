@@ -1,8 +1,13 @@
-// shop.slice · estado de tienda: filtros, carrito y selección de producto
+// shop.slice · estado de tienda que se guarda en el navegador: filtros, uuid, niveles y cliente del carrito, y selección de producto
 // conecta con: ShopCatalogScreen, ProductCard, ShopCartDrawer
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { Product, PriceLevelKey, StockUpdate } from '../types/shop.types'
+import type { PriceLevelKey } from '../types/shop.types'
+import { addToCartThunk } from '../thunks/shop.cart.thunks'
+import { clearCartThunk } from '../thunks/shop.cart.update.thunks'
+import { setCartCustomerThunk } from '../thunks/shop.cart.customer.thunks'
 import { INITIAL_SHOP_STATE } from '../constants/shop.constants'
+
+const LOGOUT_FULFILLED = 'auth/logout/fulfilled'
 
 export const shopSlice = createSlice({
     name: 'shop',
@@ -11,11 +16,11 @@ export const shopSlice = createSlice({
         setSearchQuery: (state, action: PayloadAction<string>) => {
             state.filters.searchQuery = action.payload
         },
-        setSelectedCategory: (state, action: PayloadAction<string>) => {
-            state.filters.selectedCategory = action.payload
+        setSelectedCategory: (state, action: PayloadAction<number | null>) => {
+            state.filters.selectedCategoryId = action.payload
         },
-        setSelectedBrand: (state, action: PayloadAction<string>) => {
-            state.filters.selectedBrand = action.payload
+        setSelectedBrand: (state, action: PayloadAction<number | null>) => {
+            state.filters.selectedBrandId = action.payload
         },
         setOnlyInStock: (state, action: PayloadAction<boolean>) => {
             state.filters.onlyInStock = action.payload
@@ -29,59 +34,7 @@ export const shopSlice = createSlice({
                 priceLevel: state.filters.priceLevel, // conserva el nivel de precio seleccionado
             }
         },
-        addToCart: (
-            state,
-            action: PayloadAction<{
-                product: Product
-                quantity: number
-                priceLevel?: PriceLevelKey
-            }>
-        ) => {
-            const { product, quantity } = action.payload
-            const level = action.payload.priceLevel ?? state.filters.priceLevel
-            const priceKey = level.toLowerCase() as keyof typeof product.prices
-            const unitPrice = product.prices[priceKey]
-
-            const existingIndex = state.cart.findIndex(
-                (item) => item.productId === product.id && item.priceLevel === level
-            )
-
-            if (existingIndex >= 0) {
-                const existing = state.cart[existingIndex]
-                existing.quantity += quantity
-                existing.subtotal = existing.quantity * existing.selectedPrice
-            } else {
-                state.cart.push({
-                    productId: product.id,
-                    product,
-                    quantity,
-                    selectedPrice: unitPrice,
-                    priceLevel: level,
-                    subtotal: quantity * unitPrice,
-                })
-            }
-        },
-        updateCartQuantity: (
-            state,
-            action: PayloadAction<{ productId: string; quantity: number }>
-        ) => {
-            const { productId, quantity } = action.payload
-            if (quantity <= 0) {
-                state.cart = state.cart.filter((item) => item.productId !== productId)
-            } else {
-                const item = state.cart.find((i) => i.productId === productId)
-                if (item) {
-                    item.quantity = quantity
-                    item.subtotal = quantity * item.selectedPrice
-                }
-            }
-        },
-        removeFromCart: (state, action: PayloadAction<string>) => {
-            state.cart = state.cart.filter((item) => item.productId !== action.payload)
-        },
-        clearCart: (state) => {
-            state.cart = []
-        },
+        // ojo: addToCart, updateCartQuantity, removeFromCart y clearCart eran del carrito local; ahora son thunks contra el backend (shop.cart.thunks)
         toggleCartDrawer: (state) => {
             state.isCartDrawerOpen = !state.isCartDrawerOpen
         },
@@ -91,12 +44,35 @@ export const shopSlice = createSlice({
         setSelectedProductId: (state, action: PayloadAction<string | null>) => {
             state.selectedProductId = action.payload
         },
-        // tiempo real: fija el stock de un producto en una bodega con el valor que manda el servidor
-        applyStockUpdate: (state, action: PayloadAction<StockUpdate>) => {
-            const { productId, warehouseId, stock } = action.payload
-            const product = state.products.find((p) => p.id === productId)
-            if (product) product.stockByWarehouse[warehouseId] = stock
-        },
+        // ojo: applyStockUpdate (tiempo real) se movió a shop.products.slice porque la lista de productos ya no está en este slice
+    },
+    extraReducers: (builder) => {
+        builder
+            // al agregar un producto se guarda el uuid del carrito (se crea con el primero) y con qué nivel de precio se agregó (el backend no lo guarda)
+            .addCase(addToCartThunk.fulfilled, (state, action) => {
+                state.cartUuid = action.payload.uuid
+                state.cartLevels[action.meta.arg.product.id] = action.meta.arg.priceLevel
+            })
+            // al elegir o quitar el cliente de la venta se guarda; si el cliente trae nivel de precio (P0..P3) ese pasa a ser el del catálogo
+            .addCase(setCartCustomerThunk.fulfilled, (state, action) => {
+                state.cartCustomer = action.payload.customer
+                const level = action.payload.customer?.priceType?.toUpperCase()
+                if (level === 'P0' || level === 'P1' || level === 'P2' || level === 'P3') state.filters.priceLevel = level
+            })
+            // al vaciar el carrito se olvidan los niveles
+            .addCase(clearCartThunk.fulfilled, (state) => {
+                state.cartLevels = {}
+            })
+            // al cerrar sesión se olvida el carrito de ese usuario (otro usuario en el mismo navegador no hereda su uuid)
+            // ojo: se detecta por el nombre de la acción ('auth/logout') en vez de importar logoutThunk, para que shop no dependa en tiempo de ejecución de auth
+            .addMatcher(
+                (action) => action.type === LOGOUT_FULFILLED,
+                (state) => {
+                    state.cartUuid = ''
+                    state.cartLevels = {}
+                    state.cartCustomer = null
+                }
+            )
     },
 })
 
@@ -107,14 +83,9 @@ export const {
     setOnlyInStock,
     setPriceLevel,
     resetFilters,
-    addToCart,
-    updateCartQuantity,
-    removeFromCart,
-    clearCart,
     toggleCartDrawer,
     setCartDrawerOpen,
     setSelectedProductId,
-    applyStockUpdate,
 } = shopSlice.actions
 
 export const shopReducer = shopSlice.reducer
