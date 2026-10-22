@@ -8,6 +8,7 @@ import packageIcon from '@/assets/icons/package-alt-2-svgrepo-com.svg'
 import databaseIcon from '@/assets/icons/database.svg'
 import userIcon from '@/assets/icons/user.svg'
 import fileTextIcon from '@/assets/icons/file-text.svg'
+import settingsIcon from '@/assets/icons/settings.svg'
 
 export const MENU_ITEMS: NavItem[] = [
     {
@@ -15,11 +16,9 @@ export const MENU_ITEMS: NavItem[] = [
         label: 'Tienda',
         icon: storeIcon,
         subitems: [
-            { id: 'catalog', label: 'Catálogo' },
-            { id: 'pendings', label: 'Pedidos Pendientes' },
-            { id: 'inmediatePicking', label: 'Picking Inmediato' },
-            { id: 'orderHistory', label: 'Historial de Pedidos' },
-            { id: 'savedCarts', label: 'Carritos Virtuales' },
+            { id: 'catalog', label: 'Catálogo POS' },
+            { id: 'orders', label: 'Bandeja de Pedidos' },
+            { id: 'history', label: 'Historial de Ventas' },
         ],
     },
     {
@@ -27,9 +26,8 @@ export const MENU_ITEMS: NavItem[] = [
         label: 'Gestión Caja',
         icon: packageIcon,
         subitems: [
-            { id: 'cashVerification', label: 'Verificación Caja' },
-            { id: 'posBilling', label: 'Facturación / Cobro' },
-            { id: 'receipts', label: 'Recibos de Caja' },
+            { id: 'posBilling', label: 'Facturación Caja' },
+            { id: 'billingHistory', label: 'Historial Facturación' },
             { id: 'shiftClose', label: 'Cierre de Turno' },
         ],
     },
@@ -38,35 +36,28 @@ export const MENU_ITEMS: NavItem[] = [
         label: 'Gestión Cartera',
         icon: walletIcon,
         subitems: [
-            { id: 'creditLimits', label: 'Créditos' },
-            { id: 'customerBalances', label: 'Saldos Clientes' },
-            { id: 'onlinePayments', label: 'Pagos Online' },
-            { id: 'paymentHistory', label: 'Historial de Pagos' },
-            { id: 'creditNotes', label: 'Notas Crédito' },
+            { id: 'creditClients', label: 'Gestión de Créditos' },
+            { id: 'paymentVerification', label: 'Aprobación de Abonos' },
+            { id: 'paymentHistory', label: 'Historial de Recaudos' },
         ],
-        badgeCount: 3, // Solo si existen acciones pendientes
     },
     {
         id: 'inventory',
         label: 'Gestión Inventario',
         icon: databaseIcon,
         subitems: [
-            { id: 'products', label: 'Productos' },
-            { id: 'transfers', label: 'Traslados' },
-            { id: 'brandsCategories', label: 'Marcas y Categorías' },
-            { id: 'models', label: 'Modelos de Moto' },
-            { id: 'locations', label: 'Ubicaciones' },
-            { id: 'relocation', label: 'Relocalización' },
-            { id: 'movements', label: 'Registro de movimientos' },
+            { id: 'products', label: 'Control de Productos' },
+            { id: 'transfers', label: 'Traslados entre Bodegas' },
+            { id: 'catalogs', label: 'Marcas y Categorías' },
+            { id: 'movements', label: 'Kardex & Movimientos' },
         ],
     },
     {
         id: 'thirdParties',
-        label: 'Gestión roles',
+        label: 'Gestión Roles',
         icon: userIcon,
         subitems: [
             { id: 'customers', label: 'Clientes' },
-            { id: 'customerVerification', label: 'Verificación de Clientes' },
             { id: 'suppliers', label: 'Proveedores' },
             { id: 'carriers', label: 'Transportadoras' },
             { id: 'employees', label: 'Empleados' },
@@ -75,37 +66,36 @@ export const MENU_ITEMS: NavItem[] = [
     },
     {
         id: 'reports',
-        label: 'Reportes de Ventas',
+        label: 'Reportes',
         icon: fileTextIcon,
         subitems: [
             { id: 'dailySales', label: 'Ventas Diarias' },
             { id: 'generalReport', label: 'Reporte General' },
-            { id: 'brandProfitability', label: 'Rentabilidad por Marca' },
-            { id: 'ordersReport', label: 'Auditoría de Pedidos' },
-            { id: 'paymentMethodsReport', label: 'Métodos de Pago' },
+            { id: 'inventoryReport', label: 'Valoración Inventario' },
         ],
     },
 ]
 
 // título (lo que ve el cliente) que muestra MainContent arriba, por módulo
-// ojo: antes esto era un switch dentro de MainContent; el texto es el mismo de antes
 export const MODULE_HEADER_TITLES: Record<ERPModule, string> = {
     shop: 'Tienda',
     cashRegister: 'Gestión Caja',
     wallet: 'Gestión Cartera',
     inventory: 'Gestión Inventario',
     transfers: 'Traslados',
-    thirdParties: 'Gestión Terceros',
-    reports: 'Reportes de Ventas',
+    thirdParties: 'Gestión Roles',
+    reports: 'Reportes del Sistema',
+    settings: 'Configuración del Sistema',
 }
 
-// ícono del encabezado de MainContent por módulo (los que no tienen uno propio usan el de documento)
+// ícono del encabezado de MainContent por módulo
 export const MODULE_HEADER_ICONS: Record<ERPModule, string> = {
     shop: storeIcon,
     cashRegister: packageIcon,
     wallet: walletIcon,
     inventory: databaseIcon,
     transfers: fileTextIcon,
-    thirdParties: fileTextIcon,
+    thirdParties: userIcon,
     reports: fileTextIcon,
+    settings: settingsIcon,
 }

@@ -8,6 +8,7 @@ export type ERPModule =
   | 'transfers'
   | 'thirdParties'
   | 'reports'
+  | 'settings'
 
 // ojo: antes subitems era string[] y la lógica comparaba el texto visible; ahora id (código) + label (cliente)
 export interface NavSubitem {

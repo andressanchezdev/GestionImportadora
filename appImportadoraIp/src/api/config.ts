@@ -145,6 +145,8 @@ export const API_CONFIG = {
       LIST: '/employees/list',
       ROLES: '/employees/roles',
       PERMISSIONS: '/employees/permissions',
+      SAVE_PERMISSIONS: '/employees/permissions/modules',
+      CREDENTIALS: '/employees/access-credentials',
     },
     // Salud del backend (GET, sin sesión y muy liviano: unos 220 bytes)
     HEALTH: {

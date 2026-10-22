@@ -6,6 +6,9 @@ import type { ERPModule } from '@/features/navigation'
 import { ShopCatalogScreen } from '@/features/shop'
 import { WalletScreen } from '@/features/wallet'
 import { CustomersScreen } from '@/features/customers'
+import { SettingsScreen } from '@/features/settings'
+import { TransfersScreen } from '@/features/transfers'
+import { RolesPermissionsScreen } from '@/features/auth'
 
 interface ScreenEntry {
   screen?: ComponentType // pantalla para cualquier subgestión del módulo
@@ -15,7 +18,15 @@ interface ScreenEntry {
 export const SCREEN_REGISTRY: Partial<Record<ERPModule, ScreenEntry>> = {
   shop: { subitems: { catalog: ShopCatalogScreen } },
   wallet: { screen: WalletScreen },
-  thirdParties: { subitems: { customers: CustomersScreen } },
+  thirdParties: {
+    subitems: {
+      customers: CustomersScreen,
+      rolesPermissions: RolesPermissionsScreen,
+    },
+  },
+  settings: { screen: SettingsScreen },
+  inventory: { subitems: { transfers: TransfersScreen } },
+  transfers: { screen: TransfersScreen },
 }
 
 // devuelve la pantalla del módulo/subgestión ya creada, o null si todavía no existe (se muestra el aviso de "Próxima Fase")

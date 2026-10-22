@@ -3,7 +3,8 @@
 import React from 'react'
 import './SideMenu.css'
 import { useAppDispatch, useAppSelector } from '@/global/hooks/useRedux'
-import { MENU_ITEMS, setActiveModule, setActiveSubitem } from '@/features/navigation'
+import { setActiveModule, setActiveSubitem } from '@/features/navigation'
+import { useFilteredMenuItems } from '@/global/hooks/usePermissions'
 import { SideMenuItem } from './item/SideMenuItem'
 import { ApiStatus } from './footer/ApiStatus'
 import { SideMenuUser } from './footer/SideMenuUser'
@@ -11,12 +12,13 @@ import { SideMenuUser } from './footer/SideMenuUser'
 export const SideMenu: React.FC = () => {
     const dispatch = useAppDispatch()
     const { activeModule, activeSubitem } = useAppSelector((state) => state.ui)
+    const menuItems = useFilteredMenuItems()
 
     return (
         <aside className="side-menu">
             {/* Lista de Navegación de los Módulos */}
             <nav className="side-menu-nav" aria-label="Módulos">
-                {MENU_ITEMS.map((item) => (
+                {menuItems.map((item) => (
                     <SideMenuItem
                         key={item.id}
                         item={item}

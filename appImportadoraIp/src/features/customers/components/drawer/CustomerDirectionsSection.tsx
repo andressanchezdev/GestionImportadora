@@ -3,6 +3,8 @@
 // ojo: el formulario es local (no va al estado global); dirección y ciudad son obligatorias; mientras el backend guarda se bloquean los botones
 import React, { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/global/hooks/useRedux'
+import { ValidatedInput } from '@/global/components/UI/molecules/form'
+import { SANITIZERS } from '@/global/helpers/validation.helpers'
 import { EMPTY_DIRECTION_INPUT } from '../../constants/customers.constants'
 import { selectCustomerDirections } from '../../selectors/customers.selectors'
 import { addDirectionThunk } from '../../thunks/customers.details.thunks'
@@ -52,18 +54,16 @@ export const CustomerDirectionsSection: React.FC<Props> = ({ customerId, onReque
       {isFormOpen && (
         <form className="customer-drawer-form" onSubmit={handleSubmit}>
           {FIELDS.map((field) => (
-            <label key={field.key} className="customer-drawer-field">
-              <span>
-                {field.label}
-                {field.required && ' *'}
-              </span>
-              <input
-                type="text"
-                value={form[field.key]}
-                onChange={(event) => setForm((prev) => ({ ...prev, [field.key]: event.target.value }))}
-                required={field.required}
-              />
-            </label>
+            <ValidatedInput
+              key={field.key}
+              id={`dir-${field.key}`}
+              label={field.label}
+              value={form[field.key]}
+              onChange={(val) => setForm((prev) => ({ ...prev, [field.key]: val }))}
+              sanitize={SANITIZERS.trim}
+              maxLength={60}
+              required={field.required}
+            />
           ))}
           <button type="submit" className="customer-drawer-primary-btn" disabled={!canSubmit}>
             Guardar dirección

@@ -22,14 +22,17 @@ export const WarehouseSelector: React.FC = () => {
     // ojo: antes el clic fuera y Escape estaban escritos aquí a mano; ahora es el hook compartido
     useClickOutside(wrapperRef, () => setIsOpen(false), isOpen)
 
+    const isAdmin = user?.userType === 'admin'
+    const canChangeWarehouse = isAdmin || !user?.warehouseId
+
     // cuando llegan las bodegas se corrige la activa si la guardada ya no existe (por ejemplo 'WH-01' de versiones anteriores) o cambió de nombre
     useEffect(() => {
         if (status !== 'succeeded') return
-        const pick = pickActiveWarehouse(warehouses, activeWarehouseId, user?.warehouseId)
+        const pick = pickActiveWarehouse(warehouses, activeWarehouseId, user?.warehouseId, isAdmin)
         if (pick && (pick.id !== activeWarehouseId || pick.name !== activeWarehouseName)) {
             dispatch(setActiveWarehouse({ id: pick.id, name: pick.name }))
         }
-    }, [status, warehouses, activeWarehouseId, activeWarehouseName, user?.warehouseId, dispatch])
+    }, [status, warehouses, activeWarehouseId, activeWarehouseName, user?.warehouseId, isAdmin, dispatch])
 
     return (
         <div className="app-header-warehouse-wrapper" ref={wrapperRef}>
@@ -37,28 +40,34 @@ export const WarehouseSelector: React.FC = () => {
             <div className="app-header-warehouse-relative">
                 <button
                     type="button"
-                    onClick={() => setIsOpen((prev) => !prev)}
+                    onClick={() => {
+                        if (canChangeWarehouse) setIsOpen((prev) => !prev)
+                    }}
                     className={`app-header-warehouse-btn ${isOpen ? 'app-header-warehouse-btn-active' : ''}`}
                     aria-expanded={isOpen}
-                    aria-haspopup="listbox"
+                    aria-haspopup={canChangeWarehouse ? 'listbox' : undefined}
+                    style={{ cursor: canChangeWarehouse ? 'pointer' : 'default' }}
+                    title={canChangeWarehouse ? 'Cambiar bodega activa' : 'Sede física asignada a tu usuario'}
                 >
                     <img src={buildingIcon} alt="" className="app-header-warehouse-icon" aria-hidden="true" />
                     <span className="app-header-warehouse-name">{activeWarehouseName}</span>
                     {activeWarehouseId && <span className="app-header-warehouse-badge">#{activeWarehouseId}</span>}
-                    <svg
-                        className={`app-header-warehouse-chevron ${isOpen ? 'app-header-warehouse-chevron-open' : ''}`}
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        aria-hidden="true"
-                    >
-                        <polyline points="6 9 12 15 18 9" />
-                    </svg>
+                    {canChangeWarehouse && (
+                        <svg
+                            className={`app-header-warehouse-chevron ${isOpen ? 'app-header-warehouse-chevron-open' : ''}`}
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden="true"
+                        >
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    )}
                 </button>
 
                 {/* Menú Desplegable Flotante */}

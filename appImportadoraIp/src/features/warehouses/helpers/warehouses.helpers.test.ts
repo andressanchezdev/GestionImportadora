@@ -35,8 +35,12 @@ describe('pickActiveWarehouse', () => {
     expect(pickActiveWarehouse([], '1')).toBeNull()
   })
 
-  it('conserva la activa si sigue existiendo', () => {
-    expect(pickActiveWarehouse(list, '3', 1)?.id).toBe('3')
+  it('conserva la activa si sigue existiendo cuando es admin', () => {
+    expect(pickActiveWarehouse(list, '3', 1, true)?.id).toBe('3')
+  })
+
+  it('fuerza la bodega del empleado cuando no es admin', () => {
+    expect(pickActiveWarehouse(list, '3', 1, false)?.id).toBe('1')
   })
 
   it('si la activa ya no existe usa la del usuario', () => {

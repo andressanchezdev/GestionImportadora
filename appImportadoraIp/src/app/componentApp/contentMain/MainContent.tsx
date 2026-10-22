@@ -1,16 +1,17 @@
-// MainContent · lienzo central: muestra la pantalla según el módulo y subitem activos
-// conecta con: navigation (estado ui), screenRegistry (qué pantalla toca) y MainContentPlaceholder (si aún no hay pantalla)
+// MainContent · lienzo central: muestra la pantalla según el módulo y subitem activos con guardia de permisos
+// conecta con: navigation (estado ui), usePermissions (hasScreenAccess), screenRegistry y MainContentPlaceholder
 import React from 'react'
 import './MainContent.css'
 import { useAppSelector } from '@/global/hooks/useRedux'
-// ojo: el título y el ícono por módulo salen de navigation, y la pantalla sale de screenRegistry (antes eran switch e if dentro de este componente)
-import { getModuleIcon, getModuleTitle, getSubitemLabel } from '@/features/navigation'
+import { getModuleIcon, getSubitemLabel } from '@/features/navigation'
+import { usePermissions } from '@/global/hooks/usePermissions'
 import { renderScreen } from './screenRegistry'
 import { MainContentPlaceholder } from './MainContentPlaceholder'
 
 export const MainContent: React.FC = () => {
   const { activeModule, activeSubitem } = useAppSelector((state) => state.ui)
-  // ojo: activeSubitem es id en inglés; el texto del cliente sale de getSubitemLabel
+  const { hasScreenAccess } = usePermissions()
+  const isAuthorized = hasScreenAccess(activeModule, activeSubitem)
   const subitemLabel = getSubitemLabel(activeModule, activeSubitem)
   const screen = renderScreen(activeModule, activeSubitem)
 
@@ -26,12 +27,28 @@ export const MainContent: React.FC = () => {
         </h2>
       </div>
 
-      {/* Contenido dinámico del submódulo activo (la key reinicia la animación de entrada al cambiar) */}
+      {/* Contenido dinámico del submódulo activo o guardia de acceso no autorizado */}
       <div className="main-content-viewport" key={`${activeModule}-${activeSubitem}`}>
-        {screen ?? <MainContentPlaceholder moduleId={activeModule} subitemLabel={subitemLabel} />}
+        {!isAuthorized ? (
+          <div className="main-content-unauthorized">
+            <div className="main-content-unauthorized-card">
+              <div className="main-content-unauthorized-icon">🔒</div>
+              <h3 className="main-content-unauthorized-title">Acceso Restringido</h3>
+              <p className="main-content-unauthorized-desc">
+                No tienes permisos asignados para visualizar o gestionar este submódulo.
+              </p>
+              <p className="main-content-unauthorized-detail">
+                Consulta con el administrador del sistema para habilitar el permiso correspondiente.
+              </p>
+            </div>
+          </div>
+        ) : (
+          screen ?? <MainContentPlaceholder moduleId={activeModule} subitemLabel={subitemLabel} />
+        )}
       </div>
     </main>
   )
 }
+
 
 export default MainContent

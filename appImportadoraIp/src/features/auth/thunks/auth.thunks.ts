@@ -11,16 +11,20 @@ import {
   persistAuthSession,
   persistRefreshedTokens,
 } from '../helpers/auth.session'
+import { setActiveWarehouse } from '@/features/navigation'
 import { LOGIN_MESSAGES } from '../constants/auth.constants'
 import type { AuthUser, LoginCredentials, LogoutReason } from '../types/auth.types'
 
 // inicia sesión: pide el login, guarda la sesión y devuelve el usuario; si falla devuelve el mensaje
 export const loginThunk = createAsyncThunk<AuthUser, LoginCredentials, { rejectValue: string }>(
   'auth/login',
-  async (credentials, { rejectWithValue }) => {
+  async (credentials, { rejectWithValue, dispatch }) => {
     try {
       const response = await loginRequest(credentials)
       persistAuthSession(response, credentials.remember)
+      if (response.user?.warehouseId) {
+        dispatch(setActiveWarehouse({ id: String(response.user.warehouseId), name: 'Sede Asignada' }))
+      }
       return response.user
     } catch (error) {
       return rejectWithValue(getLoginErrorMessage(error))

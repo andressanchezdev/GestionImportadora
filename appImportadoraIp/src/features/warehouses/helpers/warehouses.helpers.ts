@@ -15,13 +15,20 @@ export const toWarehouses = (rows: WarehouseDto[]): Warehouse[] =>
         }))
 
 // elige la bodega activa cuando llega la lista:
-// 1) la que ya estaba activa, si sigue existiendo; 2) la bodega del usuario (la del login); 3) la principal; 4) la primera; sin bodegas, ninguna
+// 1) si el usuario tiene bodega asignada y no es admin, se fuerza SIEMPRE la bodega del login
+// 2) si es admin multisede, se conserva la que ya estaba activa si sigue existiendo
+// 3) la bodega del usuario; 4) la principal; 5) la primera; sin bodegas, ninguna
 export const pickActiveWarehouse = (
     warehouses: Warehouse[],
     currentId: string,
-    userWarehouseId?: number
+    userWarehouseId?: number,
+    isAdmin: boolean = false
 ): Warehouse | null => {
     if (warehouses.length === 0) return null
+    if (userWarehouseId !== undefined && !isAdmin) {
+        const ofUser = warehouses.find((wh) => wh.id === String(userWarehouseId))
+        if (ofUser) return ofUser
+    }
     const current = warehouses.find((wh) => wh.id === currentId)
     if (current) return current
     const ofUser = userWarehouseId === undefined ? undefined : warehouses.find((wh) => wh.id === String(userWarehouseId))

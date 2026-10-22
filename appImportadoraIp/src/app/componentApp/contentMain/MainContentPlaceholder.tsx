@@ -1,7 +1,6 @@
 // MainContentPlaceholder · aviso de módulo o subgestión que todavía no tiene pantalla ("Próxima Fase")
 // conecta con: MainContent (cuando screenRegistry no devuelve pantalla); título e ícono de navigation
-import React from 'react'
-import { getModuleIcon, getModuleTitle, type ERPModule } from '@/features/navigation'
+import { getModuleIcon, type ERPModule } from '@/features/navigation'
 import './MainContentPlaceholder.css'
 
 interface MainContentPlaceholderProps {

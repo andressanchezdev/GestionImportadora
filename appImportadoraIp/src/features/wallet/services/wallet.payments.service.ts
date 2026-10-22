@@ -21,9 +21,10 @@ export const registerPayment = async (
     saleId: payment.saleId,
     amount: payment.amount,
     remainingAmount: payment.remainingAmount,
-    ...(warehouseId !== undefined && { warehouseId }),
+    warehouseId: warehouseId ?? ctx.warehouseId,
   })
 }
+
 
 export const updateCredit = async (input: CreditUpdateInput): Promise<void> => {
   await apiClient.put(API_CONFIG.ENDPOINTS.USERS.CREDIT, {
