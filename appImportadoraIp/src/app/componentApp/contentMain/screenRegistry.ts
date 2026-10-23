@@ -8,7 +8,7 @@ import { WalletScreen } from '@/features/wallet'
 import { CustomersScreen } from '@/features/customers'
 import { SettingsScreen } from '@/features/settings'
 import { TransfersScreen } from '@/features/transfers'
-import { RolesPermissionsScreen } from '@/features/auth'
+import { EmployeesScreen, RolesPermissionsScreen } from '@/features/employees'
 
 interface ScreenEntry {
   screen?: ComponentType // pantalla para cualquier subgestión del módulo
@@ -21,6 +21,7 @@ export const SCREEN_REGISTRY: Partial<Record<ERPModule, ScreenEntry>> = {
   thirdParties: {
     subitems: {
       customers: CustomersScreen,
+      employees: EmployeesScreen,
       rolesPermissions: RolesPermissionsScreen,
     },
   },

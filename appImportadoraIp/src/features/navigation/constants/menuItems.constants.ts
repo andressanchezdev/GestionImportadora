@@ -49,7 +49,7 @@ export const MENU_ITEMS: NavItem[] = [
             { id: 'products', label: 'Control de Productos' },
             { id: 'transfers', label: 'Traslados entre Bodegas' },
             { id: 'catalogs', label: 'Marcas y Categorías' },
-            { id: 'movements', label: 'Kardex & Movimientos' },
+            { id: 'movements', label: 'Auditoria' },
         ],
     },
     {

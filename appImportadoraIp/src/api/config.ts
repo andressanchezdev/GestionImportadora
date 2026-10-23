@@ -141,12 +141,154 @@ export const API_CONFIG = {
     },
     // Empleados y Permisos
     EMPLOYEES: {
-      BASE: '/employees',
-      LIST: '/employees/list',
-      ROLES: '/employees/roles',
-      PERMISSIONS: '/employees/permissions',
-      SAVE_PERMISSIONS: '/employees/permissions/modules',
+      BASE: '/employees', //GET GENERAL DE LOS DATOS OBTIENE   "success": true,"message": "Employees retrieved successfully","data" [ARRAY DE LA DATA QUE CONTEIEN  DENTRO DE ESTA RESPUESTA OTIENE ]
+      //   "userId": 1009,
+      // 	"employeeId": 43,
+      // 	"branches": [
+      // 		{
+      // 			"branchId": 1,
+      // 			"branchName": "Updated Warehouse"
+      // 		},
+      // 		{
+      // 			"branchId": 6,
+      // 			"branchName": "Tienda Online"
+      // 		}
+      // 	],
+      // 	"roles": [
+      // 		{
+      // 			"roleId": 1,
+      // 			"roleName": "Vendedor interno"
+      // 		},
+      // 		{
+      // 			"roleId": 4,
+      // 			"roleName": "Bodeguero"
+      // 		}
+      // 	],
+      // 	"workModality": "Presencial",
+      // 	"inmediateSupervisor": {
+      // 		"name": ""
+      // 	},
+      // 	"employmentStatus": "activo",
+      // 	"companyId": 1,
+      // 	"warehouseId": 0,
+      // 	"photo": "https://pub-85f7794f845a4ff6bd279426e93ab5ef.r2.dev/empleados/fotos/images-1762743280.png",
+      // 	"companyDetails": {
+      // 		"businessName": "",
+      // 		"nit": "",
+      // 		"phone": "",
+      // 		"cellPhone": ""
+      // 	},
+      // 	"name": "rfwefwe",
+      // 	"lastName": "fwefwf",
+      // 	"identification": "313231323121",
+      // 	"country": "Colombia",
+      // 	"department": "Antioquia",
+      // 	"city": "Medellín",
+      // 	"neighborhood": "",
+      // 	"address": "dqdw, Medellín Antioquia",
+      // 	"additionalInfo": "",
+      // 	"dni": "313231323121",
+      // 	"email": "updated+43@example.com",
+      // 	"phone": "123123231",
+      // 	"isActive": true
+      // },
+      LIST: '/employees/list', //GET QUE OBTIENE LA LISTA DE LOS EMPLEADO COMPLETA: {
+      // "success": true,
+      // "message": "Employee list retrieved successfully",
+      // // "data": { DENTRO DE DATA OBTENEOMOS EL ARRAY DE LAS FILAS DE EL EMPLADOC CON  "employees": [
+      // {
+      // 	"employeeId": 55,
+      // 	"userId": 1023,
+      // 	"name": "Juan Sebastian",
+      // 	"lastName": "Grisales",
+      // 	"businessName": "Importadora Premium Online S.A.S",
+      // 	"accessStatus": true,
+      // 	"connectionStatus": {
+      // 		"lastConnectedAt": "",
+      // 		"connectedDurationSeconds": 0
+      // 	},
+      // 	"identification": "334343",
+      // 	"identificationType": "CC",
+      // 	"email": "juansebastian.grisales@premiummotos.com",
+      // 	"phone": "34343434",
+      // 	"photo": "",
+      // 	"employmentStatus": "activo",
+      // 	"workModality": "Presencial"
+      // },
+
+      ROLES: '/employees/roles', //no devuelve datos como role, devuelve, respuesta a "{
+      //   "companyId": 1,
+      //   "roleName": ""
+      // }" no devuelve campo role, devuelve lista con ID, name, namebussines identification y photo
+      PERMISSIONS: '/employees/permissions',//requiero envio de el campo de  {"employeeId": 46} y devuelve una respuesta de no acceso o acceso denegado  
+      //{
+      // 	"success": false,
+      // 	"message": "Access denied",   
+      // 	"error": "employee not found or access denied"
+      // }  aun cuando el id de empleado no coincide 
+      // envia :
+      // {  
+      // 	"success": true,
+      // 	"message": "Employee permissions retrieved successfully",
+      // 	"data": {
+      // 		"employeeId": 46,
+      // 		"name": "werfwefwe",
+      // 		"lastName": "ewfwf",
+      // 		"branches": [
+      // 			{
+      // 				"branchId": 1,
+      // 				"branchName": "Updated Warehouse",
+      // 				"isPrimary": false
+      // 			},
+      // 			{
+      // 				"branchId": 4,
+      // 				"branchName": "NLR",
+      // 				"isPrimary": false
+      // 			},
+      // 			{
+      // 				"branchId": 6,
+      // 				"branchName": "Tienda Online",
+      // 				"isPrimary": false
+      // 			},
+      // 			{
+      // 				"branchId": 7,
+      // 				"branchName": "Premiun Jac",
+      // 				"isPrimary": false
+      // 			}
+      // 		],
+      // 		"modules": []
+      // 	}
+      // }
+      SAVE_PERMISSIONS: '/employees/permissions/modules', //envia el mismo employeeId obligarotio para identifiacr a que empleado se le actualizadron, dieron permisos de el endpoint anterior, y debe enviar en su body:
+      //       {
+      //   "employeeId": 0,
+      //   "modules": [
+      //     {
+      //       "canCreate": true,
+      //       "canDelete": true,
+      //       "canRead": true,
+      //       "canUpdate": true,
+      //       "moduleId": 11,
+      //       "moduleKey": "string",
+      //       "screens": [
+      //         {
+      //           "canCreate": true,
+      //           "canDelete": true,
+      //           "canRead": true,
+      //           "canUpdate": true,
+      //           "screenId": 0
+      //         }
+      //       ]
+      //     }
+      //   ]
+      // }
+
       CREDENTIALS: '/employees/access-credentials',
+      BY_ROLE: '/employees/by-role',
+      ROLE: '/employees/roles', //{
+      // "companyId": 5
+      // }
+
     },
     // Salud del backend (GET, sin sesión y muy liviano: unos 220 bytes)
     HEALTH: {

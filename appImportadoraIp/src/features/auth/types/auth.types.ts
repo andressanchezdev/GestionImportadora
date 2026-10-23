@@ -58,7 +58,7 @@ export type AuthStatus = 'anonymous' | 'authenticating' | 'authenticated'
 // por qué se cierra la sesión: la pidió el usuario, por inactividad, porque venció o porque se cerró en otra pestaña
 export type LogoutReason = 'manual' | 'inactivity' | 'expired' | 'remote'
 
-import type { EmployeePermissionsResponse } from './permissions.types'
+import type { EmployeePermissionsResponse } from '@/features/employees'
 
 export interface AuthState {
   user: AuthUser | null
