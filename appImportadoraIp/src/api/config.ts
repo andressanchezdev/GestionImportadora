@@ -35,27 +35,37 @@ export const API_CONFIG = {
     },
     // POS / Carrito de Ventas
     CARTS: {
-      GET: '/carts',
-      REGISTER_ITEM: '/carts/register',
+
+      GET: '/carts', //se le envia POST CON BODY VACIO Y SE OBTIENE UNA RESPUESTA 200 PERO SIN DATA
+      //VALIDAR QUE DATA SI ESTE ENVIANDOSE EN LA RESPUESTA DESDE EL BACKEND
+      //COMO NO DEVUELVE DATA, NO E ACCEDIDO A LOS uuid de los demas carritos
+      REGISTER_ITEM: '/carts/register', //DEVUELVE RESPUETSA 200 OK,"CREA" EL CARRITO, ENVIANDO 
       UPDATE: '/carts/update', // cambia la cantidad de un ítem { cartId, quantity }
       DELETE: '/carts/delete', // borra un ítem y devuelve su stock { cartId }
-      DELETE_ALL: '/carts/deleteall',
-      REASSIGN_USER: '/carts/reassignuser',
+      DELETE_ALL: '/carts/deleteall', //DELETE MASIVO envia user id e identificador unico de el carrito "uuid"
+      REASSIGN_USER: '/carts/reassignuser', //responde correctametne, se envia  con {"newUserId","oldUserId", "uuid"
     },
     // Catálogos grupo base de el endpoint
     CATALOGS: {
-      CATEGORIES: '/categories',
-      CATEGORIES_REGISTER: '/categories/register',
-      CATEGORIES_UPDATE: '/categories/update',
+      CATEGORIES: '/categories', //FUNCIONA-DEBE LLEVAR companyID, page, pagezise, y devuelve un 200 con todas las categorias
+      CATEGORIES_REGISTER: '/categories/register', //funciona devuelve el categorieId junto con el mensaje de success 200 OK
+      CATEGORIES_UPDATE: '/categories/update',// ENVIA UN ERROR DE EL SERVIDOR AL ENVIAR LA PETICION, NO ACTUALIZA, SE ENVIAN 
+      //"categoryId","name"
       BRANDS: '/brands',
       BRANDS_REGISTER: '/brands/register',
       BRANDS_UPDATE: '/brands/update',
-      MODELS: '/models',
-      MODELS_REGISTER: '/models/register',
-      MODELS_UPDATE: '/models/update',
+      //      MODELS: '/models',
+      //      MODELS_REGISTER: '/models/register',
+      //      MODELS_UPDATE: '/models/update',
       WAREHOUSES: '/warehouses',
       WAREHOUSES_REGISTER: '/warehouses/register',
       WAREHOUSES_UPDATE: '/warehouses/update',
+    },
+
+    MODELS: {
+      MODELS: '/models', //FUNCIOAN CORRECTAMENTE DEVUELVE OBJETOS DENTRO DE MODEL, MODELID, NAME
+      MODELS_REGISTER: '/models/register', //FUNCIONA CORRECTAMENTE, SE CREA EL MODELO CON LOS MISMOS CAMPOS MODELID, NAME
+      MODELS_UPDATE: '/models/update', //FUNCIONA, SE RECIBE RESPUESTA 200, PERO NO PUDE VER EL PRODUCTO CREADO CON LOS DATOSW E PRUENA
     },
     // Terceros: usuarios (clientes y vendedores, proveedores, TODOS los Agentes activos son ), centralizada de la imfo de cada actor
     USERS: {
@@ -72,25 +82,48 @@ export const API_CONFIG = {
       CREDIT_LIMIT: '/users/credit/limit',
     },
     CUSTOMERS: {
-      REGISTER: '/customers/register',
-      CHECK_EMAIL: '/customers/check-email',
-      FAVORITES: '/customers/favorites',
-      UPDATE_FAVORITE: '/customers/update-favorite',
-      UPDATE_DETAILS: '/customers/update-details',
-      UPDATE_COMPANIES: '/customers/update-companies',
-      UPDATE_PHOTO: '/customers/update-photo',
-      UPDATE_DOCUMENT: '/customers/update-document',
-      DELETE_DOCUMENT: '/customers/delete-document',
+      REGISTER: '/customers/register',//    envia en el body elegimos from data, e ingresamos dentro data:
+      // datos de el cliente, y ingresamos los demas archivos enviandolos en null, la tabla no esta creada,
+      // falta migrar para que se cree o no esta completa 
+      CHECK_EMAIL: '/customers/check-email', //SE ENVIA EN EL BODY EL companyid e email de el usario, se obtiene:  (200) SI FUNCIONA 
+      FAVORITES: '/customers/favorites', // TABLA user.favorites no existe, no esta en la db o falta la migracion para ingresarla, validar
+      UPDATE_FAVORITE: '/customers/update-favorite',//no existe la tabla en la db "error": "Error updating favorite: Error 1146 (42S02): Table 'testpremium.userfavorites' doesn't exist" 
+      UPDATE_DETAILS: '/customers/update-details', //error": "Error updating details: Error 1146 (42S02): Table 'testpremium.userdetails' doesn't exist
+      UPDATE_COMPANIES: '/customers/update-companies', // falta la integracion de la colunma de tipod de documento dentro de la db, por eso no pasa a 200 la peticion
+      UPDATE_PHOTO: '/customers/update-photo',//validar que la tabla este alineada con lo que actualmetne requiere el form, indica "{
+      // 	"success": false,
+      // 	"message": "Solicitud inválida",
+      // 	"error": "Photo file is required" aun enviando imagen falsa con libreia faker
+      // }"
+      UPDATE_DOCUMENT: '/customers/update-document',//runtime error: invalid memory address or nil pointer dereference, en el form se envia claves: photo, photos y no funciona, se envia la calve "files" e indica  "runtime error: invalid memory address or nil pointer dereference"
+      DELETE_DOCUMENT: '/customers/delete-document', // SE  envia companyId con userId y responde con un 500: 
+      // 	"success": false,
+      // 	"message": "Error interno del servidor",
+      // 	"error": "Error deleting document: file not found"
+      // }, validar si dentro de el ususario no cuenta con documetos cargados
     },
     DIRECTIONS: {
-      LIST: '/directions',
-      REGISTER: '/directions/register',
-      UPDATE: '/directions/update',
-      DELETE: '/directions/delete',
+      LIST: '/directions',//FUNCIOAN SIN ERROR ENVIANDO BODY CON userid page, pagesize  pagezise es la cantidad de objeton que va a traer
+      //page es el indicador de a que page ir a buiscar el dato que estamos enviando, pagesize indica la cantidad dentro que se van a msotrar que consinidan con el id 
+      REGISTER: '/directions/register', //funciona sin errroes agregando la direccion a el ususario, se envia 
+      //{
+      //   "additionalInfo": "CASA DE PRUEBA SEGUNDO PISO",
+      //   "address": "CALLE DE PRUEBA ANDRES",
+      //   "city": "CARRERA DE PRUEBA",
+      //   "country": "pOLOMBIA",
+      //   "department": "SEGUNDO PISO",
+      //   "neighborhood": "SANTO DOMINGO",
+      //   "userId   315
+      // }  
+      UPDATE: '/directions/update',//FUNCIONA CORRECTAMENTE ACTUALIZA,
+      // SE LE ENVIA EL BODY CON DIRECTIONID PARA DAR CON LA DIRECCION REGISTRADA 
+      // QUE SE VA A ACTUALIZAR CON EL MISMO BODY
+      DELETE: '/directions/delete', //FUNCIOAN CORRECTAMETE, PRUEBA APLICADA CONTRA EL DIRECTIONID "1120" SE ELIMINO CORRECTAMETNE LA DIRECCION "//       
+      // "message": "Direction deleted successfull"
     },
     DISCOUNTS: {
-      LIST: '/discounts',
-      REGISTER: '/discounts/register',
+      LIST: '/discounts',  //SI FUNCIONA, DA UNA RESPUESTA, VALIDAR SI LOS DATOS QUE SE DEBEN ENVIAR DE LOS DESCUENTOS SI ESTEN DENTRO DE EL CAMPO AL LLAMARLOS
+      REGISTER: '/discounts/register', //Funciona, crea el modelo correctamente con body modelId, name (name como string,pero contiene datos numericos)
       UPDATE: '/discounts/update',
       DELETE: '/discounts/delete',
       DELETE_ALL: '/discounts/deleteall',
@@ -131,6 +164,42 @@ export const API_CONFIG = {
     },
     ORDERS: {
       LIST: '/orders',
+    },
+    COMPANIES: {
+      LIST: '/companies', //GET COMPANIES
+      CREATE: '/companies',
+      UPDATE: '/companies/update', //PUT  data to update have to send  
+      //   "address": "string",
+      //   "businessName": "string",
+      //   "dianResolutionDate": "string",
+      //   "dianResolutionNumber": "string",
+      //   "economicActivities": "string",
+      //   "electronicCancellationSerial": "string",
+      //   "email": "string",
+      //   "finalInvoiceNumber": "string",
+      //   "initialInvoiceNumber": "string",
+      //   "isActive": true,
+      //   "isElectronicBiller": true,
+      //   "logo": "string",
+      //   "name": "string",
+      //   "nit": "string",
+      //   "paymentSerial": "string",
+      //   "phone": "string",
+      //   "prefix": "string",
+      //   "purchaseSerial": "string",
+      //   "supplierNit": "string",
+      //   "technicalKey": "string"
+      // }
+      DELETE: '/cpompanies/delete', //delete by Cományid devuelve la respuesta: {
+      // "success": false,
+      // "message": "Solicitud inválida",
+      // "error": "Invalid company ID"
+      // } ni con id ni con companyid
+      // BY_ID: (id: number | string) => `/companies/${id}`, {
+      // "success": false,
+      // "message": "Solicitud inválida",
+      // "error": "Invalid company ID"
+      // }
     },
     // Reportes
     REPORTS: {
@@ -216,10 +285,21 @@ export const API_CONFIG = {
       // 	"workModality": "Presencial"
       // },
 
-      ROLES: '/employees/roles', //no devuelve datos como role, devuelve, respuesta a "{
-      //   "companyId": 1,
-      //   "roleName": ""
-      // }" no devuelve campo role, devuelve lista con ID, name, namebussines identification y photo
+      ROLES: '/employees/roles', //funciona, enviando en companyId como parametro e id de le empresa "1" y devuelve 
+      //devuelve mensaje data y succes y muestra la respuesta: con las areasid de estas y roles de el area
+      // "areaId": 3,
+      // "areaName": "Administración",
+      // "areaIcon": "briefcase",
+      // "roles": [
+      // 	{
+      // 		"roleId": 3,
+      // 		"roleName": "Administrador",
+      // 		"description": "Administra operaciones generales",
+      // 		"permissions": [],
+      // 		"assignable": true,
+      // 		"usersCount": 6
+      // 	}
+      // ]
       PERMISSIONS: '/employees/permissions',//requiero envio de el campo de  {"employeeId": 46} y devuelve una respuesta de no acceso o acceso denegado  
       //{
       // 	"success": false,
@@ -259,6 +339,7 @@ export const API_CONFIG = {
       // 		"modules": []
       // 	}
       // }
+      DELETE: '/employees/', //no funciona lña respuesta obtenida es "record not found"  y el empleado no se elimina exitosamente
       SAVE_PERMISSIONS: '/employees/permissions/modules', //envia el mismo employeeId obligarotio para identifiacr a que empleado se le actualizadron, dieron permisos de el endpoint anterior, y debe enviar en su body:
       //       {
       //   "employeeId": 0,
@@ -292,8 +373,8 @@ export const API_CONFIG = {
     },
     // Salud del backend (GET, sin sesión y muy liviano: unos 220 bytes)
     HEALTH: {
-      CHECK: '/health',
-      READINESS: '/readiness',
+      CHECK: '/health', //se envia con GET sin body ni headers, se obtiene una respuesta que no indica mucho, "redis no esta confugurado
+      READINESS: '/readiness',  //funciona, devuelve un tiempo de respuetsa
     },
     // Documentación Swagger (es el archivo del Swagger, no una ruta de la API; no lo consume la app)
     DOCS: {
