@@ -16,18 +16,16 @@ export const API_CONFIG = {
   ENDPOINTS: {
     // Autenticación
     AUTH: {
-      LOGIN: '/auth/login',
-      REFRESH: '/auth/refresh',
-      LOGOUT: '/auth/logout',
+      LOGIN: '/auth/login', //funciona
+
+      REFRESH: '/auth/refresh', //funciona
+      LOGOUT: '/auth/logout',//funciona, debemos validar que el token se revoque completametne y que la logica detras lo deje invalido al aplicar el logout
+
     },
     // Productos, búsqueda e inventario de lectura
     PRODUCTS: {
       LIST: '/products',
       REGISTER: '/products/register',
-      SEARCH: '/inventory/search',
-      FILTER: '/inventory/filter',
-      CONTROL: '/inventory/control',
-      CREATE: '/inventory/createProduct',
     },
     // Búsqueda universal (varias entidades a la vez)
     SEARCH: {
@@ -39,7 +37,7 @@ export const API_CONFIG = {
       GET: '/carts', //se le envia POST CON BODY VACIO Y SE OBTIENE UNA RESPUESTA 200 PERO SIN DATA
       //VALIDAR QUE DATA SI ESTE ENVIANDOSE EN LA RESPUESTA DESDE EL BACKEND
       //COMO NO DEVUELVE DATA, NO E ACCEDIDO A LOS uuid de los demas carritos
-      REGISTER_ITEM: '/carts/register', //DEVUELVE RESPUETSA 200 OK,"CREA" EL CARRITO, ENVIANDO 
+      REGISTER_ITEM: '/carts/register', //DEVUELVE RESPUETSA 200 OK,"CREA" EL CARRITO, ENVIANDO
       UPDATE: '/carts/update', // cambia la cantidad de un ítem { cartId, quantity }
       DELETE: '/carts/delete', // borra un ítem y devuelve su stock { cartId }
       DELETE_ALL: '/carts/deleteall', //DELETE MASIVO envia user id e identificador unico de el carrito "uuid"
@@ -49,7 +47,7 @@ export const API_CONFIG = {
     CATALOGS: {
       CATEGORIES: '/categories', //FUNCIONA-DEBE LLEVAR companyID, page, pagezise, y devuelve un 200 con todas las categorias
       CATEGORIES_REGISTER: '/categories/register', //funciona devuelve el categorieId junto con el mensaje de success 200 OK
-      CATEGORIES_UPDATE: '/categories/update',// ENVIA UN ERROR DE EL SERVIDOR AL ENVIAR LA PETICION, NO ACTUALIZA, SE ENVIAN 
+      CATEGORIES_UPDATE: '/categories/update',// ENVIA UN ERROR DE EL SERVIDOR AL ENVIAR LA PETICION, NO ACTUALIZA, SE ENVIAN
       //"categoryId","name"
       BRANDS: '/brands',
       BRANDS_REGISTER: '/brands/register',
@@ -84,10 +82,10 @@ export const API_CONFIG = {
     CUSTOMERS: {
       REGISTER: '/customers/register',//    envia en el body elegimos from data, e ingresamos dentro data:
       // datos de el cliente, y ingresamos los demas archivos enviandolos en null, la tabla no esta creada,
-      // falta migrar para que se cree o no esta completa 
-      CHECK_EMAIL: '/customers/check-email', //SE ENVIA EN EL BODY EL companyid e email de el usario, se obtiene:  (200) SI FUNCIONA 
+      // falta migrar para que se cree o no esta completa
+      CHECK_EMAIL: '/customers/check-email', //SE ENVIA EN EL BODY EL companyid e email de el usario, se obtiene:  (200) SI FUNCIONA
       FAVORITES: '/customers/favorites', // TABLA user.favorites no existe, no esta en la db o falta la migracion para ingresarla, validar
-      UPDATE_FAVORITE: '/customers/update-favorite',//no existe la tabla en la db "error": "Error updating favorite: Error 1146 (42S02): Table 'testpremium.userfavorites' doesn't exist" 
+      UPDATE_FAVORITE: '/customers/update-favorite',//no existe la tabla en la db "error": "Error updating favorite: Error 1146 (42S02): Table 'testpremium.userfavorites' doesn't exist"
       UPDATE_DETAILS: '/customers/update-details', //error": "Error updating details: Error 1146 (42S02): Table 'testpremium.userdetails' doesn't exist
       UPDATE_COMPANIES: '/customers/update-companies', // falta la integracion de la colunma de tipod de documento dentro de la db, por eso no pasa a 200 la peticion
       UPDATE_PHOTO: '/customers/update-photo',//validar que la tabla este alineada con lo que actualmetne requiere el form, indica "{
@@ -96,7 +94,7 @@ export const API_CONFIG = {
       // 	"error": "Photo file is required" aun enviando imagen falsa con libreia faker
       // }"
       UPDATE_DOCUMENT: '/customers/update-document',//runtime error: invalid memory address or nil pointer dereference, en el form se envia claves: photo, photos y no funciona, se envia la calve "files" e indica  "runtime error: invalid memory address or nil pointer dereference"
-      DELETE_DOCUMENT: '/customers/delete-document', // SE  envia companyId con userId y responde con un 500: 
+      DELETE_DOCUMENT: '/customers/delete-document', // SE  envia companyId con userId y responde con un 500:
       // 	"success": false,
       // 	"message": "Error interno del servidor",
       // 	"error": "Error deleting document: file not found"
@@ -104,8 +102,8 @@ export const API_CONFIG = {
     },
     DIRECTIONS: {
       LIST: '/directions',//FUNCIOAN SIN ERROR ENVIANDO BODY CON userid page, pagesize  pagezise es la cantidad de objeton que va a traer
-      //page es el indicador de a que page ir a buiscar el dato que estamos enviando, pagesize indica la cantidad dentro que se van a msotrar que consinidan con el id 
-      REGISTER: '/directions/register', //funciona sin errroes agregando la direccion a el ususario, se envia 
+      //page es el indicador de a que page ir a buiscar el dato que estamos enviando, pagesize indica la cantidad dentro que se van a msotrar que consinidan con el id
+      REGISTER: '/directions/register', //funciona sin errroes agregando la direccion a el ususario, se envia
       //{
       //   "additionalInfo": "CASA DE PRUEBA SEGUNDO PISO",
       //   "address": "CALLE DE PRUEBA ANDRES",
@@ -114,11 +112,11 @@ export const API_CONFIG = {
       //   "department": "SEGUNDO PISO",
       //   "neighborhood": "SANTO DOMINGO",
       //   "userId   315
-      // }  
+      // }
       UPDATE: '/directions/update',//FUNCIONA CORRECTAMENTE ACTUALIZA,
-      // SE LE ENVIA EL BODY CON DIRECTIONID PARA DAR CON LA DIRECCION REGISTRADA 
+      // SE LE ENVIA EL BODY CON DIRECTIONID PARA DAR CON LA DIRECCION REGISTRADA
       // QUE SE VA A ACTUALIZAR CON EL MISMO BODY
-      DELETE: '/directions/delete', //FUNCIOAN CORRECTAMETE, PRUEBA APLICADA CONTRA EL DIRECTIONID "1120" SE ELIMINO CORRECTAMETNE LA DIRECCION "//       
+      DELETE: '/directions/delete', //FUNCIOAN CORRECTAMETE, PRUEBA APLICADA CONTRA EL DIRECTIONID "1120" SE ELIMINO CORRECTAMETNE LA DIRECCION "//
       // "message": "Direction deleted successfull"
     },
     DISCOUNTS: {
@@ -168,7 +166,7 @@ export const API_CONFIG = {
     COMPANIES: {
       LIST: '/companies', //GET COMPANIES
       CREATE: '/companies',
-      UPDATE: '/companies/update', //PUT  data to update have to send  
+      UPDATE: '/companies/update', //PUT  data to update have to send
       //   "address": "string",
       //   "businessName": "string",
       //   "dianResolutionDate": "string",
@@ -201,12 +199,169 @@ export const API_CONFIG = {
       // "error": "Invalid company ID"
       // }
     },
-    // Reportes
+    INVENTORY: {
+      GET: '/inventory',
+      //FUNCIONA devuelve  el inventario de la empresa, MENSAJE SUCCES 200  "Products successfully obtained"
+      CONTROL: '/inventory/control', //FUNCIONA OBTENEMOS RESPUESTA 200 DEVUELVE DATOS DE EL PRODUCTO IDPRODUCTO CODDIGO Y DATA CON LA INF DE EL PRODUCT
+      COUNT_LOCATIONS: '/inventory/countLocations', // fUNCIONA DEVUELVE UNA RESPUESTA SIMPLE
+
+      CREATE_PRODUCT_INVENTORY: '/inventory/createProduct', // DEVUELVE la respuesta sencilla  el body enviado en complejo:
+      //       {
+      //   "brandId": 30,
+      //   "categoryId": 63,
+      //   "code": "P0001",
+      //   "companyId": 1,
+      //   "description": "prueba de andres description",
+      //   "isActive": true,
+      //   "lastCost": 18000,
+      //   "maxStock": 50,
+      //   "minStock": 5,
+      //   "modelId": 1,
+      //   "purchasePrice": 18000,
+      //   "taxId": 1
+      //      pero el producto no se crea, no se sabe error sobre la tabla,
+      //  o sobre la documentacion que indica enviar datos incompletos o desobra
+      DELETE: '/inventory/deleteLocationProduct', //FUNCIONA enviamos udserId, prodiuctoLocationId, y companyId
+      //SE OBTIENE RESPUESTA 200 CON  Y ARREGLOS COMO:  MOVEMENT, CONTROL Y PRODUCTLOCATION
+      //
+      FILTER: '/inventory/filter', //funciona enviandole un body con miltiples arrays
+      //       {
+      //   "brandIds": [
+      //     30
+      //   ],
+      //   "categoryIds": [
+      //     63
+      //   ],
+      //   "companyId": 1,
+      //   "familyIds": [],
+      //   "hasStock": true,
+      //   "modelIds": [
+      //     1
+      //   ],
+      //   "page": 1,
+      //   "pageSize": 30,
+      //   "statusId": [
+      //     2,
+      //     3,
+      //     7
+      //   ],
+      //   "warehouseId": 1
+      // } devuelve la respuesta sin data, validar si el backend si envia la data correctamente en la respuesta
+      LOCATIONS: '/inventory/locations', // FUNCIONA SE ENVIA Y OBTENEMOS RESP 200 CON MENSAJE Y DATA, DENTRO DE DATA ENCONTRAMOS OJETOS:
+      //"locationId": 8,
+      // 	"warehouseId": 1,
+      // 	"companyId": 1,
+      // 	"location": "01-A700",
+      // 	"isActive": 1,
+      // 	"created_at": "2025-07-25T14:06:55Z",
+      // 	"update_at": "2026-03-10T10:09:18Z",
+      // 	"countProducts": 6,
+      // 	"countItems": 20
+      // },
+      // {
+      // 	"locationId": 9,
+      // 	"warehouseId": 1,
+      // 	"companyId": 1,
+      // 	"location": "01-B00",
+      // 	"isActive": 1,
+      // 	"created_at": "2025-07-25T14:06:55Z",
+      // 	"update_at": "2025-11-06T14:18:35Z",
+      // 	"countProducts": 3,
+      // 	"countItems": 1
+      // }
+      // Reportes
+      REGISTER_LOCATION: '/inventory/registerLocation', // FUNCIONA devuelve una respuetsa
+      // "Error interno del servidor" pero la accion no registra la nueva ubicacion, validar el controlador de el backend esta completo en su logica
+      REGITER_PRODUCT_LOCATION: '/inventory/registerProductLocation', //se envia en body:
+      //  "companyId": 1,
+      //  "location": "01-b1000",
+      //  "productId": 13482,
+      //  "quantity": 10,
+      //  "userId": 315,
+      //  "warehouseId": 1
+      //pero la respuetsa indica un error de el backend en la peticion
+      SEARCH: '/inventory/search', //FUNCIONA, se envian {
+      //   "companyId": 1,
+      //   "limit": 5,
+      //   "query": "17020420",
+      //   "type": "product"
+      // } pero el campo limit no influye en nada, el campo importante es "query"
+      SEARCH_LOCATION: '/inventory/searchLocation', //   ENVIAMOS {
+      //   "companyId": 1,
+      //   "location": "A1-700",
+      //   "warehouseId": 1
+      // } obtendremos   {    PERO DEVUELVE LA RESPUESTA CON DATA TIPO NULL
+      TRANSFER_LOCATION: '/inventory/transferLocationProduct', //
+      //       {
+      //   "companyId": 1,
+      //   "destinationLocation": "01-A7001",
+      //   "eliminate": "false",
+      //   "originLocation": "01-A700",
+      //   "productId": 13482,
+      //   "quantity": 2,
+      //   "userId": 1023,
+      //   "warehouseId": 1
+      // } pero en respueta indica error en el servidor "{
+      //   "success": false,
+      //   "message": "Error interno del servidor",
+      //   "error": "Error: failed detected ProductLocationId in Location Origin"
+      // }
+      NAVIGATE_BY_LOCATIONS: "/inventory/turn360degree", //se envia companyId ubicacion nueva, ubicacion actual productId
+      //se envia  y la respesta obtenida es un error interno "no get de locations de el producto"
+      UPDATE_LOCATION: '/inventory/updateLocation', // se envian
+      //   "companyId": 1,
+      //   "location": "06-D06",
+      //   "locationId": 13,
+      //   "warehouseId": 1
+      // pero la respuesta indica un error interno de el servidor
+      // Error: failed to location exist
+
+      UPDATE_LOCATION_PRODUCT: '/inventory/updateLocationProduct', // se envia en body PUT
+      //   {
+      //   "companyId": 1,
+      //   "location": "01-B00",
+      //   "locationId": 13,
+      //   "warehouseId": 1
+      //    pero COMO RESPUESTA OBTENEMOS ERROR SOBRE LA FNUCION
+      //    GetInventoryUpdateLocationProductRequest.ProductLocationId 
+      // https://importadora-back-production.up.railway.app/inventory/updateLocationProduct
+
+    },
+    MANAGEMENT: {
+      GET_COMPANIES: '/management', //FUNCIOAN ENVIA COMPALYID, ESTADO DE EL PEDIDO, Y UBICACION , DEVELVE CANTIDADES DE PEDIDOS EN ESTE ESTADO ENVIADO
+      CHANGEID: '/management/changeId', //FUNCIONA, ENVIAMOS INFOTYPE, userId, saleId el userId debe existir
+      FINANCIAL: '/management/finaliceOrderVerification',  //se envia estado actual e nuevo estado siguiente, junto con el saleId pero al enviarlo indica error
+      //de servidor Management finalize orders verification could not be recovered: Error update status sale
+      MANAGEMENT: '/management/saleLocationsPicking', //NO FUNCIONA, se envia BODY CON "{
+      //   "saleId": 1029,
+      //   "saleLocationPicking": "1600"
+      // }" 
+      UPDATE_LOCATIONS_SALES: '/management/saleLocationPicking', //No funciona, enviando saleId, saleLocationId
+      //Respuesta obtenida: ""Management sale location picking could not be recovered: json: cannot unmarshal number into Go value of type []models.ManagementSaleLocationPicking"" 
+      //el arror esta sobre el dato enviado en el saleLocationId
+      GET_SALE_ORDERS: '/management/saleOrders',  //
+      //       {
+      //   "companyId": 1,
+      //   "invoiceStatus": "invoicing",
+      //   "page": 1,
+      //   "pageSize": 30,
+      //   "saleChannel": "corporate",
+      //   "saleType": "sale",
+      //   "warehouseId": 5
+      // }devuellve una respuesta 200 que integra "data" 
+      CANCELLATION: '/managment/cancellationTransactionSale', //enviamos el body:
+      //   {
+      //     "cancellationId": 1,
+      //     "reason": "Cancelación solicitada por el cliente",
+      //     "saleId": 1029,
+      //     "warehouseId": 1
+      //   } y obtenemos respuesta: Management sale cancellation could not be recovered: Error create cancellation sale details 
+      VERIFICATION_LOCATION: '/management/verifyLocation', //NO FUNCIONA, DEVUELVE REPUESTA 204 VACIA ENVIANDO SALEID "1029"
+    },
     REPORTS: {
       SALES: '/reports/sales',
       CUSTOMERS: '/reports/customers',
       FINANCIAL: '/reports/financial',
-      INVENTORY: '/reports/inventory',
     },
     // Empleados y Permisos
     EMPLOYEES: {
@@ -285,7 +440,7 @@ export const API_CONFIG = {
       // 	"workModality": "Presencial"
       // },
 
-      ROLES: '/employees/roles', //funciona, enviando en companyId como parametro e id de le empresa "1" y devuelve 
+      ROLES: '/employees/roles', //funciona, enviando en companyId como parametro e id de le empresa "1" y devuelve
       //devuelve mensaje data y succes y muestra la respuesta: con las areasid de estas y roles de el area
       // "areaId": 3,
       // "areaName": "Administración",
@@ -300,14 +455,14 @@ export const API_CONFIG = {
       // 		"usersCount": 6
       // 	}
       // ]
-      PERMISSIONS: '/employees/permissions',//requiero envio de el campo de  {"employeeId": 46} y devuelve una respuesta de no acceso o acceso denegado  
+      PERMISSIONS: '/employees/permissions',//requiero envio de el campo de  {"employeeId": 46} y devuelve una respuesta de no acceso o acceso denegado
       //{
       // 	"success": false,
-      // 	"message": "Access denied",   
+      // 	"message": "Access denied",
       // 	"error": "employee not found or access denied"
-      // }  aun cuando el id de empleado no coincide 
+      // }  aun cuando el id de empleado no coincide
       // envia :
-      // {  
+      // {
       // 	"success": true,
       // 	"message": "Employee permissions retrieved successfully",
       // 	"data": {
