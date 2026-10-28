@@ -1,5 +1,7 @@
 # IP Online — Documentación completa del software
 
+tienen 189 operaciones (185 rutas únicas, porque algunas comparten ruta con distinto método).
+
 > **Software:** "IP Online" · Frontend `https://importadora-online-ruby.vercel.app` (Vercel) ·
 > Backend `https://importadora-back-production.up.railway.app` (Railway) · Archivos en Cloudflare R2.
 > **Fecha del análisis:** 2026-10-12 · **Fuente:** recorrido de la interfaz (usuario tester

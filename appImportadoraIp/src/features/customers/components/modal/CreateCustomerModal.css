@@ -1,8 +1,9 @@
 /* CreateCustomerModal.css · estilos del modal de registro rápido de cliente */
+/* ojo: se quitaron los valores de respaldo escritos a mano (colores, sombras y tamaños): los tokens que usaban ya existen en tokens.css */
 .customer-modal-backdrop {
   position: fixed;
   inset: 0;
-  background-color: var(--color-backdrop, rgba(0, 0, 0, 0.5));
+  background-color: var(--color-backdrop);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -15,7 +16,7 @@
   background-color: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
+  box-shadow: var(--shadow-xl);
   width: 100%;
   max-width: 520px;
   overflow: hidden;
@@ -41,7 +42,7 @@
 .customer-modal-close {
   background: transparent;
   border: none;
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   color: var(--color-text-muted);
   cursor: pointer;
 }

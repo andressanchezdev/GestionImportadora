@@ -1,7 +1,8 @@
 // shop.helpers.test · pruebas de clampQuantity (la cantidad siempre queda entre 1 y el stock)
 // conecta con: shop.helpers; se corre con npm test
 import { describe, expect, it } from 'vitest'
-import { clampQuantity, createCartUuid, toWarehouseNumber } from './shop.helpers'
+import type { Product } from '../types/shop.types'
+import { clampQuantity, createCartUuid, getBrandModelLabel, getProductTitle, splitIncludedTax, toWarehouseNumber } from './shop.helpers'
 
 describe('clampQuantity', () => {
   it('deja pasar una cantidad válida', () => {
@@ -51,5 +52,25 @@ describe('createCartUuid', () => {
     const first = createCartUuid()
     expect(first.length).toBeGreaterThan(10)
     expect(createCartUuid()).not.toBe(first)
+  })
+})
+
+describe('textos de la card y totales con IVA', () => {
+  const product = (data: Partial<Product>) => data as Product
+
+  it('usa la descripción como título, o el modelo si es igual o falta', () => {
+    expect(getProductTitle(product({ description: 'ACTEVO', modelCompatible: '20W50' }))).toBe('ACTEVO')
+    expect(getProductTitle(product({ description: '20w50', modelCompatible: '20W50' }))).toBe('20W50')
+  })
+
+  it('arma «MARCA - MODELO» sin sobrantes', () => {
+    expect(getBrandModelLabel(product({ brand: 'KIXX', modelCompatible: '15W40' }))).toBe('KIXX - 15W40')
+    expect(getBrandModelLabel(product({ brand: 'KIXX' }))).toBe('KIXX')
+  })
+
+  it('separa el IVA incluido y siempre suma el total', () => {
+    const { subtotal, tax } = splitIncludedTax(11900, 0.19)
+    expect(subtotal).toBe(10000)
+    expect(subtotal + tax).toBe(11900)
   })
 })

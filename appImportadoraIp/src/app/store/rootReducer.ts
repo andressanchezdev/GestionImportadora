@@ -1,4 +1,4 @@
-// rootReducer · junta los reducers de cada feature (ui, shop, products, cart, wallet, customers, catalogs, warehouses, auth, realtime)
+// rootReducer · junta los reducers de cada feature (ui, shop, products, cart, wallet, customers, catalogs, warehouses, orders, auth, realtime)
 // conecta con: features/*/index, app/store/store
 // src/app/store/rootReducer.ts
 import { combineReducers } from '@reduxjs/toolkit'
@@ -10,6 +10,7 @@ import { realtimeReducer } from '@/features/realtime'
 import { catalogsReducer } from '@/features/catalogs'
 import { customersReducer } from '@/features/customers'
 import { warehousesReducer } from '@/features/warehouses'
+import { ordersReducer } from '@/features/orders'
 // import cajaReducer from '@/features/caja/slices/caja.slice'
 
 export const rootReducer = combineReducers({
@@ -21,6 +22,7 @@ export const rootReducer = combineReducers({
     customers: customersReducer, // clientes, direcciones y descuentos del backend (no se persiste)
     catalogs: catalogsReducer, // marcas, categorías y modelos de moto del backend (no se persiste)
     warehouses: warehousesReducer, // bodegas del backend (no se persiste; la bodega ACTIVA vive en ui)
+    orders: ordersReducer, // bandeja de pedidos: etapa, tabla y detalle del pedido abierto (no se persiste)
     realtime: realtimeReducer, // estado de la conexión en tiempo real (no se persiste)
     auth: authReducer, // ojo: auth NO está en la whitelist de persistencia; su estado inicial se lee de la sesión guardada
 })

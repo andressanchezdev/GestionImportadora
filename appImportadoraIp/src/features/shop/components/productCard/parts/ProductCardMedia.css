@@ -1,22 +1,35 @@
 /* ProductCardMedia.css · estilos de la imagen y de los iconos flotantes de la tarjeta · solo usa tokens de styles/tokens.css */
+/* ojo: ahora la imagen llena el recuadro (object-fit: cover, proporción 1.15) y lleva la línea gris inferior, como la card de la maqueta */
 
 .product-card-media {
     position: relative;
+    flex-shrink: 0;
     width: 100%;
-    min-height: var(--product-card-media-height);
-    padding: 5px;
+    min-height: 140px;
+    aspect-ratio: 1.15;
+    background-color: var(--bg-card-media);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+.product-card-media::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 90%;
+    height: 1.5px;
+    background-color: var(--color-card-border);
+    transform: translateX(-50%) translateY(5px);
+    z-index: 1;
+}
+
 .product-card-image {
+    display: block;
     width: 100%;
     height: 100%;
-    max-width: 100%;
-    max-height: var(--product-card-media-height);
-    object-fit: contain;
-    border-radius: var(--radius-sm);
+    object-fit: cover;
 }
 
 .product-card-emoji {

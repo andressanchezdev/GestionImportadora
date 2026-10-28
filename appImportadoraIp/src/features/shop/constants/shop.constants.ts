@@ -5,7 +5,15 @@ import type { CatalogFilter, PriceLevelOption, ShopState } from '../types/shop.t
 // texto de la opción 'sin filtro' en los selectores de categoría y marca (el valor interno es null)
 export const ALL_FILTER_OPTION = 'Todas'
 
+// nombre de cada chip de filtro del catálogo: es el texto de su opción vacía («sin filtro»), como los chips de la maqueta
+export const CATEGORY_FILTER_LABEL = 'Categoría'
+export const BRAND_FILTER_LABEL = 'Marca'
+
 // ojo: antes aquí estaban CATALOG_CATEGORIES y CATALOG_BRANDS (listas fijas); ahora las categorías y marcas salen del backend (features/catalogs)
+
+// IVA de Colombia: el carrito separa subtotal e IVA como la maqueta
+// ojo: SUPUESTO a confirmar con el negocio: los precios de las listas (P0..P3) ya incluyen el IVA; cuando el backend envíe los impuestos por línea se reemplaza
+export const IVA_RATE = 0.19
 
 // tamaños de lo que se pide al backend: página del catálogo y máximo de resultados de la búsqueda por texto
 export const PRODUCTS_PAGE_SIZE = 30

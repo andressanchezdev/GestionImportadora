@@ -55,11 +55,16 @@ describe('selectCartTotals y selectCartDrawerMeta', () => {
   it('calcula el total a facturar y la cantidad de artículos', () => {
     const state = makeState([line(1, 'a', 2, 1000), line(2, 'b', 1, 500)])
     expect(selectCartTotals(state)).toEqual({ totalAmount: 2500, totalItemsCount: 3 })
-    expect(selectCartDrawerMeta(state)).toEqual({ title: 'Carrito', badge: '3 artículos' })
+    expect(selectCartDrawerMeta(state)).toEqual({ title: 'Carrito', subtitle: 'nivel P0 · 3 artículos' })
   })
 
   it('un solo artículo va en singular', () => {
-    expect(selectCartDrawerMeta(makeState([line(1, 'a', 1, 100)])).badge).toBe('1 artículo')
+    expect(selectCartDrawerMeta(makeState([line(1, 'a', 1, 100)])).subtitle).toBe('nivel P0 · 1 artículo')
+  })
+
+  it('con cliente elegido lo nombra en el encabezado', () => {
+    const state = makeState([line(1, 'a', 2, 100)], { cartCustomer: { id: 7, name: 'Taller El Pistón' }, filters: { ...INITIAL_SHOP_STATE.filters, priceLevel: 'P1' } })
+    expect(selectCartDrawerMeta(state).subtitle).toBe('Cliente: Taller El Pistón · nivel P1 · 2 artículos')
   })
 
   it('carrito vacío: total 0', () => {

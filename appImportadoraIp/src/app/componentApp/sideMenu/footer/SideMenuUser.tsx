@@ -1,6 +1,7 @@
 // SideMenuUser · tarjeta del usuario en el footer del menú (avatar con iniciales, nombre, rol y botón de cerrar sesión)
-// conecta con: features/auth (usuario de la sesión y logoutThunk); las iniciales salen de global/helpers/format; la confirmación es global/.../ConfirmDialog
+// conecta con: features/auth (usuario de la sesión y logoutThunk); las iniciales salen de global/helpers/format; la confirmación es global/.../ConfirmDialog; SideMenu le pasa si el menú está contraído
 // ojo: antes el usuario salía del estado ui con datos fijos; ahora sale de la sesión (login)
+// ojo: con el menú contraído solo se ve el avatar (como en la maqueta)
 import React, { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/global/hooks/useRedux'
 import { getInitials } from '@/global/helpers/format'
@@ -9,7 +10,11 @@ import { getDisplayName, logoutThunk, selectCurrentUser } from '@/features/auth'
 import logoutIcon from '@/assets/icons/logout.svg'
 import './SideMenuUser.css'
 
-export const SideMenuUser: React.FC = () => {
+interface SideMenuUserProps {
+    isMini: boolean
+}
+
+export const SideMenuUser: React.FC<SideMenuUserProps> = ({ isMini }) => {
     const dispatch = useAppDispatch()
     const user = useAppSelector(selectCurrentUser)
     const [showConfirm, setShowConfirm] = useState(false)
@@ -25,23 +30,27 @@ export const SideMenuUser: React.FC = () => {
 
     return (
         <>
-            <div className="side-menu-user">
-                <div className="side-menu-user-avatar" aria-hidden="true">
+            <div className={`side-menu-user ${isMini ? 'side-menu-user-mini' : ''}`}>
+                <div className="side-menu-user-avatar" title={isMini ? displayName : undefined} aria-hidden="true">
                     {getInitials(displayName)}
                 </div>
-                <div className="side-menu-user-info">
-                    <p className="side-menu-user-name">{displayName}</p>
-                    <p className="side-menu-user-role">{user.userType}</p>
-                </div>
-                <button
-                    type="button"
-                    className="side-menu-user-logout"
-                    onClick={() => setShowConfirm(true)}
-                    aria-label="Cerrar sesión"
-                    title="Cerrar sesión"
-                >
-                    <img src={logoutIcon} alt="" className="side-menu-user-logout-icon" />
-                </button>
+                {!isMini && (
+                    <>
+                        <div className="side-menu-user-info">
+                            <p className="side-menu-user-name">{displayName}</p>
+                            <p className="side-menu-user-role">{user.userType}</p>
+                        </div>
+                        <button
+                            type="button"
+                            className="side-menu-user-logout"
+                            onClick={() => setShowConfirm(true)}
+                            aria-label="Cerrar sesión"
+                            title="Cerrar sesión"
+                        >
+                            <img src={logoutIcon} alt="" className="side-menu-user-logout-icon" />
+                        </button>
+                    </>
+                )}
             </div>
 
             {/* ojo: el diálogo ahora es el ConfirmDialog global; aquí solo se le dan los textos y qué hacer al confirmar */}

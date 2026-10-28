@@ -1,5 +1,6 @@
-// AppHeader · barra superior: logo con el nombre del sistema y el selector de bodega
-// conecta con: WarehouseSelector (bodega activa); ojo: el estado de la API (latencia) ahora se muestra en el footer del menú (ApiStatus)
+// AppHeader · barra superior de la columna central: selector de bodega y configuración
+// conecta con: WarehouseSelector (bodega activa), navigation (el módulo de Configuración); ojo: el estado de la API (latencia) se muestra en el footer del menú (ApiStatus)
+// ojo: la marca (logo y nombre) y el botón ☰ de contraer el menú viven ahora en la cabecera del menú lateral (SideMenuBrand)
 import React from 'react'
 import './AppHeader.css'
 import { WarehouseSelector } from './warehouse/WarehouseSelector'
@@ -12,15 +13,6 @@ export const AppHeader: React.FC = () => {
 
     return (
         <header className="app-header">
-            {/* Logo y Nombre del Sistema */}
-            <div className="app-header-brand">
-                <div className="app-header-logo">IP</div>
-                <div>
-                    <h1 className="app-header-title">Importadora Premium</h1>
-                    <span className="app-header-badge">ERP Online</span>
-                </div>
-            </div>
-
             {/* Selector de Bodega Activa y Botón de Configuración */}
             <div className="app-header-actions">
                 <WarehouseSelector />

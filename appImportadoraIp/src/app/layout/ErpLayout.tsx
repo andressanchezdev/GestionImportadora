@@ -1,6 +1,7 @@
-// ErpLayout · layout del ERP: header, menú lateral, contenido central y drawer derecho
+// ErpLayout · layout del ERP: menú lateral, columna central (cabecera y contenido) y drawer derecho
 // conecta con: componentApp/* (header, sideMenu, contentMain, drawerRight) y features/realtime (useRealtime) y features/auth (useSessionActivity) y features/shop (useCartSync); lo muestra AuthGate cuando hay sesión
 // ojo: antes este layout vivía dentro de StoreApp; StoreApp ahora solo pone el Provider y la puerta de entrada
+// ojo: como en la maqueta, la cabecera ya no cruza todo el ancho: va dentro de la columna central y la marca pasó al menú lateral
 import './ErpLayout.css'
 import { useRealtime } from '@/features/realtime'
 import { useSessionActivity } from '@/features/auth'
@@ -23,20 +24,17 @@ export function ErpLayout() {
 
   return (
     <div className="store-app-layout">
-      {/* Barra Superior */}
-      <AppHeader />
+      {/* Menú lateral izquierdo (232px, token --sidebar-width; 64px cuando está contraído) */}
+      <SideMenu />
 
-      {/* Cuerpo del Layout con los 3 bloques estructurales */}
-      <div className="store-app-body">
-        {/* Menú lateral izquierdo (280px, token --sidebar-width) */}
-        <SideMenu />
-
-        {/* Lienzo central flexible (flex-1) */}
+      {/* Columna central: cabecera y lienzo flexible (flex-1) */}
+      <div className="store-app-main">
+        <AppHeader />
         <MainContent />
-
-        {/* Panel lateral derecho (aparece solo cuando hay algo que mostrar) */}
-        <DrawerRight />
       </div>
+
+      {/* Panel lateral derecho (aparece solo cuando hay algo que mostrar) */}
+      <DrawerRight />
     </div>
   )
 }

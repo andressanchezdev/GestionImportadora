@@ -27,6 +27,7 @@ export interface ProductDto {
     code: string
     description?: string
     brandName?: string
+    brandImage?: string
     categoryName?: string
     modelName?: string
     models?: string[]
@@ -51,6 +52,7 @@ export interface ControlProductDto {
     productInformation?: {
         description?: string
         brandName?: string
+        brandImage?: string
         categoryName?: string
         modelName?: string
         productImage?: string

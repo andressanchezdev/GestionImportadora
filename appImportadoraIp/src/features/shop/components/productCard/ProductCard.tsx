@@ -1,10 +1,11 @@
-// ProductCard · tarjeta de producto con el diseño de Yamaha: imagen con iconos, nombre, referencia, precio con tarifas y cantidad
-// conecta con: ShopCatalogScreen (le pasa los datos y recibe el agregar al carrito); usa shop.helpers y las partes ProductCard* (parts/ Media, Info, TierMenu)
-// ojo: ProductCardStock ya no se usa en la tarjeta (el stock salió del diseño); el archivo se conserva como referencia
+// ProductCard · tarjeta de producto con el diseño de la maqueta (IP): imagen con tarifas, precio y marca, categoría y título, referencia y cantidad
+// conecta con: ShopCatalogScreen (le pasa los datos y recibe el agregar al carrito); usa shop.helpers y las partes ProductCard* (parts/ Media, Info, TierMenu) y brand/ProductBrand
+// ojo: antes tenía el diseño de Yamaha (borde #e9e7e7, botón en mayúsculas con fuente Oswald, contador con - y +); ahora es el de la maqueta. ProductCardStock no se usa en la tarjeta (el stock salió del diseño); el archivo se conserva como referencia
+// ojo: la tarjeta no abre ningún detalle del producto: el producto solo se ve aquí, en el carrito y en las tablas
 import React, { useState } from 'react'
 import type { PriceLevelKey } from '../../types/shop.types'
 import type { ProductCardProps } from '../../types/shop.card.types'
-import { getStockStatus, getWarehouseStock } from '../../helpers/shop.helpers'
+import { getBrandModelLabel, getProductTitle, getStockStatus, getWarehouseStock } from '../../helpers/shop.helpers'
 import { useQuantityInput } from '../../hooks/useQuantityInput'
 import { ProductCardMedia } from './parts/ProductCardMedia'
 import { ProductCardInfo } from './parts/ProductCardInfo'
@@ -29,17 +30,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     const warehouseStock = getWarehouseStock(product, activeWarehouseId)
     const isOutOfStock = getStockStatus(warehouseStock, product.minStockAlert) === 'out_of_stock'
 
-    // ojo: la cantidad (botones, número escrito y flechas del teclado) ahora vive en useQuantityInput; antes eran useState + handleIncrement/Decrement aquí
+    // ojo: la cantidad (número escrito o flechas del campo) vive en useQuantityInput; antes eran useState + handleIncrement/Decrement aquí
     const quantityInput = useQuantityInput(warehouseStock)
 
     const handleAdd = () => {
-        if (isOutOfStock) return
+        if (isOutOfStock || cartQuantity > 0) return
         // si el usuario estaba escribiendo, se confirma ese número antes de agregar
         onAddToCart(product, quantityInput.commitDraft(), cardPriceLevel)
     }
 
     return (
-        <article className={`product-card ${isOutOfStock ? 'product-card-out-of-stock' : ''}`}>
+        <article className="product-card">
             <ProductCardMedia
                 name={product.name}
                 category={product.category}
@@ -49,28 +50,29 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 onLevelChange={(level) => setPriceOverride({ level, from: selectedPriceLevel })}
             />
 
-            <ProductCardInfo name={product.name} code={product.code} location={product.location} />
+            <div className="product-card-body">
+                {/* Precio del nivel activo a la izquierda y la marca a la derecha */}
+                <ProductCardPricing product={product} level={cardPriceLevel} />
 
-            {/* Precio del nivel activo alineado a la derecha */}
-            <ProductCardPricing
-                product={product}
-                level={cardPriceLevel}
-            />
+                <ProductCardInfo
+                    category={product.category}
+                    title={getProductTitle(product)}
+                    meta={getBrandModelLabel(product)}
+                    code={product.code}
+                    location={product.location}
+                />
 
-            {/* Contador de cantidad + botón Ordenar */}
-            <ProductCardActions
-                quantity={quantityInput.quantity}
-                quantityText={quantityInput.text}
-                maxQuantity={warehouseStock}
-                isOutOfStock={isOutOfStock}
-                cartQuantity={cartQuantity}
-                onIncrement={quantityInput.increment}
-                onDecrement={quantityInput.decrement}
-                onQuantityChange={quantityInput.handleChange}
-                onQuantityKeyDown={quantityInput.handleKeyDown}
-                onQuantityBlur={quantityInput.handleBlur}
-                onAdd={handleAdd}
-            />
+                {/* Cantidad + botón Ordenar */}
+                <ProductCardActions
+                    quantityText={quantityInput.text}
+                    maxQuantity={warehouseStock}
+                    isOutOfStock={isOutOfStock}
+                    cartQuantity={cartQuantity}
+                    onQuantityChange={quantityInput.handleChange}
+                    onQuantityBlur={quantityInput.handleBlur}
+                    onAdd={handleAdd}
+                />
+            </div>
         </article>
     )
 }

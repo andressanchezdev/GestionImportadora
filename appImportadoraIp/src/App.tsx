@@ -2,6 +2,8 @@
 // conecta con: app/layout/StoreApp y global AppToaster (alertas flotantes)
 import StoreApp from '@/app/layout/StoreApp'
 import { AppToaster } from '@/global/components/UI/atoms/AppToaster'
+// ojo: los botones (btn-primary, btn-secondary, btn-danger, btn-accent) se estilan una sola vez para toda la app
+import '@/global/components/UI/atoms/Button.css'
 
 
 //aqui se centra el inicio de app, renderiza/carga store.tsx la cual es la base de la app 

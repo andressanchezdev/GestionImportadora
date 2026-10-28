@@ -6,6 +6,8 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  /* ojo: el login conserva Montserrat; la fuente base de la app ahora es la de la maqueta (Inter o la del sistema) */
+  font-family: var(--font-family-brand);
 }
 
 .login-screen-section {

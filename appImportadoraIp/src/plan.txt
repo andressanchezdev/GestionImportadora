@@ -645,6 +645,14 @@ Para garantizar la auditoría total de cada proceso, los endpoints inyectan obli
    - docs/features2/ (archivos de mocks mockInmediatePicking.json, mockCashRegisterData, etc.).
    - Cualquier archivo de datos simulados local que duplique los endpoints activos del backend.
 
+3. Elementos reemplazados por el traslado del diseño de la maqueta (revisar y retirar a mano):
+   - ProductCardStock y la clase .product-card-out-of-stock (la card nueva muestra el stock en su fila de datos).
+   - Sección de tokens «Yamaha» y el uso de --c-brand-yellow en las cards (ahora son los tokens de la maqueta).
+   - Ajuste de menú y cabeceras: «Gestión Caja» ahora es «Gestión Ventas» (id cashRegister igual), las subgestiones tienen nombres cortos y «Marcas y Categorías» (id catalogs) se separó en brands, categories y models. Si el backend tiene permisos guardados con el id catalogs, hay que asignarlos de nuevo a los 3 ids nuevos para los empleados que no son admin; los textos de las secciones 10 y 12 de este documento conservan los nombres anteriores.
+   - CSS sin ningún uso en el código: .shop-catalog-filter-pills-scroll (src/App.css) y .customer-drawer-field (CustomerDrawer.css).
+   - !important que ya existían (la regla del repo los prohíbe): padding-left en RolesPermissionsScreen.css (features/auth y features/employees, parece copia repetida) y border-color en molecules/form/FormInputs.css.
+   - Vista de pedidos: no hay vista de ficha de producto; los pedidos se ven en tabla y su detalle en el panel derecho (features/orders).
+
 ====================================================================================================
 FIN DEL DOCUMENTO DE ESPECIFICACIÓN TÉCNICA
 ====================================================================================================

@@ -24,12 +24,12 @@ export const API_CONFIG = {
     },
     // Productos, búsqueda e inventario de lectura
     PRODUCTS: {
-      LIST: '/products',
-      REGISTER: '/products/register',
+      LIST: '/products', // FUNCIONA, 200 "Products successfully obtained" con {companyId, page, pageSize}; devuelve productId, code, description, categoryName, modelName, brandName, brandImage, isActive, isPromotion, locations, prices e images
+      REGISTER: '/products/register', // ERROR 404 "The route you are looking for does not exist" con {companyId, brandId, categoryId, modelId, taxId, code, description, isActive, lastCost, purchasePrice, maxStock, minStock}; el Swagger la lista pero el backend no la tiene publicada; el producto no se crea (no sale en /products ni en /search)
     },
     // Búsqueda universal (varias entidades a la vez)
     SEARCH: {
-      UNIVERSAL: '/search',
+      UNIVERSAL: '/search', // FUNCIONA con {companyId, query, type:"product", limit}, 200 "Search completed successfully" y la misma forma de fila que /products
     },
     // POS / Carrito de Ventas
     CARTS: {
@@ -47,37 +47,41 @@ export const API_CONFIG = {
     CATALOGS: {
       CATEGORIES: '/categories', //FUNCIONA-DEBE LLEVAR companyID, page, pagezise, y devuelve un 200 con todas las categorias
       CATEGORIES_REGISTER: '/categories/register', //funciona devuelve el categorieId junto con el mensaje de success 200 OK
+      // PRUEBA DE HOY (ANDRES): responde 201 "Category registered successfully" pero con categoryId = 0 y NO crea nada: el total de /categories sigue igual (529) y el nombre no aparece en ninguna pagina
       CATEGORIES_UPDATE: '/categories/update',// ENVIA UN ERROR DE EL SERVIDOR AL ENVIAR LA PETICION, NO ACTUALIZA, SE ENVIAN
+      // SIiN PRoOBAR HOY: no se pudo crear una categoria propia para actualizarla (el registro no crea nada) y se evito tocar las categorias reales
       //"categoryId","name"
-      BRANDS: '/brands',
-      BRANDS_REGISTER: '/brands/register',
-      BRANDS_UPDATE: '/brands/update',
+      BRANDS: '/brands', // FUNCIONA, 200 "Brands successfully obtained" con {companyId, page, pageSize}; devuelve brandId, name, image
+      BRANDS_REGISTER: '/brands/register', // FUNCIONA con {companyId, name}, 201 "Brand created successfully" y devuelve {brandId, name, image}; la marca aparece de inmediato en /brands
+      BRANDS_UPDATE: '/brands/update', // FUNCIONA, es PUT con {brandId, name}, 200 "Brand updated successfully"; el nombre cambia en /brands
       //      MODELS: '/models',
       //      MODELS_REGISTER: '/models/register',
       //      MODELS_UPDATE: '/models/update',
-      WAREHOUSES: '/warehouses',
-      WAREHOUSES_REGISTER: '/warehouses/register',
-      WAREHOUSES_UPDATE: '/warehouses/update',
+      WAREHOUSES: '/warehouses', // FUNCIONA, 200 "Warehouses successfully obtained"; devuelve warehouseId, name, address, las series (electronicBillingSerial, transferSerial, remissionSerial, saleSerial), isMain, isActive
+      WAREHOUSES_REGISTER: '/warehouses/register', // FUNCIONA con {companyId, name, address}, 201 "Warehouse registered successfully" pero la respuesta trae warehouseId = 0 (el id real hay que buscarlo en /warehouses) y las 4 series quedan en 0
+      WAREHOUSES_UPDATE: '/warehouses/update', // FUNCIONA, es PUT con {warehouseId, name, address}, 200 "Warehouse updated successfully"; INCONSISTENTE: la respuesta dice isActive:false pero en /warehouses la bodega sigue isActive:true
     },
 
     MODELS: {
       MODELS: '/models', //FUNCIOAN CORRECTAMENTE DEVUELVE OBJETOS DENTRO DE MODEL, MODELID, NAME
       MODELS_REGISTER: '/models/register', //FUNCIONA CORRECTAMENTE, SE CREA EL MODELO CON LOS MISMOS CAMPOS MODELID, NAME
+      // PRUEBA DE HOY (ANDRES): responde 201 "Model registered successfully" pero con modelId = 0 y NO crea nada: el total de /models sigue igual (552) y el nombre no aparece en ninguna pagina
       MODELS_UPDATE: '/models/update', //FUNCIONA, SE RECIBE RESPUESTA 200, PERO NO PUDE VER EL PRODUCTO CREADO CON LOS DATOSW E PRUENA
+      // SIiN PROBA HOY: no se pudo crear un modelo propio para actualizarlo (el registro no crea nada) y se evito tocar los modelos reales
     },
     // Terceros: usuarios (clientes y vendedores, proveedores, TODOS los Agentes activos son ), centralizada de la imfo de cada actor
     USERS: {
-      LIST: '/users',
-      BY_ID: (id: number | string) => `/users/${id}`,
-      REGISTER: '/users/register',
-      QUICK_REGISTER: '/users/quick-register',
-      UPDATE: '/users/update',
-      STATE: '/users/state',
-      VALIDATE_DOCUMENT: '/users/validate-document',
-      BALANCE: '/users/balance',
-      CREDIT: '/users/credit',
-      CREDIT_DAYS: '/users/credit/days',
-      CREDIT_LIMIT: '/users/credit/limit',
+      LIST: '/users', // FUNCIONA con {companyId, page, pageSize, userType:"customer"}, 200 "Users successfully obtained"; cada fila trae companyInformation
+      BY_ID: (id: number | string) => `/users/${id}`, // FUNCIONA, GET /users/315 responde 200 "User retrieved successfully" con el usuario y su companyInformation
+      REGISTER: '/users/register', // SP: segun el Swagger es multipart/form-data (campo data con el JSON + photo, identityCardFiles, chamberCommerceFiles y rutFiles); para el alta sin archivos el backend ofrece /users/quick-register
+      QUICK_REGISTER: '/users/quick-register', // FUNCIONA con {companyId, email, name, identification, phone, userType:"customer"}, 201 "User registered successfully"; devuelve el usuario con userId, warehouseId null y priceType vacio
+      UPDATE: '/users/update', // FUNCIONA, es PUT con {userId + SOLO los campos a cambiar}, 200 "User updated successfully"; actualiza parcial (lastName y priceType cambian sin tocar el nombre); la respuesta devuelve el usuario completo
+      STATE: '/users/state', // FUNCIONA, es PUT con {userId, isActive:false}, 200 "User state updated successfully"; el usuario desaparece de la lista POST /users pero GET /users/:id lo sigue devolviendo (no hay forma de ver desde la API que esta inactivo)
+      VALIDATE_DOCUMENT: '/users/validate-document', // FUNCIONA con {companyId, identification}, 200 "Document validation completed"; devuelve {isValid, documentType, message}
+      BALANCE: '/users/balance', // FUNCIONA con {userId, price, type}, 201 "Balance registered successfully" y devuelve {balanceId, userId, price, type, created_at}; acepta cualquier type e incluso sin type (quedo ""); el saldo NO se refleja en /wallet (sumAmount sigue en 0), no se sabe donde se consulta
+      CREDIT: '/users/credit', // FUNCIONA, es PUT con {userId, quota, days}, 200 "User updated successfully"; guarda quota y days (visibles en /wallet > creditInformation) pero IGNORA isCredit: con isCredit:true sigue en false; ese flag solo cambia con PUT /users/update {isCredit}. Enviar solo quota no borra days. Probado con un usuario de prueba ANDRES
+      CREDIT_DAYS: '/users/credit/days', // FUNCIONA, es PUT con {userId, days}, 200 "Credit days updated successfully"; cambia creditInformation.days en /wallet; acepta days:0 sin validar
+      CREDIT_LIMIT: '/users/credit/limit', // FUNCIONA, es PUT con {userId, limit}, 200 "Credit limit updated successfully"; cambia creditInformation.quota en /wallet (es el mismo campo que quota de /users/credit); acepta limit negativo (-5) sin validar
     },
     CUSTOMERS: {
       REGISTER: '/customers/register',//    envia en el body elegimos from data, e ingresamos dentro data:
@@ -122,46 +126,49 @@ export const API_CONFIG = {
     DISCOUNTS: {
       LIST: '/discounts',  //SI FUNCIONA, DA UNA RESPUESTA, VALIDAR SI LOS DATOS QUE SE DEBEN ENVIAR DE LOS DESCUENTOS SI ESTEN DENTRO DE EL CAMPO AL LLAMARLOS
       REGISTER: '/discounts/register', //Funciona, crea el modelo correctamente con body modelId, name (name como string,pero contiene datos numericos)
-      UPDATE: '/discounts/update',
-      DELETE: '/discounts/delete',
-      DELETE_ALL: '/discounts/deleteall',
-      DISABLE_ALL: '/discounts/disabledall',
+      UPDATE: '/discounts/update', // ERROR 404 "discount not found" (PUT con {discountId, rate, isActive}) para el discountId que devolvio /discounts/register; no se pudo comprobar que actualice
+      DELETE: '/discounts/delete', // ERROR 404 "Discount not found" (DELETE con {discountId}) para el mismo id que devolvio /discounts/register; no se pudo comprobar que borre
+      DELETE_ALL: '/discounts/deleteall', // SP A PROPOSITO: borra todos los descuentos del userId (DELETE con {userId})
+      DISABLE_ALL: '/discounts/disabledall', // SP A PROPOSITO: desactiva todos los descuentos del userId (PUT con {userId})
+      // OJO REGISTER, probado con un usuario de prueba y {userId, brandId, rate:5, quantity:1, isActive:true}: responde 201 "Discount registered successfully" pero devuelve rate:0, isActive:false y un discountId que despues no existe (404 en update y delete); /discounts con ese userId sigue en data = []; al repetirlo con categoryId responde 500 "Error registering discount: discount already exists", asi que algo si se guardo pero no se puede ver ni editar desde la API
     },
     // Cartera y Crédito
     WALLET: {
-      BASE: '/wallet',
-      SUMMARY: '/wallet/summary',
-      INTERNAL: '/wallet/internal',
-      HISTORY: '/wallet/history',
+      BASE: '/wallet', // FUNCIONA, 200 "Users successfully obtained"; trae sumAmount, isCredit, ubicationInformation, paymentInformation, companyInformation y creditInformation
+      SUMMARY: '/wallet/summary', // ERROR 500 "Wallet summary could not be retrieved: failed to retrieve wallet summary" tanto con {companyId, warehouseId:1} como solo con {companyId}; la app lo usa para los KPI de cartera, validar el controlador del backend
+      INTERNAL: '/wallet/internal', // RESPONDE 200 "Wallet by ID obtained successfully" con {companyId, userId:315} pero data = [] (sin facturas para ese usuario, no se sabe si esta completo)
+      HISTORY: '/wallet/history', // RESPONDE 200 "Bills successfully obtained" con {companyId, userId:315, page, pageSize} pero data = [] (vacio, no se sabe si esta completo)
     },
     PAYMENTS: {
-      LIST: '/payments',
+      LIST: '/payments', // RESPONDE 200 "Payments successfully obtained" con {companyId, page, pageSize, warehouseId:1} pero data = [] (vacio)
       REGISTER: '/payments/register',
       ADVANCE: '/payments/advance',
       EARLY: '/payments/early',
-      BY_SALE: '/payments/by-sale',
-      DETAIL: '/payments/detail',
-      SUMMARY: '/payments/summary',
+      BY_SALE: '/payments/by-sale', // RESPONDE 200 "Payments retrieved successfully" con {companyId, saleId:1029} pero data = [] (esa venta no tiene pagos)
+      DETAIL: '/payments/detail', // FUNCIONA con {companyId, paymentId:1}, 200 "Payment retrieved successfully"; devuelve paymentId, userId, saleId, amount, remainingAmount, paymentMethod, serialPayment y warehouseInformation
+      SUMMARY: '/payments/summary', // FUNCIONA con {companyId, warehouseId:1}, 200; devuelve totales de pagos (verificados, pendientes, cancelados), montos y paymentsByMethod
       CHANGE_STATUS: '/payments/changestatus',
-      CANCELLED: '/payments/cancelled',
+      CANCELLED: '/payments/cancelled', // SP: el Swagger la tiene como PUT (no POST) con {paymentId, reason, userId}; cancela un pago real
+      BULK: '/payments/bulk', // SP: inserta pagos en lote
+      BULK_INSERT: '/payments/bulk-insert', // SP: inserta pagos en lote (el Swagger lo describe igual que /payments/bulk)
     },
     // Ventas y Pipeline de Surtido
     SALES: {
       REGISTER: '/sales/register',
-      PENDINGS: '/sales/pendings',
-      HISTORY: '/sales/history',
-      DETAIL: '/sales/detail',
-      SUMMARY: '/sales/summary',
+      PENDINGS: '/sales/pendings', // RESPONDE 200 "Pendings successfully obteined" con {companyId, page, pageSize, warehouseId:1} pero data = [] (vacio)
+      HISTORY: '/sales/history', // ERROR 500 "Histories could not recovered: failed to retrieve histories" con {companyId, page, pageSize, warehouseId:1}, validar el controlador del backend
+      DETAIL: '/sales/detail', // FUNCIONA con {companyId, saleId:1029, warehouseId:1}, 200 "Sale retrieved successfully"; trae la venta (serialCode, invoiceStatus, saleChannel, totalAmount) pero NO trae items ni cliente (eso lo da /management/saleId)
+      SUMMARY: '/sales/summary', // FUNCIONA con {companyId, warehouseId:1}, 200; devuelve totales y desgloses salesByChannel, salesByPaymentMethod y salesByInvoiceStatus
       STATUS: '/sales/status',
       CANCEL: '/sales/cancel',
-      APPROVED: '/sales/approved',
-      TRASLADES: '/sales/traslades',
+      APPROVED: '/sales/approved', // ERROR 500 "Error updating sale data: the code does not match the reference number" con {saleId:1029, code:0}; probado por error con un codigo falso: el backend lo rechazo y no cambio nada; exige un code igual a la referencia de la venta
+      TRASLADES: '/sales/traslades', // FUNCIONA con {page, pageSize, userId, warehouseId}, 200 "Traslades successfully obteined"; devuelve saleId, serialCode, invoiceStatus, userInformation, warehouseInformation y auxWarehouseInformation
       TRASLADES_REJECT: '/sales/traslades/reject',
-      REPORT_GENERAL: '/sales/report/general',
-      REPORT_INTERNAL: '/sales/report/internal',
+      REPORT_GENERAL: '/sales/report/general', // ERROR 404 "The route you are looking for does not exist": la ruta esta en config pero no existe en el backend
+      REPORT_INTERNAL: '/sales/report/internal', // ERROR 404 "The route you are looking for does not exist": la ruta esta en config pero no existe en el backend
     },
     ORDERS: {
-      LIST: '/orders',
+      LIST: '/orders', // solo deja id 315: exige sellerId (400 "GetOrdersRequest.SellerId required"); con sellerId:315 responde 200 "Orders Successfully obtained" pero devuelve USUARIOS (userId, name, email, identification, phone, priceType, profileType, serialResponse), no pedidos, y con pageSize:5 devolvio 20 filas (ignora pageSize). Los pedidos reales salen de /management/saleOrders
     },
     COMPANIES: {
       LIST: '/companies', //GET COMPANIES
@@ -198,14 +205,17 @@ export const API_CONFIG = {
       // "message": "Solicitud inválida",
       // "error": "Invalid company ID"
       // }
+      DELETE_DELETE: '/companies/delete', // SP A PROPOSITO: borra una empresa
+      ID: '/companies/id', // ERROR 400 "Invalid company ID" con ?id=1 y con ?companyId=1 (igual que la nota de arriba)
     },
     INVENTORY: {
-      GET: '/inventory',
+      GET: '/inventory', // FUNCIONA, 200 "Products successfully obtained" con {companyId, page, pageSize, warehouseId}; devuelve productImage, brandName, description, modelName, categoryName, code, minStock y maxStock (sin stock por ubicacion)
       //FUNCIONA devuelve  el inventario de la empresa, MENSAJE SUCCES 200  "Products successfully obtained"
       CONTROL: '/inventory/control', //FUNCIONA OBTENEMOS RESPUESTA 200 DEVUELVE DATOS DE EL PRODUCTO IDPRODUCTO CODDIGO Y DATA CON LA INF DE EL PRODUCT
       COUNT_LOCATIONS: '/inventory/countLocations', // fUNCIONA DEVUELVE UNA RESPUESTA SIMPLE
 
       CREATE_PRODUCT_INVENTORY: '/inventory/createProduct', // DEVUELVE la respuesta sencilla  el body enviado en complejo:
+      // PRUEBA DE HOY (ANDRES): ERROR 500 "Error registering product: failed to add product" con {companyId, brandId, categoryId, modelId, taxId, code, description, isActive, lastCost, purchasePrice, maxStock, minStock}; el producto no se crea (igual que /products/register, que da 404)
       //       {
       //   "brandId": 30,
       //   "categoryId": 63,
@@ -271,6 +281,7 @@ export const API_CONFIG = {
       // }
       // Reportes
       REGISTER_LOCATION: '/inventory/registerLocation', // FUNCIONA devuelve una respuetsa
+      // PRUEBA DE HOY (ANDRES): con quantity:0 responde 400 (Quantity required: el validador trata 0 como vacio y el error nombra GetInventoryRegisterLocationProductRequest, otra estructura); con quantity:1 responde 500 "Error: failed to add model" (mensaje que no corresponde) y la ubicacion no se crea
       // "Error interno del servidor" pero la accion no registra la nueva ubicacion, validar el controlador de el backend esta completo en su logica
       REGITER_PRODUCT_LOCATION: '/inventory/registerProductLocation', //se envia en body:
       //  "companyId": 1,
@@ -326,6 +337,8 @@ export const API_CONFIG = {
       //    GetInventoryUpdateLocationProductRequest.ProductLocationId 
       // https://importadora-back-production.up.railway.app/inventory/updateLocationProduct
 
+      REGISTER_LOCATION_PRODUCT: '/inventory/registerLocationProduct', // SP A PROPOSITO: registra stock de un producto en una ubicacion y no se pudo crear un producto propio (createProduct da 500); body {companyId, warehouseId, userId, productId, location, quantity}
+      TURN360DEGREE: '/inventory/turn360degree', // ERROR 500 "Error: error getting locations product" con {companyId, warehouseId:1, productId:"1", location:"01-A700", following:"next"|"prev"|"1"}; productId y following son string y los valores validos de following no estan documentados
     },
     MANAGEMENT: {
       GET_COMPANIES: '/management', //FUNCIOAN ENVIA COMPALYID, ESTADO DE EL PEDIDO, Y UBICACION , DEVELVE CANTIDADES DE PEDIDOS EN ESTE ESTADO ENVIADO
@@ -339,6 +352,7 @@ export const API_CONFIG = {
       UPDATE_LOCATIONS_SALES: '/management/saleLocationPicking', //No funciona, enviando saleId, saleLocationId
       //Respuesta obtenida: ""Management sale location picking could not be recovered: json: cannot unmarshal number into Go value of type []models.ManagementSaleLocationPicking"" 
       //el arror esta sobre el dato enviado en el saleLocationId
+      GET_SALE_BY_ID: '/management/saleId', // detalle completo del pedido (cabecera, cliente, vendedor, líneas y pagos); lo usa la vista de pedidos; verificado en la versión anterior
       GET_SALE_ORDERS: '/management/saleOrders',  //
       //       {
       //   "companyId": 1,
@@ -357,11 +371,15 @@ export const API_CONFIG = {
       //     "warehouseId": 1
       //   } y obtenemos respuesta: Management sale cancellation could not be recovered: Error create cancellation sale details 
       VERIFICATION_LOCATION: '/management/verifyLocation', //NO FUNCIONA, DEVUELVE REPUESTA 204 VACIA ENVIANDO SALEID "1029"
+      CANCELLATION_TRANSACTION_SALE: '/management/cancellationTransactionSale', // SP: cancela una venta; OJO la clave CANCELLATION de arriba escribe la ruta con la errata "/managment/..." y esta es la ruta del Swagger
+      FINALIZE_ORDER_VERIFICATION: '/management/finalizeOrderVerification', // SP: cambia la etapa de un pedido real
+      VERIFY_TRANSACTION: '/management/verifyTransaction', // SP: verifica el pago de una venta real
     },
     REPORTS: {
-      SALES: '/reports/sales',
-      CUSTOMERS: '/reports/customers',
-      FINANCIAL: '/reports/financial',
+      SALES: '/reports/sales', // EXIGE startDate y endDate (400 "SalesReportRequest.StartDate required"); con "2026-01-01" y "2026-10-28" FUNCIONA, 200; devuelve totalSales, totalOrders, averageTicket, salesByDay, topProducts y paymentMethods
+      CUSTOMERS: '/reports/customers', // FUNCIONA sin fechas, 200 "Customer report generated successfully"; devuelve totalCustomers, activeCustomers, newCustomers, totalRevenue, topCustomers y customersByType
+      FINANCIAL: '/reports/financial', // EXIGE startDate y endDate (400 "FinancialReportRequest.StartDate required"); con "2026-01-01" y "2026-10-28" FUNCIONA, 200; devuelve totalRevenue, totalCost, grossProfit, grossMargin, accountsReceivable y revenueByMonth
+      INVENTORY: '/reports/inventory', // FUNCIONA con {companyId, warehouseId:1}, 200; devuelve totalProducts, totalStock, totalValue, lowStockCount, outOfStockCount, stockByCategory, stockByBrand y lowStockProducts
     },
     // Empleados y Permisos
     EMPLOYEES: {
@@ -519,12 +537,89 @@ export const API_CONFIG = {
       //   ]
       // }
 
-      CREDENTIALS: '/employees/access-credentials',
-      BY_ROLE: '/employees/by-role',
+      CREDENTIALS: '/employees/access-credentials', // EXIGE employeeId, no userId (400 "GetAccessCredentialsRequest.EmployeeId required"); con employeeId:55 responde 200 y DEVUELVE email y password del empleado: contrasena expuesta por el backend, riesgo de seguridad
+      BY_ROLE: '/employees/by-role', // FUNCIONA con {companyId, roleId:1}, 200 "Employees successfully obtained"; devuelve id, name, businessName, identification y photo
       ROLE: '/employees/roles', //{
       // "companyId": 5
       // }
 
+      REGISTER: '/employees/register', // SP: crea un empleado real
+      BY_ID: (id: number | string) => `/employees/${id}`, // ERROR 404 "Employee not found" (GET) tanto con el employeeId (52) como con el userId (1019) de un empleado que si sale en /employees/list
+    },
+    // Purchases (agregado desde el Swagger)
+    PURCHASES: {
+      LIST: '/purchases', // FUNCIONA con {companyId, page, pageSize, warehouseId:1}, 200 "Purchase orders retrieved successfully"; trae purchaseOrderId, supplierName, warehouseName, orderNumber, status, statusLabel, orderDate
+      CANCEL: '/purchases/cancel', // SP: cancela una orden de compra
+      CREATE: '/purchases/create', // SP: crea una orden de compra
+      DETAIL: '/purchases/detail', // FUNCIONA con {companyId, purchaseOrderId:15}, 200; con purchaseOrderId:0 responde 404 "Purchase order not found"
+      RECEIVE: '/purchases/receive', // SP: recibe items de una orden de compra (mueve inventario)
+      STATUS: '/purchases/status', // SP: cambia el estado de una orden de compra
+      SUMMARY: '/purchases/summary', // FUNCIONA, GET, 200; devuelve totalOrders, conteos por estado, totalAmount, pendingAmount, receivedAmount y topSuppliers
+      UPDATE: '/purchases/update', // SP: modifica una orden de compra
+    },
+    // Quotations (agregado desde el Swagger)
+    QUOTATIONS: {
+      LIST: '/quotations', // FUNCIONA con {companyId, page, pageSize, userId}, 200; devuelve {data, page, pageSize, totalRows, totalPages}
+      BRANDS: '/quotations/brands', // RESPONDE 200 "Redirect to brands endpoint" y solo devuelve {endpoint, message}, no datos: hay que llamar /brands
+      CART_ADD: '/quotations/cart/add', // SP: agrega un item a una cotizacion
+      CART_DELETE: '/quotations/cart/delete', // SP: quita un item de una cotizacion
+      CATEGORIES: '/quotations/categories', // RESPONDE 200 "Redirect to categories endpoint" y solo devuelve {endpoint, message}, no datos: hay que llamar /categories
+      DELETE: '/quotations/delete', // SP: borra una cotizacion
+      HISTORY: '/quotations/history', // FUNCIONA con {companyId, page, pageSize, userId}, 200; misma forma que /quotations
+      MODELS: '/quotations/models', // RESPONDE 200 "Redirect to models endpoint" y solo devuelve {endpoint, message}, no datos: hay que llamar /models
+      REGISTER: '/quotations/register', // SP: crea una cotizacion
+      STATS: '/quotations/stats', // FUNCIONA, GET, 200; devuelve totalQuotations, conteos por estado, totalValue, acceptedValue y conversionRate
+      STATUS: '/quotations/status', // SP: cambia el estado de una cotizacion
+      UPDATE: '/quotations/update', // SP: modifica una cotizacion
+      BY_ID: (id: number | string) => `/quotations/${id}`, // FUNCIONA, GET /quotations/2, 200; devuelve quotationId, sellerName, quotationNumber, subtotal, taxAmount, totalAmount, status, validUntil
+    },
+    // Siigo (agregado desde el Swagger)
+    SIIGO: {
+      ACCOUNT_GROUPS: '/siigo/account-groups', // SP
+      COST_CENTERS: '/siigo/cost-centers', // 
+      CREDIT_NOTE: '/siigo/credit-note', //
+      CUSTOMERS: '/siigo/customers', // 
+      DOCUMENT_TYPES: '/siigo/document-types', //
+      INVOICES: '/siigo/invoices', //
+      PAYMENT_TYPES: '/siigo/payment-types', //
+      PRODUCTS: '/siigo/products', //   
+      SYNC_CUSTOMERS: '/siigo/sync/customers', // 
+      SYNC_INVOICE: '/siigo/sync/invoice', // 
+      SYNC_INVOICES: '/siigo/sync/invoices', //
+      SYNC_PRODUCTS: '/siigo/sync/products', // 
+      TAXES: '/siigo/taxes', //
+      TEST_CONNECTION: '/siigo/test-connection', // 
+      USERS: '/siigo/users', // 
+      WAREHOUSES: '/siigo/warehouses', //
+    },
+    // Suppliers (agregado desde el Swagger)
+    SUPPLIERS: {
+      CREATE: '/suppliers/create', // SP: crea un proveedor
+      DELETE: '/suppliers/delete', // SP: borra un proveedor
+      DETAIL: '/suppliers/detail', // FUNCIONA con {supplierId:19}, 200; con supplierId:0 responde 404 "Supplier not found"
+      LIST: '/suppliers/list', // FUNCIONA con {companyId, page, pageSize}, 200; devuelve supplierId, name, documentType, documentId, email, phone, address, city, country
+      PRODUCTS: '/suppliers/products', // RESPONDE 200 "Products retrieved successfully" con {supplierId:19, page, pageSize} pero data = null (no se sabe si el proveedor no tiene productos o si falla)
+      PRODUCTS_ADD: '/suppliers/products/add', // SP: agrega un producto a un proveedor
+      PRODUCTS_REMOVE: '/suppliers/products/remove', // SP: quita un producto de un proveedor
+      PRODUCTS_UPDATE: '/suppliers/products/update', // SP: modifica un producto de un proveedor
+      SUMMARY: '/suppliers/summary', // FUNCIONA, GET, 200; devuelve totalSuppliers, activeSuppliers, totalProducts y totalCreditLimit
+      UPDATE: '/suppliers/update', // SP: modifica un proveedor
+    },
+    // Sync (agregado desde el Swagger)
+    SYNC: {
+      CONFLICTS: '/sync/conflicts', // SIiN PROBAAR: stoca dsispositivos y la cola de ssincronizacion); metodo POST, "Get sync conflicts"
+      CONFLICTS_RESOLVE: '/sync/conflicts/resolve', // SP:  ('''); metodo POST, "Resolve a sync conflict"
+      DEVICES: '/sync/devices', // SP:  (''''); metodo POST, "Get registered devices"
+      DEVICES_REGISTER: '/sync/devices/register', // SP:  (''''); metodo POST, "Register a sync device"
+      DEVICES_UPDATE: '/sync/devices/update', // SP:  (''''); metodo PUT, "Update a device"
+      FULL: '/sync/full', // SP:  (tosca dispsositivos y la cola de sincronizacion); metodo POST, "Perform full sync"
+      LOGS: '/sync/logs', // SP:  (''''); metodo POST, "Get sync logs"
+      PULL: '/sync/pull', // SP:  ('''''); metodo POST, "Pull updates from server"
+      PUSH: '/sync/push', // SP:  ('''''); metodo POST, "Push changes to server"
+      QUEUE: '/sync/queue', // SP:  (''''); metodo POST, "Get sync queue"
+      QUEUE_ADD: '/sync/queue/add', // SP:  ('''''); metodo POST, "Queue a sync operation"
+      QUEUE_UPDATE: '/sync/queue/update', // SP:  (''''); metodo PUT, "Update queue item status"
+      STATUS: '/sync/status', // SP:  ('''''); metodo POST, "Get sync status"
     },
     // Salud del backend (GET, sin sesión y muy liviano: unos 220 bytes)
     HEALTH: {
@@ -533,7 +628,7 @@ export const API_CONFIG = {
     },
     // Documentación Swagger (es el archivo del Swagger, no una ruta de la API; no lo consume la app)
     DOCS: {
-      SWAGGER_DOC: '/swagger/doc.json',
+      SWAGGER_DOC: '/swagger/doc.json', // FUNCIONA, GET responde 200 con el JSON de Swagger (schemes, info, paths y definitions)
     },
   },
 } as const

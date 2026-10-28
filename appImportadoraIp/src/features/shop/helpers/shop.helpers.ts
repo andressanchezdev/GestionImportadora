@@ -2,6 +2,7 @@
 // conecta con: ProductCard (los usa para pintar) y shop.selectors
 // ojo: estas funciones antes estaban dentro de ProductCard.tsx
 import type { PriceLevelKey, Product, ProductStockStatus } from '../types/shop.types'
+import { IVA_RATE } from '../constants/shop.constants'
 
 // stock de un producto en una bodega (0 si no hay dato de esa bodega)
 export const getWarehouseStock = (product: Product, warehouseId: string): number => {
@@ -35,6 +36,24 @@ export { toWarehouseNumber } from '@/global/helpers/warehouse'
 export const getPriceByLevel = (product: Product, level: PriceLevelKey): number => {
   const key = level.toLowerCase() as keyof Product['prices']
   return product.prices[key]
+}
+
+// título de la card y del carrito: la descripción; si falta o solo repite el modelo se muestra el modelo; sin ninguno, el código
+export const getProductTitle = (product: Product): string => {
+  const description = (product.description ?? '').trim()
+  const model = (product.modelCompatible ?? '').trim()
+  if (description && description.toUpperCase() !== model.toUpperCase()) return description
+  return model || product.name || product.code
+}
+
+// línea gris «MARCA - MODELO» de la card y del carrito (sin sobrantes si falta uno de los dos)
+export const getBrandModelLabel = (product: Product): string =>
+  [product.brand, product.modelCompatible].filter(Boolean).join(' - ')
+
+// separa un total con IVA incluido en subtotal e IVA (el subtotal se redondea al peso y el IVA es lo que falta, así siempre suman el total)
+export const splitIncludedTax = (total: number, rate: number = IVA_RATE): { subtotal: number; tax: number } => {
+  const subtotal = Math.round(total / (1 + rate))
+  return { subtotal, tax: total - subtotal }
 }
 
 // emoji según la categoría, para enriquecer el thumbnail de la tarjeta

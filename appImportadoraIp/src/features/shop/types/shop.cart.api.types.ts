@@ -9,6 +9,7 @@ export interface CartProductInfoDto {
     code?: string
     description?: string
     brandName?: string
+    brandImage?: string
     categoryName?: string
     modelName?: string
     url?: string

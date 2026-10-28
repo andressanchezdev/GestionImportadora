@@ -1,9 +1,10 @@
 // MainContent · lienzo central: muestra la pantalla según el módulo y subitem activos con guardia de permisos
-// conecta con: navigation (estado ui), usePermissions (hasScreenAccess), screenRegistry y MainContentPlaceholder
+// conecta con: navigation (estado ui y títulos), usePermissions (hasScreenAccess), screenRegistry y MainContentPlaceholder
+// ojo: como en la maqueta el título es la subgestión (20 px) con el nombre del módulo debajo en letra pequeña; se quitó el ícono del título y la línea inferior
 import React from 'react'
 import './MainContent.css'
 import { useAppSelector } from '@/global/hooks/useRedux'
-import { getModuleIcon, getSubitemLabel } from '@/features/navigation'
+import { getModuleTitle, getSubitemLabel } from '@/features/navigation'
 import { usePermissions } from '@/global/hooks/usePermissions'
 import { renderScreen } from './screenRegistry'
 import { MainContentPlaceholder } from './MainContentPlaceholder'
@@ -19,12 +20,10 @@ export const MainContent: React.FC = () => {
     <main className="main-content">
       {/* Encabezado del Área de Trabajo */}
       <div className="main-content-header">
-        <h2 className="main-content-title">
-          <img src={getModuleIcon(activeModule)} alt="" className="main-content-title-icon" />
-          <span>
-            {subitemLabel || 'Inicio'}
-          </span>
-        </h2>
+        <div>
+          <h2 className="main-content-title">{subitemLabel || 'Inicio'}</h2>
+          <small className="main-content-subtitle">{getModuleTitle(activeModule)}</small>
+        </div>
       </div>
 
       {/* Contenido dinámico del submódulo activo o guardia de acceso no autorizado */}

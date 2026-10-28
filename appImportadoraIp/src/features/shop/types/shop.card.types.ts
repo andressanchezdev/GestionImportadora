@@ -1,7 +1,6 @@
 // shop.card.types · props de la tarjeta de producto y de sus partes (stock, precios y acciones)
 // conecta con: ProductCard, ProductCardStock, ProductCardPricing, ProductCardActions y las partes (Media, Info, TierMenu)
 // ojo: ProductCardProps antes estaba en shop.types; se separó para que ese archivo no crezca
-import type { KeyboardEvent } from 'react'
 import type { PriceLevelKey, Product, ProductStockStatus } from './shop.types'
 
 export interface ProductCardProps {
@@ -22,16 +21,13 @@ export interface ProductCardPricingProps {
     level: PriceLevelKey
 }
 
+// ojo: la cantidad ahora es un campo numérico como el de la maqueta (las flechas del navegador suben y bajan), por eso ya no hay botones - y +
 export interface ProductCardActionsProps {
-    quantity: number // cantidad confirmada (la usan los botones - y + para deshabilitarse)
     quantityText: string // lo que se ve en el campo (puede ser lo que el usuario está escribiendo)
     maxQuantity: number
     isOutOfStock: boolean
     cartQuantity: number
-    onIncrement: () => void
-    onDecrement: () => void
     onQuantityChange: (value: string) => void
-    onQuantityKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void
     onQuantityBlur: () => void
     onAdd: () => void
 }
@@ -46,8 +42,11 @@ export interface ProductCardMediaProps {
     onLevelChange: (level: PriceLevelKey) => void
 }
 
+// ojo: la info de la card ahora es categoría + título, «MARCA - MODELO» (con la ubicación a la derecha) y la referencia
 export interface ProductCardInfoProps {
-    name: string
+    category: string
+    title: string // descripción o modelo (getProductTitle)
+    meta: string // «MARCA - MODELO» (getBrandModelLabel)
     code: string
     location?: string
 }

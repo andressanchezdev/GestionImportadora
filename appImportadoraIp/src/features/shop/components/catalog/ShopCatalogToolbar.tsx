@@ -1,8 +1,11 @@
-// ShopCatalogToolbar · fila de búsqueda: texto, categoría, marca, y el grupo de controles ("con stock" y limpiar filtros)
-// conecta con: shop.slice (filtros), shop.selectors (hay filtros activos), catalogs (marcas y categorías del backend), global SearchBar
+// ShopCatalogToolbar · fila de herramientas: búsqueda, filtros de categoría y marca como chips, «con stock» y limpiar filtros
+// conecta con: shop.slice (filtros), shop.selectors (hay filtros activos), catalogs (marcas y categorías del backend), global SearchBar, ChipSelect y FilterChip
+// ojo: como los chips de la maqueta (Marca ▾, Categoría ▾): sin etiqueta aparte, el nombre del filtro es la opción vacía y el chip se pinta amarillo cuando hay uno elegido; los chips son los de global/UI/molecules/chips
 import React from 'react'
 import { useAppDispatch, useAppSelector } from '@/global/hooks/useRedux'
 import { SearchBar } from '@/global/components/UI/molecules/SearchBar'
+import { ChipSelect } from '@/global/components/UI/molecules/chips/ChipSelect'
+import { FilterChip } from '@/global/components/UI/molecules/chips/FilterChip'
 import {
   setSearchQuery,
   setSelectedCategory,
@@ -11,9 +14,12 @@ import {
   resetFilters,
 } from '../../slices/shop.slice'
 import { selectBrands, selectCategories } from '@/features/catalogs'
-import { ALL_FILTER_OPTION } from '../../constants/shop.constants'
+import { BRAND_FILTER_LABEL, CATEGORY_FILTER_LABEL } from '../../constants/shop.constants'
 import { selectHasActiveFilters } from '../../selectors/shop.selectors'
 import './ShopCatalogToolbar.css'
+
+// el valor elegido llega como texto; null = sin filtro
+const toId = (value: string | null): number | null => (value === null ? null : Number(value))
 
 export const ShopCatalogToolbar: React.FC = () => {
   const dispatch = useAppDispatch()
@@ -23,7 +29,7 @@ export const ShopCatalogToolbar: React.FC = () => {
   const categories = useAppSelector(selectCategories)
 
   return (
-    /* Fila 1: Buscador Universal con categoría, marca y toggle de stock */
+    /* Fila de herramientas: buscador, chips de categoría y marca, toggle de stock y limpiar */
     <div className="shop-catalog-search-row">
       <SearchBar
         value={filters.searchQuery}
@@ -32,72 +38,33 @@ export const ShopCatalogToolbar: React.FC = () => {
         className="shop-catalog-search-bar"
       />
 
-      {/* Contenedor de Selectores: Categoría y Marca al mismo nivel */}
-      <div className="shop-catalog-filter-select-wrapper">
-        <label htmlFor="category-filter" className="shop-catalog-filter-group-label">
-          Categoría:
-        </label>
-        <select
-          id="category-filter"
-          value={filters.selectedCategoryId ?? ''}
-          onChange={(e) =>
-            dispatch(setSelectedCategory(e.target.value === '' ? null : Number(e.target.value)))
-          }
-          className="shop-catalog-select"
+      {/* ojo: el valor de cada opción es el id (el backend filtra por id); la opción vacía lleva el nombre del filtro */}
+      <ChipSelect
+        label={CATEGORY_FILTER_LABEL}
+        value={filters.selectedCategoryId}
+        options={categories.map((category) => ({ value: category.id, label: category.name }))}
+        onChange={(value) => dispatch(setSelectedCategory(toId(value)))}
+      />
+      <ChipSelect
+        label={BRAND_FILTER_LABEL}
+        value={filters.selectedBrandId}
+        options={brands.map((brand) => ({ value: brand.id, label: brand.name }))}
+        onChange={(value) => dispatch(setSelectedBrand(toId(value)))}
+      />
+
+      {/* Toggle de stock (chip) y limpiar filtros */}
+      <FilterChip label="Con stock en bodega" active={filters.onlyInStock} onClick={() => dispatch(setOnlyInStock(!filters.onlyInStock))} />
+
+      {hasActiveFilters && (
+        <button
+          type="button"
+          onClick={() => dispatch(resetFilters())}
+          className="shop-catalog-reset-btn"
+          title="Restablecer todos los filtros"
         >
-          {/* ojo: el valor de cada opción es el id de la categoría; 'Todas' es el valor vacío */}
-          <option value="">{ALL_FILTER_OPTION}</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-
-        <label htmlFor="brand-filter" className="shop-catalog-filter-group-label">
-          Marca:
-        </label>
-        <select
-          id="brand-filter"
-          value={filters.selectedBrandId ?? ''}
-          onChange={(e) =>
-            dispatch(setSelectedBrand(e.target.value === '' ? null : Number(e.target.value)))
-          }
-          className="shop-catalog-select"
-        >
-          {/* ojo: el valor de cada opción es el id de la marca (el backend filtra por id); 'Todas' es el valor vacío */}
-          <option value="">{ALL_FILTER_OPTION}</option>
-          {brands.map((brand) => (
-            <option key={brand.id} value={brand.id}>
-              {brand.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Toggle de stock y limpiar filtros */}
-      <div className="shop-catalog-controls-group">
-        <label className="shop-catalog-filter-checkbox-label">
-          <input
-            type="checkbox"
-            checked={filters.onlyInStock}
-            onChange={(e) => dispatch(setOnlyInStock(e.target.checked))}
-            className="shop-catalog-filter-checkbox"
-          />
-          <span>Con stock en bodega</span>
-        </label>
-
-        {hasActiveFilters && (
-          <button
-            type="button"
-            onClick={() => dispatch(resetFilters())}
-            className="shop-catalog-reset-btn"
-            title="Restablecer todos los filtros"
-          >
-            Limpiar filtros
-          </button>
-        )}
-      </div>
+          Limpiar filtros
+        </button>
+      )}
     </div>
   )
 }

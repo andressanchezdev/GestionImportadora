@@ -28,6 +28,7 @@ export interface Product {
     category: string // Categoría (ej. Motor, Frenos, Transmisión, Eléctrico, Suspensión)
     modelCompatible?: string // Modelo de moto (ej. Boxer CT 100, Pulsar NS 200, FZ 16)
     imageUrl?: string
+    brandImage?: string // logo de la marca (dirección de la imagen); sin él se muestra el nombre de la marca
     location?: string // Ubicación física en estantería (ej. Estante M-04)
     prices: ProductPrices
     stockByWarehouse: Record<string, number> // Stock mapeado por ID de bodega (ej. 'WH-01': 15)

@@ -1,6 +1,7 @@
 // WarehouseSelector · botón que muestra la bodega activa y abre el menú para cambiarla
 // conecta con: navigation (bodega activa), features/warehouses (lista del backend y elección de la activa), auth (bodega del usuario), global useClickOutside (cierra con clic fuera o Escape)
 // ojo: antes la lista era fija (WH-01); ahora llega de POST /warehouses y, al llegar, se deja activa la que ya estaba, la del usuario, la principal o la primera
+// ojo: como en la maqueta el botón ya no lleva la etiqueta «Tienda:» ni el número de bodega (el número sigue en la lista del menú)
 import React, { useEffect, useRef, useState } from 'react'
 import { pickActiveWarehouse, useWarehouses } from '@/features/warehouses'
 import { setActiveWarehouse } from '@/features/navigation'
@@ -36,7 +37,6 @@ export const WarehouseSelector: React.FC = () => {
 
     return (
         <div className="app-header-warehouse-wrapper" ref={wrapperRef}>
-            <span className="app-header-warehouse-title">Tienda:</span>
             <div className="app-header-warehouse-relative">
                 <button
                     type="button"
@@ -51,22 +51,10 @@ export const WarehouseSelector: React.FC = () => {
                 >
                     <img src={buildingIcon} alt="" className="app-header-warehouse-icon" aria-hidden="true" />
                     <span className="app-header-warehouse-name">{activeWarehouseName}</span>
-                    {activeWarehouseId && <span className="app-header-warehouse-badge">#{activeWarehouseId}</span>}
                     {canChangeWarehouse && (
-                        <svg
-                            className={`app-header-warehouse-chevron ${isOpen ? 'app-header-warehouse-chevron-open' : ''}`}
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            aria-hidden="true"
-                        >
-                            <polyline points="6 9 12 15 18 9" />
-                        </svg>
+                        <span className="app-header-warehouse-chevron" aria-hidden="true">
+                            ▾
+                        </span>
                     )}
                 </button>
 

@@ -11,6 +11,9 @@ export interface ConfirmDialogProps {
     message: string
     confirmLabel?: string
     cancelLabel?: string
+    // ojo: contenido extra bajo el mensaje (ej. el motivo de una anulación) y confirmar inactivo hasta que esté completo
+    children?: React.ReactNode
+    confirmDisabled?: boolean
     onConfirm: () => void
     onCancel: () => void
 }
@@ -21,6 +24,8 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     message,
     confirmLabel = 'Confirmar',
     cancelLabel = 'Cancelar',
+    children,
+    confirmDisabled = false,
     onConfirm,
     onCancel,
 }) => {
@@ -69,11 +74,12 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                     {title}
                 </h4>
                 <p className="confirm-dialog-message">{message}</p>
+                {children}
                 <div className="confirm-dialog-actions">
                     <button ref={cancelRef} type="button" className="confirm-dialog-btn-cancel" onClick={onCancel}>
                         {cancelLabel}
                     </button>
-                    <button ref={confirmRef} type="button" className="confirm-dialog-btn-confirm" onClick={onConfirm}>
+                    <button ref={confirmRef} type="button" className="confirm-dialog-btn-confirm" onClick={onConfirm} disabled={confirmDisabled}>
                         {confirmLabel}
                     </button>
                 </div>

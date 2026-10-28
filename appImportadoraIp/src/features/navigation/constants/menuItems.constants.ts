@@ -1,6 +1,7 @@
 // menuItems · lista fija del menú lateral (módulos y subgestiones)
 // conecta con: SideMenu (lo pinta), navigation.slice (elige el primer subitem), MainContent (decide la pantalla)
 // ojo: id va en inglés (código) y label en español (lo que ve el cliente); antes los subitems eran solo texto
+// ojo: los nombres de las subgestiones son cortos (el módulo ya da el contexto); «Gestión Caja» ahora se llama «Gestión Ventas» (su id sigue siendo cashRegister) y «Marcas y Categorías» (id catalogs) se separó en brands, categories y models
 import type { ERPModule, NavItem } from '../types/navigation.types'
 import storeIcon from '@/assets/icons/store.svg'
 import walletIcon from '@/assets/icons/wallet.svg'
@@ -16,19 +17,19 @@ export const MENU_ITEMS: NavItem[] = [
         label: 'Tienda',
         icon: storeIcon,
         subitems: [
-            { id: 'catalog', label: 'Catálogo POS' },
-            { id: 'orders', label: 'Bandeja de Pedidos' },
-            { id: 'history', label: 'Historial de Ventas' },
+            { id: 'catalog', label: 'Catálogo' },
+            { id: 'orders', label: 'Pedidos' },
+            { id: 'history', label: 'Historial' },
         ],
     },
     {
         id: 'cashRegister',
-        label: 'Gestión Caja',
+        label: 'Gestión Ventas',
         icon: packageIcon,
         subitems: [
-            { id: 'posBilling', label: 'Facturación Caja' },
-            { id: 'billingHistory', label: 'Historial Facturación' },
-            { id: 'shiftClose', label: 'Cierre de Turno' },
+            { id: 'posBilling', label: 'Facturación' },
+            { id: 'billingHistory', label: 'Historial' },
+            { id: 'shiftClose', label: 'Cierre de turno' },
         ],
     },
     {
@@ -36,9 +37,9 @@ export const MENU_ITEMS: NavItem[] = [
         label: 'Gestión Cartera',
         icon: walletIcon,
         subitems: [
-            { id: 'creditClients', label: 'Gestión de Créditos' },
-            { id: 'paymentVerification', label: 'Aprobación de Abonos' },
-            { id: 'paymentHistory', label: 'Historial de Recaudos' },
+            { id: 'creditClients', label: 'Créditos' },
+            { id: 'paymentVerification', label: 'Abonos' },
+            { id: 'paymentHistory', label: 'Recaudos' },
         ],
     },
     {
@@ -46,10 +47,12 @@ export const MENU_ITEMS: NavItem[] = [
         label: 'Gestión Inventario',
         icon: databaseIcon,
         subitems: [
-            { id: 'products', label: 'Control de Productos' },
-            { id: 'transfers', label: 'Traslados entre Bodegas' },
-            { id: 'catalogs', label: 'Marcas y Categorías' },
-            { id: 'movements', label: 'Auditoria' },
+            { id: 'products', label: 'Productos' },
+            { id: 'transfers', label: 'Traslados' },
+            { id: 'brands', label: 'Marcas' },
+            { id: 'categories', label: 'Categorías' },
+            { id: 'models', label: 'Modelos' },
+            { id: 'movements', label: 'Auditoría' },
         ],
     },
     {
@@ -69,9 +72,9 @@ export const MENU_ITEMS: NavItem[] = [
         label: 'Reportes',
         icon: fileTextIcon,
         subitems: [
-            { id: 'dailySales', label: 'Ventas Diarias' },
-            { id: 'generalReport', label: 'Reporte General' },
-            { id: 'inventoryReport', label: 'Valoración Inventario' },
+            { id: 'dailySales', label: 'Ventas' },
+            { id: 'generalReport', label: 'General' },
+            { id: 'inventoryReport', label: 'Inventario' },
         ],
     },
 ]
@@ -79,7 +82,7 @@ export const MENU_ITEMS: NavItem[] = [
 // título (lo que ve el cliente) que muestra MainContent arriba, por módulo
 export const MODULE_HEADER_TITLES: Record<ERPModule, string> = {
     shop: 'Tienda',
-    cashRegister: 'Gestión Caja',
+    cashRegister: 'Gestión Ventas',
     wallet: 'Gestión Cartera',
     inventory: 'Gestión Inventario',
     transfers: 'Traslados',

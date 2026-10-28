@@ -109,3 +109,9 @@
     animation: none;
   }
 }
+
+/* confirmar inactivo (ej. falta el motivo de la anulación) */
+.confirm-dialog-btn-confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

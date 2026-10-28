@@ -1,14 +1,11 @@
-/* ApiStatus.css · estilos del estado de la API en el footer del menú · solo usa tokens de styles/tokens.css */
+/* ApiStatus.css · estilos del estado de la API en el footer del menú (línea de texto con punto de color) · solo usa tokens de styles/tokens.css */
 .side-menu-api {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
-  background-color: var(--bg-card-inner);
+  gap: 6px;
+  padding: 0 12px 8px;
   font-size: var(--text-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-secondary);
+  color: var(--c-yellow-700);
 }
 
 .side-menu-api-dot {
@@ -16,7 +13,7 @@
   height: 8px;
   border-radius: var(--radius-circle);
   flex-shrink: 0;
-  background-color: var(--c-amber-500);
+  background-color: currentColor;
 }
 
 .side-menu-api-text {
@@ -30,25 +27,19 @@
   animation: pulse var(--motion-pulse);
 }
 
-/* en línea: verde (texto oscuro para contraste AA) */
+/* en línea: verde de la maqueta (contraste AA sobre blanco) */
 .side-menu-api-online {
-  background-color: var(--c-emerald-50);
-  color: var(--c-emerald-700);
-}
-
-.side-menu-api-online .side-menu-api-dot {
-  background-color: var(--c-emerald-500);
-  box-shadow: 0 0 0 2px var(--alpha-emerald-500-30);
+  color: var(--c-green-700);
 }
 
 /* sin conexión: rojo */
 .side-menu-api-offline {
-  background-color: var(--c-red-50);
-  color: var(--c-red-700);
+  color: var(--c-red-650);
 }
 
-.side-menu-api-offline .side-menu-api-dot {
-  background-color: var(--c-red-500);
+/* menú contraído: la maqueta oculta esta línea */
+.side-menu-api-mini {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

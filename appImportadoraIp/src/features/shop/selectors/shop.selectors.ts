@@ -48,7 +48,14 @@ export const selectCartTotals = createSelector([selectCartState], (cart) => ({
 
 // datos del encabezado del panel derecho cuando muestra el carrito (título y cantidad de artículos)
 // ojo: antes este encabezado vivía dentro de ShopCartDrawer; ahora lo pinta el panel con estos datos
-export const selectCartDrawerMeta = createSelector([selectCartTotals], ({ totalItemsCount }) => ({
+// ojo: como el encabezado de la maqueta («Cliente: … · nivel P1»), el detalle va en el subtítulo y ya no en una insignia aparte
+export const selectCartDrawerMeta = createSelector([selectCartTotals, selectShop], ({ totalItemsCount }, shop) => ({
   title: 'Carrito',
-  badge: `${totalItemsCount} ${totalItemsCount === 1 ? 'artículo' : 'artículos'}`,
+  subtitle: [
+    shop.cartCustomer ? `Cliente: ${shop.cartCustomer.name}` : null,
+    `nivel ${shop.filters.priceLevel}`,
+    `${totalItemsCount} ${totalItemsCount === 1 ? 'artículo' : 'artículos'}`,
+  ]
+    .filter(Boolean)
+    .join(' · '),
 }))

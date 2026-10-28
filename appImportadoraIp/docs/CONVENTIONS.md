@@ -92,8 +92,9 @@ Equivalencias ya aplicadas (código → texto del cliente):
 
 ## 5c. Escalas de diseño (en tokens.css)
 
-- Texto: 12 · 13 · 14 · 16 · 18 · 20 · 24 (más íconos 36 y 42). Mínimo 12px.
-- Radios: sm 6 · md 8 · lg 12 · pill · circle.
+- Texto: 12 · 13 · 14 · 16 · 18 · 20 · 24 (más íconos 36 y 42). Mínimo 12px. Base de la app: 14px con interlineado 1,45 (`--leading-body`), puesta en `.store-app-layout`.
+- Radios: sm 6 · md 8 · base 10 (cajas, cards y tablas de la maqueta) · lg 12 · pill · circle.
+- Piezas globales de la maqueta: `Button` (btn-primary, secondary, danger, accent), `Pill` (amber, blue, green, red, gray), `FilterChip` y `ChipSelect`. Se reutilizan; no se vuelven a escribir en cada feature.
 - Sombras: rest · card · card-hover; foco con --focus-outline y --ring-focus.
 - Espaciado: --space-1..6 (4 · 8 · 12 · 16 · 24 · 32).
 - Contraste mínimo 4.5:1 para texto; el foco con teclado siempre es visible.

@@ -29,8 +29,10 @@
   --c-blue-100: #dbeafe;
   --c-blue-200: #bfdbfe;
   --c-blue-300: #93c5fd;
-  --c-blue-600: #2563eb;
-  --c-blue-700: #1d4ed8;
+  --c-blue-600: #1f64e0;
+  /* ojo: antes #2563eb; ahora el azul de la maqueta */
+  --c-blue-700: #174fb5;
+  /* ojo: antes #1d4ed8; ahora el azul oscuro de la maqueta (hover y texto activo) */
   --c-blue-800: #1e40af;
   --c-blue-900: #1e3a8a;
   --c-emerald-50: #ecfdf5;
@@ -72,6 +74,30 @@
   --c-slate-900: #0f172a;
   --c-white: #ffffff;
 
+  /* ---- 1a. PALETA DE LA MAQUETA (MAQUETA-V3): el «chrome» de la app (menú, cabecera, tablas, panel) y las cards de IP ---- */
+  --c-shell-50: #f5f6f9; /* fondo de la app y del contenido */
+  --c-shell-100: #eef1f5; /* superficie suave: hover, campos y encabezados de tabla */
+  --c-shell-200: #dfe3ea; /* líneas y bordes del menú, la cabecera, las tablas y el panel */
+  --c-shell-600: #5b6472; /* texto secundario del chrome */
+  --c-blue-75: #e8f0fe; /* fondo del ítem activo del menú */
+  --c-green-100: #eefaf2; /* pastilla verde: fondo */
+  --c-green-300: #7cc79a; /* pastilla verde: borde */
+  --c-green-700: #17803d; /* texto verde de la maqueta */
+  --c-red-100: #fdf0f0; /* pastilla roja: fondo */
+  --c-red-300: #e59a9a; /* pastilla roja: borde */
+  --c-red-650: #d32f2f; /* texto rojo de la maqueta */
+  --c-yellow-50: #fff8e1; /* chip activo y pastilla ámbar: fondo */
+  --c-yellow-100: #fff4cf; /* caja del ícono del panel derecho */
+  --c-yellow-400: #ffc629; /* botón principal (Ordenar, Finalizar compra) y etiqueta de tarifa */
+  --c-yellow-600: #e0b400; /* pastilla ámbar: borde */
+  --c-yellow-700: #9a6700; /* texto e íconos sobre fondo amarillo suave */
+  --c-violet-50: #f5f3ff; /* estado «acento» (ej. traslado en tránsito): fondo */
+  --c-violet-600: #7c3aed; /* estado «acento»: texto */
+  --c-ip-gray-500: #757575; /* texto tenue de las cards de IP */
+  --c-ip-green-100: #baffc0; /* botón «Ordenado» */
+  --c-ip-green-800: #1b6519; /* texto del botón «Ordenado» */
+  --c-ip-red-600: #e53935; /* quitar del carrito */
+
   /* ---- 1b. TRANSPARENCIAS (rgba) ---- */
   --alpha-amber-500-10: rgba(245, 158, 11, 0.1);
   --alpha-amber-500-20: rgba(245, 158, 11, 0.2);
@@ -85,10 +111,10 @@
   --alpha-black-10: rgba(0, 0, 0, 0.1);
   --alpha-black-45: rgba(0, 0, 0, 0.45);
   /* fondo oscuro detrás de los diálogos de confirmación */
-  --alpha-blue-600-10: rgba(37, 99, 235, 0.1);
-  --alpha-blue-600-20: rgba(37, 99, 235, 0.2);
-  --alpha-blue-600-25: rgba(37, 99, 235, 0.25);
-  --alpha-blue-600-30: rgba(37, 99, 235, 0.3);
+  --alpha-blue-600-10: rgba(31, 100, 224, 0.1);
+  --alpha-blue-600-20: rgba(31, 100, 224, 0.2);
+  --alpha-blue-600-25: rgba(31, 100, 224, 0.25);
+  --alpha-blue-600-30: rgba(31, 100, 224, 0.3);
   --alpha-emerald-500-10: rgba(16, 185, 129, 0.1);
   --alpha-emerald-500-20: rgba(16, 185, 129, 0.2);
   --alpha-emerald-500-30: rgba(16, 185, 129, 0.3);
@@ -134,6 +160,8 @@
   /* badges, botones y campos pequeños */
   --radius-md: 8px;
   /* botones y bloques medianos */
+  --radius-base: 10px;
+  /* paneles, campos de cantidad y cards del carrito (el radio más usado de la maqueta) */
   --radius-lg: 12px;
   /* tarjetas y paneles */
   --radius-pill: 9999px;
@@ -180,17 +208,19 @@
   /* ---- 3. TOKENS SEMÁNTICOS Y LAYOUT (valores originales del proyecto) ---- */
 
   /* 1. BACKGROUNDS (Superficies y Fondos) */
-  --bg-app: var(--c-ip-gray-50);
+  --bg-app: var(--c-shell-50);
   /* Fondo base general de la app */
   --bg-header: var(--c-white);
   /* Superficie blanca de la cabecera */
   --bg-sidebar: var(--c-white);
   /* Superficie blanca del menú lateral */
-  --bg-main: var(--c-ip-gray-50);
+  --bg-main: var(--c-shell-50);
   /* Fondo del lienzo central de trabajo */
   --bg-card: var(--c-white);
   /* Fondo de tarjetas, paneles y métricas */
-  --bg-card-inner: var(--c-ip-gray-50);
+  --bg-card-inner: var(--c-shell-100);
+  --bg-card-media: var(--c-ip-gray-50);
+  /* fondo de la imagen de la card, del botón agotado y del carrito (el gris de IP) */
   /* Fondo de contenedores internos / placeholders */
   --bg-drawer: var(--c-white);
   /* Superficie blanca del drawer lateral derecho */
@@ -198,16 +228,25 @@
   /* 2. TEXTOS Y BORDES (Escala de Grises de clienteIP) */
   --color-text-primary: var(--c-ip-gray-900);
   /* Texto principal carbón de alto contraste */
-  --color-text-secondary: var(--c-ip-gray-600);
+  --color-text-secondary: var(--c-shell-600);
   /* Subtítulos, etiquetas e iconos inactivos */
-  --color-text-muted: var(--c-ip-gray-600);
+  --color-text-muted: var(--c-shell-600);
   /* Textos tenues */
-  --color-border: var(--c-ip-gray-200);
+  --color-border: var(--c-shell-200);
+  --color-card-border: var(--c-ip-gray-200);
+  /* borde de las cards de IP (producto, carrito, pedido) */
+  --color-card-muted: var(--c-ip-gray-500);
+  /* texto tenue de las cards de IP */
   /* Bordes finos y divisores sutiles */
 
   /* 3. SOMBRAS Y BORDES REDONDEADOS */
   --shadow-card: 0 2px 8px var(--alpha-black-6);
   --shadow-card-hover: 0 6px 20px var(--alpha-black-10);
+  --shadow-card-soft: 0 1px 8px var(--alpha-black-5); /* card de pedido */
+  --shadow-card-flat: 0 1px 6px var(--alpha-black-4); /* card del carrito */
+  --shadow-popover: 0 8px 24px rgba(20, 30, 50, 0.18); /* menús desplegables */
+  --shadow-tier-trigger: 0 1px 3px rgba(0, 0, 0, 0.13); /* botón de tarifas */
+  --shadow-tier-menu: 0 8px 24px rgba(0, 0, 0, 0.27); /* menú de tarifas */
   --shadow-modal: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
   /* sombra de los diálogos de confirmación */
   --radius-input: 24px;
@@ -215,7 +254,9 @@
   /* 4. FUENTES (Familias y Pesos Tipográficos) */
   /* ojo: la fuente principal pasó de Inter (que nunca se cargaba) a Montserrat, la de las tarjetas de Yamaha; se carga en index.html */
   /* --font-family-base: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; */
-  --font-family-base: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-base: Inter, system-ui, 'Segoe UI', Roboto, sans-serif;
+  /* ojo: antes Montserrat; la maqueta usa Inter o la fuente del sistema. Montserrat sigue en --font-family-brand (login) */
+  --font-family-brand: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-family-display: 'Oswald', 'D-DIN Condensed', 'Arial Narrow', sans-serif;
   --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
@@ -241,6 +282,9 @@
   /* texto corrido y descripciones */
   --leading-relaxed: 1.5;
   /* mensajes largos */
+  --leading-body: 1.45;
+  /* base del ERP (maqueta): 14px con este interlineado en todo lo que no fija el suyo */
+  /* mensajes largos */
   --leading-badge: 16px;
   /* alto fijo de las insignias circulares (no depende del tamaño del texto) */
 
@@ -254,11 +298,13 @@
   /* ojo: los tamaños de texto ahora están en la escala de la sección 2 */
 
   /* --- Dimensiones estructurales de Layout --- */
-  --header-height: 64px;
+  --header-height: 60px;
   /* 64px: altura fija de cabecera de clienteIP */
-  --sidebar-width: 280px;
+  --sidebar-width: 232px;
+  --sidebar-width-mini: 64px;
+  /* menú contraído (solo íconos) */
   /* 280px: ancho fijo del menú lateral ERP */
-  --drawer-width-open: 360px;
+  --drawer-width-open: 400px;
   /* 360px: ancho del panel derecho abierto */
   --drawer-width-collapsed: 56px;
   /* 56px: ancho del panel derecho contraído */
@@ -270,7 +316,9 @@
   --text-rem-24: 1.5rem;
 
   /* 6. TARJETA DE PRODUCTO (diseño tomado de las cards de Yamaha; ver docs/yamaha-product-card-spec.md) */
-  --product-card-min-width: 330px;
+  --product-card-min-width: 300px;
+  --product-card-max-width: 380px; /* ojo: tope de ancho para que la card no se estire cuando hay pocas columnas */
+  /* ojo: antes 330px (Yamaha); ahora 300px como la maqueta */
   --product-card-media-height: 180px;
   --radius-product-card: 12px;
   --c-product-card-border: #e9e7e7;
@@ -289,4 +337,39 @@
   --shadow-product-card-menu: 1px 2px 4px rgba(0, 0, 0, 0.25);
   --size-product-card-icon-box: 40px;
   --size-product-card-emoji: 80px;
+
+  /* 7. ALIAS DE NOMBRES QUE YA USABAN LOS CSS (antes no existían en este archivo y esos estilos no se aplicaban) */
+  --color-bg-muted: var(--c-shell-100);
+  --color-bg-hover: var(--c-shell-100);
+  --bg-hover: var(--c-shell-100);
+  --bg-surface-secondary: var(--c-shell-100);
+  --color-bg-elevated: var(--c-white);
+  --color-bg-surface: var(--c-white);
+  --bg-surface: var(--c-white);
+  --color-primary: var(--c-blue-600);
+  --color-primary-light: var(--c-blue-75);
+  --color-danger: var(--c-red-650);
+  --color-danger-light: var(--c-red-100);
+  --color-danger-bg: var(--c-red-100);
+  --color-success: var(--c-green-700);
+  --color-success-light: var(--c-green-100);
+  --color-success-bg: var(--c-green-100);
+  --color-warning: var(--c-yellow-700);
+  --color-warning-bg: var(--c-yellow-50);
+  --color-info: var(--c-blue-600);
+  --color-info-bg: var(--c-blue-50);
+  --color-accent: var(--c-violet-600);
+  --color-accent-bg: var(--c-violet-50);
+  --color-text-tertiary: var(--c-slate-400);
+  --color-text-disabled: var(--c-slate-400);
+  --color-backdrop: var(--alpha-black-45);
+  --shadow-sm: var(--shadow-rest);
+  --shadow-md: var(--shadow-card);
+  --shadow-xl: var(--shadow-modal);
+  --radius-full: var(--radius-pill);
+  --tracking-wider: 0.08em;
+  --line-height-relaxed: var(--leading-relaxed);
+  --alpha-black-1: rgba(0, 0, 0, 0.01);
+  --duration-fast: 150ms;
+  --ease-default: ease;
 }

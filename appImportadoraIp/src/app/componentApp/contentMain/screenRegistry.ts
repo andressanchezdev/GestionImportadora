@@ -1,9 +1,10 @@
 // screenRegistry · mapa de qué pantalla de feature se muestra por módulo y subgestión
-// conecta con: MainContent (pide la pantalla); las pantallas vienen de features/shop, features/wallet y features/customers
+// conecta con: MainContent (pide la pantalla); las pantallas vienen de features/shop, features/orders, features/wallet y features/customers
 // ojo: para sumar una pantalla nueva solo se agrega una línea aquí (antes eran if encadenados dentro de MainContent)
 import { createElement, type ComponentType, type ReactNode } from 'react'
 import type { ERPModule } from '@/features/navigation'
 import { ShopCatalogScreen } from '@/features/shop'
+import { OrdersScreen } from '@/features/orders'
 import { WalletScreen } from '@/features/wallet'
 import { CustomersScreen } from '@/features/customers'
 import { SettingsScreen } from '@/features/settings'
@@ -16,7 +17,7 @@ interface ScreenEntry {
 }
 
 export const SCREEN_REGISTRY: Partial<Record<ERPModule, ScreenEntry>> = {
-  shop: { subitems: { catalog: ShopCatalogScreen } },
+  shop: { subitems: { catalog: ShopCatalogScreen, orders: OrdersScreen } },
   wallet: { screen: WalletScreen },
   thirdParties: {
     subitems: {
