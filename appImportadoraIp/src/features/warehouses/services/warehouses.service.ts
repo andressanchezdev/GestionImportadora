@@ -8,7 +8,7 @@ import { toWarehouses } from '../helpers/warehouses.helpers'
 import type { Warehouse, WarehouseDto } from '../types/warehouse.types'
 
 export const fetchWarehouses = async (ctx: RequestContext): Promise<Warehouse[]> => {
-    const { data } = await apiClient.post<APIResponse<WarehouseDto[] | null>>(API_CONFIG.ENDPOINTS.CATALOGS.WAREHOUSES, {
+    const { data } = await apiClient.post<APIResponse<WarehouseDto[] | null>>(API_CONFIG.ENDPOINTS.WAREHOUSES.BASE, {
         companyId: ctx.companyId,
         page: 1,
         pageSize: WAREHOUSES_PAGE_SIZE,

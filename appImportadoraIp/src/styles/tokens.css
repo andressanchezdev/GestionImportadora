@@ -75,28 +75,50 @@
   --c-white: #ffffff;
 
   /* ---- 1a. PALETA DE LA MAQUETA (MAQUETA-V3): el «chrome» de la app (menú, cabecera, tablas, panel) y las cards de IP ---- */
-  --c-shell-50: #f5f6f9; /* fondo de la app y del contenido */
-  --c-shell-100: #eef1f5; /* superficie suave: hover, campos y encabezados de tabla */
-  --c-shell-200: #dfe3ea; /* líneas y bordes del menú, la cabecera, las tablas y el panel */
-  --c-shell-600: #5b6472; /* texto secundario del chrome */
-  --c-blue-75: #e8f0fe; /* fondo del ítem activo del menú */
-  --c-green-100: #eefaf2; /* pastilla verde: fondo */
-  --c-green-300: #7cc79a; /* pastilla verde: borde */
-  --c-green-700: #17803d; /* texto verde de la maqueta */
-  --c-red-100: #fdf0f0; /* pastilla roja: fondo */
-  --c-red-300: #e59a9a; /* pastilla roja: borde */
-  --c-red-650: #d32f2f; /* texto rojo de la maqueta */
-  --c-yellow-50: #fff8e1; /* chip activo y pastilla ámbar: fondo */
-  --c-yellow-100: #fff4cf; /* caja del ícono del panel derecho */
-  --c-yellow-400: #ffc629; /* botón principal (Ordenar, Finalizar compra) y etiqueta de tarifa */
-  --c-yellow-600: #e0b400; /* pastilla ámbar: borde */
-  --c-yellow-700: #9a6700; /* texto e íconos sobre fondo amarillo suave */
-  --c-violet-50: #f5f3ff; /* estado «acento» (ej. traslado en tránsito): fondo */
-  --c-violet-600: #7c3aed; /* estado «acento»: texto */
-  --c-ip-gray-500: #757575; /* texto tenue de las cards de IP */
-  --c-ip-green-100: #baffc0; /* botón «Ordenado» */
-  --c-ip-green-800: #1b6519; /* texto del botón «Ordenado» */
-  --c-ip-red-600: #e53935; /* quitar del carrito */
+  --c-shell-50: #f5f6f9;
+  /* fondo de la app y del contenido */
+  --c-shell-100: #eef1f5;
+  /* superficie suave: hover, campos y encabezados de tabla */
+  --c-shell-200: #dfe3ea;
+  /* líneas y bordes del menú, la cabecera, las tablas y el panel */
+  --c-shell-600: #5b6472;
+  /* texto secundario del chrome */
+  --c-blue-75: #e8f0fe;
+  /* fondo del ítem activo del menú */
+  --c-green-100: #eefaf2;
+  /* pastilla verde: fondo */
+  --c-green-300: #7cc79a;
+  /* pastilla verde: borde */
+  --c-green-700: #17803d;
+  /* texto verde de la maqueta */
+  --c-red-100: #fdf0f0;
+  /* pastilla roja: fondo */
+  --c-red-300: #e59a9a;
+  /* pastilla roja: borde */
+  --c-red-650: #d32f2f;
+  /* texto rojo de la maqueta */
+  --c-yellow-50: #fff8e1;
+  /* chip activo y pastilla ámbar: fondo */
+  --c-yellow-100: #fff4cf;
+  /* caja del ícono del panel derecho */
+  --c-yellow-400: #ffc629;
+  /* botón principal (Ordenar, Finalizar compra) y etiqueta de tarifa */
+  --c-yellow-600: #e0b400;
+  /* pastilla ámbar: borde */
+  --c-yellow-700: #9a6700;
+  /* texto e íconos sobre fondo amarillo suave */
+  --c-violet-50: #f5f3ff;
+  /* estado «acento» (ej. traslado en tránsito): fondo */
+  --c-violet-600: #7c3aed;
+  /* estado «acento»: texto */
+  --c-ip-gray-500: #757575;
+  /* texto tenue de las cards de IP */
+  --c-ip-green-100: #baffc0;
+  /* botón «Ordenado» */
+  --c-ip-green-800: #1b6519;
+  /* texto del botón «Ordenado» */
+  --c-ip-red-600: #e53935;
+  /* quitar del carrito */
 
   /* ---- 1b. TRANSPARENCIAS (rgba) ---- */
   --alpha-amber-500-10: rgba(245, 158, 11, 0.1);
@@ -164,7 +186,7 @@
   /* paneles, campos de cantidad y cards del carrito (el radio más usado de la maqueta) */
   --radius-lg: 12px;
   /* tarjetas y paneles */
-  --radius-pill: 9999px;
+  --radius-pill: 5px;
   --radius-circle: 50%;
 
   /* ---- 2d-1. SOMBRAS Y FOCO ---- */
@@ -242,11 +264,16 @@
   /* 3. SOMBRAS Y BORDES REDONDEADOS */
   --shadow-card: 0 2px 8px var(--alpha-black-6);
   --shadow-card-hover: 0 6px 20px var(--alpha-black-10);
-  --shadow-card-soft: 0 1px 8px var(--alpha-black-5); /* card de pedido */
-  --shadow-card-flat: 0 1px 6px var(--alpha-black-4); /* card del carrito */
-  --shadow-popover: 0 8px 24px rgba(20, 30, 50, 0.18); /* menús desplegables */
-  --shadow-tier-trigger: 0 1px 3px rgba(0, 0, 0, 0.13); /* botón de tarifas */
-  --shadow-tier-menu: 0 8px 24px rgba(0, 0, 0, 0.27); /* menú de tarifas */
+  --shadow-card-soft: 0 1px 8px var(--alpha-black-5);
+  /* card de pedido */
+  --shadow-card-flat: 0 1px 6px var(--alpha-black-4);
+  /* card del carrito */
+  --shadow-popover: 0 8px 24px rgba(20, 30, 50, 0.18);
+  /* menús desplegables */
+  --shadow-tier-trigger: 0 1px 3px rgba(0, 0, 0, 0.13);
+  /* botón de tarifas */
+  --shadow-tier-menu: 0 8px 24px rgba(0, 0, 0, 0.27);
+  /* menú de tarifas */
   --shadow-modal: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
   /* sombra de los diálogos de confirmación */
   --radius-input: 24px;
@@ -317,7 +344,8 @@
 
   /* 6. TARJETA DE PRODUCTO (diseño tomado de las cards de Yamaha; ver docs/yamaha-product-card-spec.md) */
   --product-card-min-width: 300px;
-  --product-card-max-width: 380px; /* ojo: tope de ancho para que la card no se estire cuando hay pocas columnas */
+  --product-card-max-width: 380px;
+  /* ojo: tope de ancho para que la card no se estire cuando hay pocas columnas */
   /* ojo: antes 330px (Yamaha); ahora 300px como la maqueta */
   --product-card-media-height: 180px;
   --radius-product-card: 12px;

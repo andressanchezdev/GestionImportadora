@@ -10,6 +10,9 @@ export const API_CONFIG = {
   BASE_URL:
     (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) ||
     'https://importadora-back-production.up.railway.app',
+  STORAGE_BASE_URL:
+    (typeof import.meta !== 'undefined' && import.meta.env?.VITE_STORAGE_BASE_URL) ||
+    'https://storage.googleapis.com/importadorapremiumonline/',
   TIMEOUT: 15000, // 15 segundos
   // URL del websocket de tiempo real; vacía = tiempo real desactivado (no se conecta a ningún servidor por defecto)
   WS_URL: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_WS_URL) || '',
@@ -26,6 +29,7 @@ export const API_CONFIG = {
     PRODUCTS: {
       LIST: '/products', // FUNCIONA, 200 "Products successfully obtained" con {companyId, page, pageSize}; devuelve productId, code, description, categoryName, modelName, brandName, brandImage, isActive, isPromotion, locations, prices e images
       REGISTER: '/products/register', // ERROR 404 "The route you are looking for does not exist" con {companyId, brandId, categoryId, modelId, taxId, code, description, isActive, lastCost, purchasePrice, maxStock, minStock}; el Swagger la lista pero el backend no la tiene publicada; el producto no se crea (no sale en /products ni en /search)
+      //SEARCH: '/inventory/search', // FUNCIONA, búsqueda por texto en código, descripción, marca, modelo o categoría
     },
     // Búsqueda universal (varias entidades a la vez)
     SEARCH: {
@@ -57,31 +61,19 @@ export const API_CONFIG = {
       //      MODELS: '/models',
       //      MODELS_REGISTER: '/models/register',
       //      MODELS_UPDATE: '/models/update',
-      WAREHOUSES: '/warehouses', // FUNCIONA, 200 "Warehouses successfully obtained"; devuelve warehouseId, name, address, las series (electronicBillingSerial, transferSerial, remissionSerial, saleSerial), isMain, isActive
-      WAREHOUSES_REGISTER: '/warehouses/register', // FUNCIONA con {companyId, name, address}, 201 "Warehouse registered successfully" pero la respuesta trae warehouseId = 0 (el id real hay que buscarlo en /warehouses) y las 4 series quedan en 0
-      WAREHOUSES_UPDATE: '/warehouses/update', // FUNCIONA, es PUT con {warehouseId, name, address}, 200 "Warehouse updated successfully"; INCONSISTENTE: la respuesta dice isActive:false pero en /warehouses la bodega sigue isActive:true
     },
 
-    MODELS: {
-      MODELS: '/models', //FUNCIOAN CORRECTAMENTE DEVUELVE OBJETOS DENTRO DE MODEL, MODELID, NAME
-      MODELS_REGISTER: '/models/register', //FUNCIONA CORRECTAMENTE, SE CREA EL MODELO CON LOS MISMOS CAMPOS MODELID, NAME
-      // PRUEBA DE HOY (ANDRES): responde 201 "Model registered successfully" pero con modelId = 0 y NO crea nada: el total de /models sigue igual (552) y el nombre no aparece en ninguna pagina
-      MODELS_UPDATE: '/models/update', //FUNCIONA, SE RECIBE RESPUESTA 200, PERO NO PUDE VER EL PRODUCTO CREADO CON LOS DATOSW E PRUENA
-      // SIiN PROBA HOY: no se pudo crear un modelo propio para actualizarlo (el registro no crea nada) y se evito tocar los modelos reales
+    WAREHOUSES: {
+      BASE: '/warehouses', // FUNCIONA, 200 "Warehouses successfully obtained"; devuelve warehouseId, name, address, las series (electronicBillingSerial, transferSerial, remissionSerial, saleSerial), isMain, isActive
+      REGISTER: '/warehouses/register', // FUNCIONA con {companyId, name, address}, 201 "Warehouse registered successfully" pero la respuesta trae warehouseId = 0 (el id real hay que buscarlo en /warehouses) y las 4 series quedan en 0
+      UPDATE: '/warehouses/update', // FUNCIONA, es PUT con {warehouseId, name, address}, 200 "Warehouse updated successfully"; INCONSISTENTE: la respuesta dice isActive:false pero en /warehouses la bodega sigue isActive:true
     },
-    // Terceros: usuarios (clientes y vendedores, proveedores, TODOS los Agentes activos son ), centralizada de la imfo de cada actor
-    USERS: {
-      LIST: '/users', // FUNCIONA con {companyId, page, pageSize, userType:"customer"}, 200 "Users successfully obtained"; cada fila trae companyInformation
-      BY_ID: (id: number | string) => `/users/${id}`, // FUNCIONA, GET /users/315 responde 200 "User retrieved successfully" con el usuario y su companyInformation
-      REGISTER: '/users/register', // SP: segun el Swagger es multipart/form-data (campo data con el JSON + photo, identityCardFiles, chamberCommerceFiles y rutFiles); para el alta sin archivos el backend ofrece /users/quick-register
-      QUICK_REGISTER: '/users/quick-register', // FUNCIONA con {companyId, email, name, identification, phone, userType:"customer"}, 201 "User registered successfully"; devuelve el usuario con userId, warehouseId null y priceType vacio
-      UPDATE: '/users/update', // FUNCIONA, es PUT con {userId + SOLO los campos a cambiar}, 200 "User updated successfully"; actualiza parcial (lastName y priceType cambian sin tocar el nombre); la respuesta devuelve el usuario completo
-      STATE: '/users/state', // FUNCIONA, es PUT con {userId, isActive:false}, 200 "User state updated successfully"; el usuario desaparece de la lista POST /users pero GET /users/:id lo sigue devolviendo (no hay forma de ver desde la API que esta inactivo)
-      VALIDATE_DOCUMENT: '/users/validate-document', // FUNCIONA con {companyId, identification}, 200 "Document validation completed"; devuelve {isValid, documentType, message}
-      BALANCE: '/users/balance', // FUNCIONA con {userId, price, type}, 201 "Balance registered successfully" y devuelve {balanceId, userId, price, type, created_at}; acepta cualquier type e incluso sin type (quedo ""); el saldo NO se refleja en /wallet (sumAmount sigue en 0), no se sabe donde se consulta
-      CREDIT: '/users/credit', // FUNCIONA, es PUT con {userId, quota, days}, 200 "User updated successfully"; guarda quota y days (visibles en /wallet > creditInformation) pero IGNORA isCredit: con isCredit:true sigue en false; ese flag solo cambia con PUT /users/update {isCredit}. Enviar solo quota no borra days. Probado con un usuario de prueba ANDRES
-      CREDIT_DAYS: '/users/credit/days', // FUNCIONA, es PUT con {userId, days}, 200 "Credit days updated successfully"; cambia creditInformation.days en /wallet; acepta days:0 sin validar
-      CREDIT_LIMIT: '/users/credit/limit', // FUNCIONA, es PUT con {userId, limit}, 200 "Credit limit updated successfully"; cambia creditInformation.quota en /wallet (es el mismo campo que quota de /users/credit); acepta limit negativo (-5) sin validar
+    MODELS: {
+      BASE: '/models', //FUNCIOAN CORRECTAMENTE DEVUELVE OBJETOS DENTRO DE MODEL, MODELID, NAME
+      REGISTER: '/models/register', //FUNCIONA CORRECTAMENTE, SE CREA EL MODELO CON LOS MISMOS CAMPOS MODELID, NAME
+      // PRUEBA ANDRES: responde 201 "Model registered successfully" pero con modelId = 0 y NO crea nada: el total de /models sigue igual (552) y el nombre no aparece en ninguna pagina
+      UPDATE: '/models/update', //FUNCIONA, SE RECIBE RESPUESTA 200, PERO NO PUDE VER EL PRODUCTO CREADO CON LOS DATOSW E PRUENA
+      // SiN PROBA HOY: no se pudo crear un modelo propio para actualizarlo (el registro no crea nada) y se evito tocar los modelos reales
     },
     CUSTOMERS: {
       REGISTER: '/customers/register',//    envia en el body elegimos from data, e ingresamos dentro data:
@@ -140,7 +132,36 @@ export const API_CONFIG = {
       HISTORY: '/wallet/history', // RESPONDE 200 "Bills successfully obtained" con {companyId, userId:315, page, pageSize} pero data = [] (vacio, no se sabe si esta completo)
     },
     PAYMENTS: {
-      LIST: '/payments', // RESPONDE 200 "Payments successfully obtained" con {companyId, page, pageSize, warehouseId:1} pero data = [] (vacio)
+      LIST: '/payments', // RESPONDE 200 "Payments successfully obtained" ENVIO BODY
+      // {
+      //   "page": 1,
+      //   "pageSize": 30,
+      //   "userId": 315
+      // } OBTENEMOS COMO RESPUESTA
+
+      // paymentId": 8659,
+      // "userId": 315,
+      // "saleId": 1029,
+      // "companyId": 0,
+      // "userVerifyId": 315,
+      // "amount": 1,
+      // "remainingAmount": 389999,
+      // "paymentMethod": "cash",
+      // "created_at": "0001-01-01T00:00:00Z",
+      // "serialPayment": 51,
+      // "warehouseInformation": {
+      // 	"warehouseId": 0,
+      // 	"companyId": 0,
+      // 	"name": "",
+      // 	"address": "",
+      // 	"electronicBillingSerial": 0,
+      // 	"transferSerial": 0,
+      // 	"remissionSerial": 0,
+      // 	"saleSerial": 0,
+      // 	"isActive": false,
+      // 	"isMain": false
+      //
+      // pero data =[](vacio)
       REGISTER: '/payments/register',
       ADVANCE: '/payments/advance',
       EARLY: '/payments/early',
@@ -168,7 +189,9 @@ export const API_CONFIG = {
       REPORT_INTERNAL: '/sales/report/internal', // ERROR 404 "The route you are looking for does not exist": la ruta esta en config pero no existe en el backend
     },
     ORDERS: {
-      LIST: '/orders', // solo deja id 315: exige sellerId (400 "GetOrdersRequest.SellerId required"); con sellerId:315 responde 200 "Orders Successfully obtained" pero devuelve USUARIOS (userId, name, email, identification, phone, priceType, profileType, serialResponse), no pedidos, y con pageSize:5 devolvio 20 filas (ignora pageSize). Los pedidos reales salen de /management/saleOrders
+      LIST: '/orders', // solo deja saleid 315 exige sellerId (400 "GetOrdersRequest.SellerId required"); con sellerId:315 
+      // responde 200 "Orders Successfully obtained" pero devuelve USUARIOS (userId, name, email, identification, phone, priceType, profileType, serialResponse), no pedidos, y con pageSize:5 devolvio 20 filas (ignora pageSize). Los pedidos reales salen de /management/saleOrders
+      //envia todas lar ordenes creadas inicaindo en id 215
     },
     COMPANIES: {
       LIST: '/companies', //GET COMPANIES
@@ -291,6 +314,7 @@ export const API_CONFIG = {
       //  "userId": 315,
       //  "warehouseId": 1
       //pero la respuetsa indica un error de el backend en la peticion
+
       SEARCH: '/inventory/search', //FUNCIONA, se envian {
       //   "companyId": 1,
       //   "limit": 5,
@@ -607,7 +631,7 @@ export const API_CONFIG = {
     },
     // Sync (agregado desde el Swagger)
     SYNC: {
-      CONFLICTS: '/sync/conflicts', // SIiN PROBAAR: stoca dsispositivos y la cola de ssincronizacion); metodo POST, "Get sync conflicts"
+      CONFLICTS: '/sync/conflicts', // SIiN PROBAAR: toca dispositivos y la cola de sincronizacion); metodo POST, "Get sync conflicts"
       CONFLICTS_RESOLVE: '/sync/conflicts/resolve', // SP:  ('''); metodo POST, "Resolve a sync conflict"
       DEVICES: '/sync/devices', // SP:  (''''); metodo POST, "Get registered devices"
       DEVICES_REGISTER: '/sync/devices/register', // SP:  (''''); metodo POST, "Register a sync device"
@@ -621,6 +645,21 @@ export const API_CONFIG = {
       QUEUE_UPDATE: '/sync/queue/update', // SP:  (''''); metodo PUT, "Update queue item status"
       STATUS: '/sync/status', // SP:  ('''''); metodo POST, "Get sync status"
     },
+    // Terceros: usuarios (clientes y vendedores, proveedores, TODOS los Agentes activos son ), centralizada de la imfo de cada actor
+    USERS: {
+      LIST: '/users', // FUNCIONA con {companyId, page, pageSize, userType:"customer"}, 200 "Users successfully obtained"; cada fila trae companyInformation
+      BY_ID: (id: number | string) => `/users/${id}`, // FUNCIONA, GET /users/315 responde 200 "User retrieved successfully" con el usuario y su companyInformation
+      REGISTER: '/users/register', // SP: segun el Swagger es multipart/form-data (campo data con el JSON + photo, identityCardFiles, chamberCommerceFiles y rutFiles); para el alta sin archivos el backend ofrece /users/quick-register
+      QUICK_REGISTER: '/users/quick-register', // FUNCIONA con {companyId, email, name, identification, phone, userType:"customer"}, 201 "User registered successfully"; devuelve el usuario con userId, warehouseId null y priceType vacio
+      UPDATE: '/users/update', // FUNCIONA, es PUT con {userId + SOLO los campos a cambiar}, 200 "User updated successfully"; actualiza parcial (lastName y priceType cambian sin tocar el nombre); la respuesta devuelve el usuario completo
+      STATE: '/users/state', // FUNCIONA, es PUT con {userId, isActive:false}, 200 "User state updated successfully"; el usuario desaparece de la lista POST /users pero GET /users/:id lo sigue devolviendo (no hay forma de ver desde la API que esta inactivo)
+      VALIDATE_DOCUMENT: '/users/validate-document', // FUNCIONA con {companyId, identification}, 200 "Document validation completed"; devuelve {isValid, documentType, message}
+      BALANCE: '/users/balance', // FUNCIONA con {userId, price, type}, 201 "Balance registered successfully" y devuelve {balanceId, userId, price, type, created_at}; acepta cualquier type e incluso sin type (quedo ""); el saldo NO se refleja en /wallet (sumAmount sigue en 0), no se sabe donde se consulta
+      CREDIT: '/users/credit', // FUNCIONA, es PUT con {userId, quota, days}, 200 "User updated successfully"; guarda quota y days (visibles en /wallet > creditInformation) pero IGNORA isCredit: con isCredit:true sigue en false; ese flag solo cambia con PUT /users/update {isCredit}. Enviar solo quota no borra days. Probado con un usuario de prueba ANDRES
+      CREDIT_DAYS: '/users/credit/days', // FUNCIONA, es PUT con {userId, days}, 200 "Credit days updated successfully"; cambia creditInformation.days en /wallet; acepta days:0 sin validar
+      CREDIT_LIMIT: '/users/credit/limit', // FUNCIONA, es PUT con {userId, limit}, 200 "Credit limit updated successfully"; cambia creditInformation.quota en /wallet (es el mismo campo que quota de /users/credit); acepta limit negativo (-5) sin validar
+    },
+
     // Salud del backend (GET, sin sesión y muy liviano: unos 220 bytes)
     HEALTH: {
       CHECK: '/health', //se envia con GET sin body ni headers, se obtiene una respuesta que no indica mucho, "redis no esta confugurado
@@ -630,6 +669,7 @@ export const API_CONFIG = {
     DOCS: {
       SWAGGER_DOC: '/swagger/doc.json', // FUNCIONA, GET responde 200 con el JSON de Swagger (schemes, info, paths y definitions)
     },
+
   },
 } as const
 

@@ -7,7 +7,7 @@ import { CATALOG_PAGE_SIZE } from '../constants/catalogs.constants'
 import { toBrands, toCategories, toMotoModels } from '../helpers/catalogs.adapter'
 import type { Brand, BrandDto, Category, CategoryDto, ModelDto, MotoModel } from '../types/catalogs.types'
 
-const { CATALOGS } = API_CONFIG.ENDPOINTS
+const { CATALOGS, MODELS } = API_CONFIG.ENDPOINTS
 
 // cuerpo común de los tres catálogos
 const body = (ctx: RequestContext) => ({ companyId: ctx.companyId, page: 1, pageSize: CATALOG_PAGE_SIZE })
@@ -23,6 +23,6 @@ export const fetchCategories = async (ctx: RequestContext): Promise<Category[]> 
 }
 
 export const fetchMotoModels = async (ctx: RequestContext): Promise<MotoModel[]> => {
-  const { data } = await apiClient.post<APIResponse<ModelDto[] | null>>(CATALOGS.MODELS, body(ctx))
+  const { data } = await apiClient.post<APIResponse<ModelDto[] | null>>(MODELS.BASE, body(ctx))
   return toMotoModels(data.data ?? [])
 }

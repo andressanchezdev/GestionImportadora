@@ -33,6 +33,8 @@ export interface Product {
     prices: ProductPrices
     stockByWarehouse: Record<string, number> // Stock mapeado por ID de bodega (ej. 'WH-01': 15)
     minStockAlert?: number // Límite para disparar alerta de stock bajo
+    isNew?: boolean // Producto creado en los últimos 7 días
+    createdAt?: string // Fecha ISO de creación
 }
 
 export interface CatalogFilter {

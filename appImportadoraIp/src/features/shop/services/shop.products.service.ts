@@ -8,7 +8,7 @@ import { toProduct, toProductFromControl } from '../helpers/shop.adapter'
 import type { ControlProductDto, ProductDto, ProductsQuery } from '../types/shop.api.types'
 import type { Product } from '../types/shop.types'
 
-const { PRODUCTS } = API_CONFIG.ENDPOINTS
+const { PRODUCTS, INVENTORY } = API_CONFIG.ENDPOINTS
 
 // cuerpo de POST /products: solo lleva los filtros que realmente están aplicados
 export const buildProductsBody = (ctx: RequestContext, query: ProductsQuery) => ({
@@ -36,7 +36,7 @@ export const searchProducts = async (
     limit: number,
     warehouseId?: number
 ): Promise<Product[]> => {
-    const { data } = await apiClient.post<APIResponse<ControlProductDto[] | null>>(PRODUCTS.SEARCH, {
+    const { data } = await apiClient.post<APIResponse<ControlProductDto[] | null>>(INVENTORY.SEARCH, {
         companyId: ctx.companyId,
         limit,
         query: text,

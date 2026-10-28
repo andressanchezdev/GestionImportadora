@@ -6,8 +6,10 @@ import type { Product } from './shop.types'
 
 // ---- POST /products ----
 export interface ProductImageDto {
-    url: string
-    isMain?: boolean
+    url?: string
+    imageUrl?: string
+    path?: string
+    isMain?: boolean | number
 }
 
 export interface ProductPriceDto {
@@ -31,12 +33,16 @@ export interface ProductDto {
     categoryName?: string
     modelName?: string
     models?: string[]
-    images?: ProductImageDto[] | null
+    images?: Array<ProductImageDto | string> | null
+    productImage?: string
+    image?: string
+    photo?: string
     prices?: ProductPriceDto[] | null
     promotions?: ProductPriceDto[] | null
     locations?: ProductLocationDto[] | null
     isActive?: boolean
     isPromotion?: boolean
+    created_at?: string
 }
 
 // ---- POST /inventory/search (búsqueda por texto) ----

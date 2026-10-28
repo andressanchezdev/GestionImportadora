@@ -45,8 +45,36 @@ describe('toProduct', () => {
     expect(toProduct(dto).imageUrl).toBe('https://x/principal.png')
   })
 
-  it('sin imágenes queda sin imagen', () => {
+  it('extrae imagen cuando images es un arreglo de strings', () => {
+    expect(toProduct({ ...dto, images: ['https://x/string-url.png'] }).imageUrl).toBe('https://x/string-url.png')
+  })
+
+  it('extrae imagen de productImage si images está vacío', () => {
+    expect(toProduct({ ...dto, images: [], productImage: 'https://x/from-product-image.png' }).imageUrl).toBe(
+      'https://x/from-product-image.png'
+    )
+  })
+
+  it('sin imágenes válidas queda sin imagen', () => {
     expect(toProduct({ ...dto, images: null }).imageUrl).toBeUndefined()
+    expect(toProduct({ ...dto, images: ['   ', 'null'] }).imageUrl).toBeUndefined()
+  })
+
+  it('resuelve rutas relativas con el bucket de Google Cloud Storage', () => {
+    expect(toProduct({ ...dto, images: [{ url: 'productos/cilindro.jpg' }] }).imageUrl).toBe(
+      'https://storage.googleapis.com/importadorapremiumonline/productos/cilindro.jpg'
+    )
+    expect(toProduct({ ...dto, brandImage: 'marcas/bajaj.png' }).brandImage).toBe(
+      'https://storage.googleapis.com/importadorapremiumonline/marcas/bajaj.png'
+    )
+  })
+
+  it('calcula isNew si la fecha de creación fue en los últimos 7 días', () => {
+    const recent = new Date(Date.now() - 2 * 24 * 3600 * 1000).toISOString()
+    expect(toProduct({ ...dto, created_at: recent }).isNew).toBe(true)
+
+    const old = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString()
+    expect(toProduct({ ...dto, created_at: old }).isNew).toBe(false)
   })
 
   it('arma los 4 precios por tipo, sin importar mayúsculas', () => {
